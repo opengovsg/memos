@@ -1,5 +1,6 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common'
 import { SequelizeModule } from '@nestjs/sequelize'
+import { ConfigModule as NestConfig } from '@nestjs/config'
 import { HelmetMiddleware } from 'middlewares/helmet.middleware'
 import { SessionMiddleware } from 'middlewares/session.middleware'
 import { ConfigModule } from 'config/config.module'
@@ -11,6 +12,7 @@ import { HealthModule } from './health/health.module'
 
 @Module({
   imports: [
+    NestConfig.forRoot(),
     ConfigModule,
     OtpModule,
     MailerModule,

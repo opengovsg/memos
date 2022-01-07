@@ -1,4 +1,4 @@
-import { Schema } from 'convict'
+import convict, { Schema } from 'convict'
 
 export interface ConfigSchema {
   port: number
@@ -13,6 +13,28 @@ export interface ConfigSchema {
   }
   health: { heapSizeThreshold: number; rssThreshold: number }
 }
+
+/**
+ * To require an env var without setting a default,
+ * use
+ *    default: '',
+ *    format: 'required-string',
+ */
+convict.addFormats({
+  'required-string': {
+    validate: (val: any): void => {
+      if (val === '') {
+        throw new Error('Required value cannot be empty')
+      }
+    },
+    coerce: (val: any): any => {
+      if (val === null) {
+        return undefined
+      }
+      return val
+    },
+  },
+})
 
 export const schema: Schema<ConfigSchema> = {
   port: {
@@ -31,20 +53,20 @@ export const schema: Schema<ConfigSchema> = {
     doc: 'The AWS region for SES. Optional, logs mail to console if absent',
     env: 'AWS_REGION',
     format: '*',
-    default: '',
+    default: 'ap-southeast-1',
   },
   session: {
     name: {
       doc: 'Name of session ID cookie to set in response',
       env: 'SESSION_NAME',
-      default: 'ts-template',
+      default: 'memo-mOYKUZ6ql4',
       format: String,
     },
     secret: {
       doc: 'A secret string used to generate sessions for users',
       env: 'SESSION_SECRET',
-      default: 'toomanysecrets',
-      format: String,
+      default: '',
+      format: 'required-string',
     },
     cookie: {
       maxAge: {
@@ -65,8 +87,8 @@ export const schema: Schema<ConfigSchema> = {
     secret: {
       doc: 'A secret string used to generate TOTPs for users',
       env: 'OTP_SECRET',
-      format: '*',
-      default: 'toomanysecrets',
+      format: 'required-string',
+      default: '',
     },
     numValidPastWindows: {
       doc: 'The number of past windows for which tokens should be considered valid, where a window is the duration that an OTP is valid for, e.g. OTP expiry time.',
