@@ -41,5 +41,8 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "dependencies": {}
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.17.0"
+  }
 }
