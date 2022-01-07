@@ -1,10 +1,13 @@
-FROM node:lts-alpine
+FROM node:14-alpine
 LABEL maintainer="Open Government Products"
+
 WORKDIR /usr/src/app
-RUN apk update && apk add python g++ make tini && rm -rf /var/cache/apk/*
+RUN apk update && apk add python3 g++ make tini && rm -rf /var/cache/apk/*
 COPY . ./
+
 # Install backend dependencies
 RUN cd backend && npm ci && cd ..
+
 # Install frontend dependencies
 RUN cd frontend && npm ci && cd ..
 
