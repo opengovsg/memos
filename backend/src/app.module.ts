@@ -1,5 +1,4 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common'
-import { SequelizeModule } from '@nestjs/sequelize'
 import { ConfigModule as NestConfig } from '@nestjs/config'
 import { HelmetMiddleware } from 'middlewares/helmet.middleware'
 import { SessionMiddleware } from 'middlewares/session.middleware'
@@ -9,6 +8,7 @@ import { OtpModule } from 'otp/otp.module'
 import { MailerModule } from 'mailer/mailer.module'
 import { TerminusModule } from '@nestjs/terminus'
 import { HealthModule } from './health/health.module'
+import { PrismaModule } from 'database/prisma.module'
 
 @Module({
   imports: [
@@ -16,14 +16,10 @@ import { HealthModule } from './health/health.module'
     ConfigModule,
     OtpModule,
     MailerModule,
-    SequelizeModule.forRoot({
-      dialect: 'sqlite', // TO-DO: change to production database dialect
-      autoLoadModels: true, // TO-DO: remove in production
-      synchronize: true, // TO-DO: remove in production
-    }),
     AuthModule,
     TerminusModule,
     HealthModule,
+    PrismaModule,
   ],
 })
 export class AppModule implements NestModule {

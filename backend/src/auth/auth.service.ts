@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { InjectModel } from '@nestjs/sequelize'
 import { GenerateOtpDto, VerifyOtpDto } from './dto/index'
-import { User } from '../database/models'
+import { UserService } from '../user/user.service'
+import { User as UserModel } from '@prisma/client'
 import { Logger } from '@nestjs/common'
 import { OtpService } from '../otp/otp.service'
 import { MailerService } from '../mailer/mailer.service'
@@ -9,10 +9,9 @@ import { MailerService } from '../mailer/mailer.service'
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User)
-    private readonly userModel: typeof User,
     private otpService: OtpService,
-    private mailerService: MailerService
+    private mailerService: MailerService,
+    private userService: UserService
   ) {}
 
   async generateOtp(generateOtpDto: GenerateOtpDto): Promise<void> {
@@ -35,12 +34,12 @@ export class AuthService {
     return this.mailerService.sendMail(mail)
   }
 
-  async verifyOtp(verifyOtpDto: VerifyOtpDto): Promise<User | undefined> {
+  async verifyOtp(verifyOtpDto: VerifyOtpDto): Promise<UserModel | undefined> {
     const { email, token } = verifyOtpDto
     const isVerified = this.otpService.verifyOtp(email, token)
-    const [user] = isVerified
-      ? await this.userModel.findOrCreate({ where: { email } })
-      : []
+    const user = isVerified
+      ? await this.userService.findOrCreateUser({ email })
+      : undefined
 
     return user
   }

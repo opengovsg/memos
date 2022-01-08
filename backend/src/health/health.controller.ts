@@ -3,9 +3,9 @@ import {
   HealthCheck,
   HealthCheckResult,
   HealthCheckService,
-  SequelizeHealthIndicator,
   MemoryHealthIndicator,
 } from '@nestjs/terminus'
+import { PrismaHealthIndicator } from 'database/prisma.health'
 import { ConfigService } from '../config/config.service'
 
 @Controller('health')
@@ -15,7 +15,7 @@ export class HealthController {
     private config: ConfigService,
     // Refer to https://github.com/nestjs/terminus/blob/master/sample/ for
     // examples of how to add other services/databases to healthcheck.
-    private db: SequelizeHealthIndicator,
+    private db: PrismaHealthIndicator,
     private memory: MemoryHealthIndicator
   ) {}
 
@@ -23,7 +23,7 @@ export class HealthController {
   @HealthCheck()
   async check(): Promise<HealthCheckResult> {
     return this.health.check([
-      async () => this.db.pingCheck('database'),
+      async () => this.db.isHealthy('database'),
       async () =>
         this.memory.checkHeap(
           'memory_heap',
