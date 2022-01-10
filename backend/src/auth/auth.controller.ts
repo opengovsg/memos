@@ -19,7 +19,7 @@ export class AuthController {
   @Post()
   async generateOtp(
     @Res() res: Response,
-    @Body() generateOtpDto: GenerateOtpDto
+    @Body() generateOtpDto: GenerateOtpDto,
   ): Promise<void> {
     try {
       await this.authService.generateOtp(generateOtpDto)
@@ -36,7 +36,7 @@ export class AuthController {
   async verifyOtp(
     @Req() req: Request,
     @Res() res: Response,
-    @Body() verifyOtpDto: VerifyOtpDto
+    @Body() verifyOtpDto: VerifyOtpDto,
   ): Promise<void> {
     try {
       const user = await this.authService.verifyOtp(verifyOtpDto)
@@ -61,7 +61,7 @@ export class AuthController {
   @Post('logout')
   async logout(@Req() req: Request, @Res() res: Response): Promise<void> {
     req.session.destroy(() =>
-      res.status(HttpStatus.OK).json({ message: 'Logged out' })
+      res.status(HttpStatus.OK).json({ message: 'Logged out' }),
     )
   }
 

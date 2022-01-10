@@ -12,7 +12,7 @@ export class AuthService {
     @InjectModel(User)
     private readonly userModel: typeof User,
     private otpService: OtpService,
-    private mailerService: MailerService
+    private mailerService: MailerService,
   ) {}
 
   async generateOtp(generateOtpDto: GenerateOtpDto): Promise<void> {

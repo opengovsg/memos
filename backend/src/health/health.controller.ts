@@ -16,7 +16,7 @@ export class HealthController {
     // Refer to https://github.com/nestjs/terminus/blob/master/sample/ for
     // examples of how to add other services/databases to healthcheck.
     private db: SequelizeHealthIndicator,
-    private memory: MemoryHealthIndicator
+    private memory: MemoryHealthIndicator,
   ) {}
 
   @Get()
@@ -27,12 +27,12 @@ export class HealthController {
       async () =>
         this.memory.checkHeap(
           'memory_heap',
-          this.config.get('health.heapSizeThreshold')
+          this.config.get('health.heapSizeThreshold'),
         ),
       async () =>
         this.memory.checkRSS(
           'memory_rss',
-          this.config.get('health.rssThreshold')
+          this.config.get('health.rssThreshold'),
         ),
     ])
   }
