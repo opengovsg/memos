@@ -8,7 +8,7 @@
     "on-frontend": "npm run --prefix frontend",
     "postinstall": "npm --prefix backend install && npm --prefix frontend install",
     "dev-docker": "docker-compose up --build",
-    "dev": "env-cmd concurrently \"npm run on-backend -- start:dev\" \"npm run on-frontend -- start\"",
+    "dev": "concurrently \"npm run on-backend -- start:dev\" \"npm run on-frontend -- start\"",
     "lint": "npm run on-backend -- lint && npm run on-frontend -- lint",
     "lint:fix": "npm run on-backend -- lint:fix && npm run on-frontend -- lint:fix",
     "test": "npm run on-backend -- test && npm run on-frontend -- test",
@@ -27,7 +27,6 @@
     "commitizen": "^4.2.4",
     "concurrently": "^6.3.0",
     "cz-conventional-changelog": "^3.3.0",
-    "env-cmd": "^10.1.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^7.0.4"
   },
