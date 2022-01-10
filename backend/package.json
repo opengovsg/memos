@@ -16,10 +16,10 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "test": "DOTENV_CONFIG_PATH=.env-example jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage && sed -i.bak 's/SF:src/SF:backend\\/src/g' coverage/lcov.info",
+    "test:watch": "npm test -- --watch",
+    "test:cov": "npm test -- --coverage && sed -i.bak 's/SF:src/SF:backend\\/src/g' coverage/lcov.info",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "npm test -- --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/common": "^8.2.4",
