@@ -7,8 +7,6 @@ import { ConfigService } from 'config/config.service'
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
-  app.setGlobalPrefix('/api')
-
   const config = app.get(ConfigService)
   const environment = config.get('environment')
   if (['staging', 'production'].includes(environment)) {
