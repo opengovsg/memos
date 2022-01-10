@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import convict, { Config, Path } from 'convict'
+import 'dotenv/config'
 
 import { ConfigSchema, schema } from './config.schema'
 
