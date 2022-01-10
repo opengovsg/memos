@@ -10,7 +10,7 @@ export class SessionMiddleware implements NestMiddleware {
 
   constructor(private config: ConfigService) {
     const secure = ['staging', 'production'].includes(
-      this.config.get('environment')
+      this.config.get('environment'),
     )
     this.middleware = session({
       resave: false, // can set to false since touch is implemented by our store
