@@ -27,10 +27,10 @@ export class MemosController {
   /**
    * Void a memo by id
    */
-  @Post(':memoId/void')
+  @Post(':id/void')
   @ApiResponse({ type: VoidMemoResponseDto })
   async voidMemo(
-    @Param('memoId') _memoId: string,
+    @Param('id') _memoId: string,
     @Body() _voidMemoDto: VoidMemoDto,
   ): Promise<void> {
     await this.memosService.voidMemo()

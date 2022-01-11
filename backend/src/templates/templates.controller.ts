@@ -26,17 +26,17 @@ export class TemplatesController {
   /**
    * Get the latest version of a template by id
    */
-  @Get(':templateId')
-  async getTemplate(@Param('templateId') _templateId: number): Promise<void> {
+  @Get(':id')
+  async getTemplate(@Param('id') _templateId: number): Promise<void> {
     await this.templatesService.getTemplate()
   }
   /**
    * Create a new version of a template by id
    */
-  @Put(':templateId')
+  @Put(':id')
   @ApiResponse({ type: UpdateTemplateResponseDto })
   async updateTemplate(
-    @Param('templateId') _templateId: number,
+    @Param('id') _templateId: number,
     @Body() _updateTemplateDto: UpdateTemplateDto,
   ): Promise<void> {
     await this.templatesService.updateTemplate()
@@ -44,10 +44,8 @@ export class TemplatesController {
   /**
    * Delete all versions of a template by id
    */
-  @Delete(':templateId')
-  async deleteTemplate(
-    @Param('templateId') _templateId: number,
-  ): Promise<void> {
+  @Delete(':id')
+  async deleteTemplate(@Param('id') _templateId: number): Promise<void> {
     await this.templatesService.deleteTemplate()
   }
 }

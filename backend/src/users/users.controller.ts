@@ -10,18 +10,18 @@ export class UsersController {
   /**
    * List templates that the user has access to
    */
-  @Get(':userId/templates')
+  @Get(':id/templates')
   @ApiResponse({ type: ListTemplatesForUserResponseDto })
-  async listTemplates(@Param('userId') _userId: number): Promise<void> {
+  async listTemplates(@Param('id') _userId: number): Promise<void> {
     await this.usersService.listTemplates()
   }
   /**
    * List memos that the user has access to
    */
-  @Get(':userId/memos')
+  @Get(':id/memos')
   @ApiResponse({ type: ListMemosForUserDto })
   async listMemos(
-    @Param('userId') _userId: number,
+    @Param('id') _userId: number,
     @Query('query') _query: ListMemosForUserDto,
   ): Promise<void> {
     await this.usersService.listMemos()
