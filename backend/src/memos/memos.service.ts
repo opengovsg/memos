@@ -14,7 +14,7 @@ export class MemosService {
   async uploadMemosComplete(): Promise<void> {
     return
   }
-  async getMemo(): Promise<void> {
+  async listMemosForUser(): Promise<void> {
     return
   }
 }

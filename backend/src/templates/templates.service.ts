@@ -14,4 +14,7 @@ export class TemplatesService {
   async getTemplate(): Promise<void> {
     return
   }
+  async listTemplatesForUser(): Promise<void> {
+    return
+  }
 }

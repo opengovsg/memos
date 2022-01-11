@@ -6,5 +6,6 @@ import { MemosService } from './memos.service'
   imports: [ConfigModule],
   controllers: [MemosController],
   providers: [MemosService],
+  exports: [MemosService],
 })
 export class MemosModule {}
