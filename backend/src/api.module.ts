@@ -4,8 +4,17 @@ import { SequelizeModule } from '@nestjs/sequelize'
 
 import { AuthModule } from 'auth/auth.module'
 import { HealthModule } from 'health/health.module'
+import { MemosModule } from 'memos/memos.module'
+import { TemplatesModule } from 'templates/templates.module'
+import { UsersModule } from 'users/users.module'
 
-const apiModules = [AuthModule, HealthModule]
+const apiModules = [
+  AuthModule,
+  HealthModule,
+  TemplatesModule,
+  UsersModule,
+  MemosModule,
+]
 
 @Module({
   imports: [
