@@ -4,6 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 
 import { AppModule } from './app.module'
 import { ConfigService } from 'config/config.service'
+import { ValidationPipe } from '@nestjs/common'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
@@ -13,6 +14,13 @@ async function bootstrap() {
   if (['staging', 'production'].includes(environment)) {
     app.set('trust proxy', 1)
   }
+
+  // https://docs.nestjs.com/techniques/validation#transform-payload-objects
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  )
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Memos')
