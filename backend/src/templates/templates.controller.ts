@@ -1,18 +1,28 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import {
+  AddPermissionDto,
+  AddPermissionResponseDto,
   CreateTemplateDto,
   CreateTemplateResponseDto,
+  DeletePermissionDto,
+  DeletePermissionResponseDto,
+  ListPermissionsDto,
+  ListPermissionsResponseDto,
   UpdateTemplateDto,
   UpdateTemplateResponseDto,
 } from './dto'
 
+import { PermissionsService } from './permissions.service'
 import { TemplatesService } from './templates.service'
 
 @Controller('templates')
 @ApiTags('templates')
 export class TemplatesController {
-  constructor(private readonly templatesService: TemplatesService) {}
+  constructor(
+    private readonly templatesService: TemplatesService,
+    private readonly permissionsService: PermissionsService,
+  ) {}
   /**
    * Create a new template
    */
@@ -47,5 +57,41 @@ export class TemplatesController {
   @Delete(':id')
   async deleteTemplate(@Param('id') _templateId: number): Promise<void> {
     await this.templatesService.deleteTemplate()
+  }
+
+  /**
+   * Add permission to template
+   */
+  @Post(':id/permissions')
+  @ApiResponse({ type: AddPermissionResponseDto })
+  async addPermission(
+    @Param('id') _templateId: number,
+    @Body() _addPermissionDto: AddPermissionDto,
+  ): Promise<void> {
+    await this.permissionsService.addPermission()
+  }
+
+  /**
+   * List permissions for template
+   */
+  @Get(':id/permissions')
+  @ApiResponse({ type: ListPermissionsResponseDto })
+  async listPermission(
+    @Param('id') _templateId: number,
+    @Body() _listPermissionsDto: ListPermissionsDto,
+  ): Promise<void> {
+    await this.permissionsService.listPermissions()
+  }
+
+  /**
+   * Delete permission from template
+   */
+  @Post(':id/permissions/delete')
+  @ApiResponse({ type: DeletePermissionResponseDto })
+  async deletePermission(
+    @Param('id') _templateId: number,
+    @Body() _deletePermissionDto: DeletePermissionDto,
+  ): Promise<void> {
+    await this.permissionsService.deletePermission()
   }
 }
