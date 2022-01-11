@@ -1,5 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Res,
+} from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Response } from 'express'
 import {
   AddPermissionDto,
   AddPermissionResponseDto,
@@ -29,16 +39,22 @@ export class TemplatesController {
   @Post()
   @ApiResponse({ type: CreateTemplateResponseDto })
   async createTemplate(
-    @Body() _createTemplateDto: CreateTemplateDto,
+    @Res() res: Response,
+    @Body() createTemplateDto: CreateTemplateDto,
   ): Promise<void> {
-    await this.templatesService.createTemplate()
+    const result = await this.templatesService.createTemplate(createTemplateDto)
+    res.json(result)
   }
   /**
    * Get the latest version of a template by id
    */
   @Get(':id')
-  async getTemplate(@Param('id') _templateId: number): Promise<void> {
-    await this.templatesService.getTemplate()
+  async getTemplate(
+    @Res() res: Response,
+    @Param('id') templateId: number,
+  ): Promise<void> {
+    const result = await this.templatesService.getTemplate(templateId)
+    res.json(result)
   }
   /**
    * Create a new version of a template by id
@@ -46,17 +62,22 @@ export class TemplatesController {
   @Put(':id')
   @ApiResponse({ type: UpdateTemplateResponseDto })
   async updateTemplate(
-    @Param('id') _templateId: number,
-    @Body() _updateTemplateDto: UpdateTemplateDto,
+    @Res() res: Response,
+    @Param('id') templateId: number,
+    @Body() updateTemplateDto: UpdateTemplateDto,
   ): Promise<void> {
-    await this.templatesService.updateTemplate()
+    const result = await this.templatesService.updateTemplate({
+      ...updateTemplateDto,
+      templateId,
+    })
+    res.json(result)
   }
   /**
    * Delete all versions of a template by id
    */
   @Delete(':id')
-  async deleteTemplate(@Param('id') _templateId: number): Promise<void> {
-    await this.templatesService.deleteTemplate()
+  async deleteTemplate(@Param('id') templateId: number): Promise<void> {
+    await this.templatesService.deleteTemplate(templateId)
   }
 
   /**
