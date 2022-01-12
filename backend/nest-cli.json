@@ -1,5 +1,14 @@
 {
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
-  "entryFile": "index.js"
+  "entryFile": "index.js",
+  "compilerOptions": {
+    "plugins": [ {
+      "name": "@nestjs/swagger",
+      "options": {
+        "classValidatorShim": true,
+        "introspectComments": true
+      }
+    }]
+  }
 }

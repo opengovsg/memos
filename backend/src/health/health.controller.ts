@@ -19,6 +19,10 @@ export class HealthController {
     private memory: MemoryHealthIndicator,
   ) {}
 
+  /**
+   * Checks database and memory use
+   * @returns
+   */
   @Get()
   @HealthCheck()
   async check(): Promise<HealthCheckResult> {
