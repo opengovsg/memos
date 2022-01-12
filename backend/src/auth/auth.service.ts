@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common'
-import { InjectModel } from '@nestjs/sequelize'
+import { InjectRepository } from '@nestjs/typeorm'
 import { GenerateOtpDto, VerifyOtpDto } from './dto/index'
-import { User } from '../database/models'
+import { User } from '../database/entities'
 import { Logger } from '@nestjs/common'
 import { OtpService } from '../otp/otp.service'
 import { MailerService } from '../mailer/mailer.service'
+import { EntityManager, Repository } from 'typeorm'
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User)
-    private readonly userModel: typeof User,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
     private otpService: OtpService,
     private mailerService: MailerService,
   ) {}
@@ -38,10 +39,22 @@ export class AuthService {
   async verifyOtp(verifyOtpDto: VerifyOtpDto): Promise<User | undefined> {
     const { email, token } = verifyOtpDto
     const isVerified = this.otpService.verifyOtp(email, token)
-    const [user] = isVerified
-      ? await this.userModel.findOrCreate({ where: { email } })
-      : []
-
-    return user
+    if (isVerified) {
+      // findOrCreateUser
+      const user = await this.userRepository.manager.transaction<User>(
+        async (manager: EntityManager) => {
+          let foundUser = await manager.findOne(User, {
+            where: { email: email },
+          })
+          if (!foundUser) {
+            foundUser = manager.create(User, user)
+          }
+          const result: User = await manager.save(foundUser)
+          return result
+        },
+      )
+      return user
+    }
+    return
   }
 }
