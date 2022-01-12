@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  Res,
-} from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Put, Res } from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Response } from 'express'
 import {
@@ -73,11 +64,12 @@ export class TemplatesController {
     res.json(result)
   }
   /**
-   * Delete all versions of a template by id
+   * Hide all versions of a template by id such that the template is no longer displayed
+   * and cannot be used for issuance
    */
-  @Delete(':id')
-  async deleteTemplate(@Param('id') templateId: number): Promise<void> {
-    await this.templatesService.deleteTemplate(templateId)
+  @Post(':id/hide')
+  async hideTemplate(@Param('id') templateId: number): Promise<void> {
+    await this.templatesService.hideTemplate(templateId)
   }
 
   /**

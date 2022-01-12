@@ -5,7 +5,7 @@ export class MemosService {
   async createMemo(): Promise<void> {
     return
   }
-  async voidMemo(): Promise<void> {
+  async voidMemos(): Promise<void> {
     return
   }
   async uploadMemos(): Promise<void> {

@@ -1,2 +1,4 @@
-export class VoidMemoDto {}
-export class VoidMemoResponseDto {}
+export class VoidMemosDto {
+  id!: string[]
+}
+export class VoidMemosResponseDto {}

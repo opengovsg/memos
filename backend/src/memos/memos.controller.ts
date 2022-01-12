@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post } from '@nestjs/common'
+import { Body, Controller, Post } from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import {
   CreateMemoDto,
@@ -7,8 +7,8 @@ import {
   UploadMemosCompleteResponseDto,
   UploadMemosDto,
   UploadMemosResponseDto,
-  VoidMemoDto,
-  VoidMemoResponseDto,
+  VoidMemosDto,
+  VoidMemosResponseDto,
 } from './dto'
 import { MemosService } from './memos.service'
 
@@ -25,15 +25,12 @@ export class MemosController {
     await this.memosService.createMemo()
   }
   /**
-   * Void a memo by id
+   * Void a list of memos
    */
-  @Post(':id/void')
-  @ApiResponse({ type: VoidMemoResponseDto })
-  async voidMemo(
-    @Param('id') _memoId: string,
-    @Body() _voidMemoDto: VoidMemoDto,
-  ): Promise<void> {
-    await this.memosService.voidMemo()
+  @Post('void')
+  @ApiResponse({ type: VoidMemosResponseDto })
+  async voidMemos(@Body() _voidMemosDto: VoidMemosDto): Promise<void> {
+    await this.memosService.voidMemos()
   }
 
   /**

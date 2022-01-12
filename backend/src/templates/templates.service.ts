@@ -20,7 +20,7 @@ export class TemplatesService {
     // Do something with data
     return { id: 1, version: 2 }
   }
-  async deleteTemplate(_templateId: number): Promise<void> {
+  async hideTemplate(_templateId: number): Promise<void> {
     return
   }
   async getTemplate(_templateId: number): Promise<void> {
