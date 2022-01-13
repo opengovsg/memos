@@ -1,4 +1,4 @@
-import User from '../database/models'
+import User from '../database/entities/user.entity'
 
 declare module 'express-session' {
   interface SessionData {

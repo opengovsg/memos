@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common'
 import { RouterModule } from '@nestjs/core'
-import { SequelizeModule } from '@nestjs/sequelize'
-
+import { TypeOrmModule } from '@nestjs/typeorm'
 import { AuthModule } from 'auth/auth.module'
 import { HealthModule } from 'health/health.module'
 import { MemosModule } from 'memos/memos.module'
 import { TemplatesModule } from 'templates/templates.module'
 import { UsersModule } from 'users/users.module'
+import { DatabaseConfigService } from 'database/database-config.service'
 
 const apiModules = [
   AuthModule,
@@ -26,10 +26,8 @@ const apiModules = [
         children: apiModules,
       },
     ]),
-    SequelizeModule.forRoot({
-      dialect: 'sqlite', // TO-DO: change to production database dialect
-      autoLoadModels: true, // TO-DO: remove in production
-      synchronize: true, // TO-DO: remove in production
+    TypeOrmModule.forRootAsync({
+      useClass: DatabaseConfigService,
     }),
   ],
 })

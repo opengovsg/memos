@@ -3,8 +3,8 @@ import {
   HealthCheck,
   HealthCheckResult,
   HealthCheckService,
-  SequelizeHealthIndicator,
   MemoryHealthIndicator,
+  TypeOrmHealthIndicator,
 } from '@nestjs/terminus'
 import { ConfigService } from '../config/config.service'
 
@@ -15,7 +15,7 @@ export class HealthController {
     private config: ConfigService,
     // Refer to https://github.com/nestjs/terminus/blob/master/sample/ for
     // examples of how to add other services/databases to healthcheck.
-    private db: SequelizeHealthIndicator,
+    private db: TypeOrmHealthIndicator,
     private memory: MemoryHealthIndicator,
   ) {}
 

@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { getModelToken } from '@nestjs/sequelize'
 import { AuthService } from './auth.service'
 import { ConfigService } from '../config/config.service'
 import { OtpService } from '../otp/otp.service'
 import { MailerService } from '../mailer/mailer.service'
-import { User } from '../database/models'
+import { User } from '../database/entities'
+import { getRepositoryToken } from '@nestjs/typeorm'
 
 describe('AuthService', () => {
   let service: AuthService
-  const mockModel = {}
+  const mockRepository = {}
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -18,8 +18,8 @@ describe('AuthService', () => {
         OtpService,
         MailerService,
         {
-          provide: getModelToken(User),
-          useValue: mockModel,
+          provide: getRepositoryToken(User),
+          useValue: mockRepository,
         },
       ],
     }).compile()

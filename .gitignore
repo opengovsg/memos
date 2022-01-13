@@ -71,3 +71,6 @@ frontend/build
 
 # JetBrains IDEs' settings
 .idea
+
+# sqlite files
+*.sqlite3
