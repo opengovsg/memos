@@ -1,7 +1,5 @@
 import { Column, Entity, Index, JoinColumn, OneToOne } from 'typeorm'
-import { User } from '.'
-import { BaseEntity } from './base.entity'
-import { TemplateVersion } from './templateVersion.entity'
+import { BaseEntity, TemplateVersion, User } from '.'
 
 // TODO: Abstract constants
 enum UinType {

@@ -1,6 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm'
-import { User } from '.'
-import { BaseEntity } from './base.entity'
+import { BaseEntity, User } from '.'
 
 @Entity({ name: 'templates' })
 export class Template extends BaseEntity {

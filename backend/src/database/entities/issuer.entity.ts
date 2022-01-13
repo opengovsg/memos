@@ -1,7 +1,5 @@
 import { Entity, JoinColumn, OneToOne } from 'typeorm'
-import { User } from '.'
-import { BaseEntity } from './base.entity'
-import { Template } from './template.entity'
+import { BaseEntity, Template, User } from '.'
 
 @Entity({ name: 'issuers' })
 export class Issuer extends BaseEntity {
