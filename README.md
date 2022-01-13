@@ -13,7 +13,7 @@ After setting up PostgreSQL, run the following to start up the development envir
 
 ```sh
 # Create development database
-$ createdb healthpass_dev
+$ createdb memos_dev
 
 # Setup .env files and replace values within it
 $ cp backend/.env-example backend/.env
