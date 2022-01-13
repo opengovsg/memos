@@ -1,76 +1,45 @@
-# TypeScript Project Files Template for OGP
 
-## Folder Structure
-Two separate TypeScript projects, `frontend/` and `backend/`, 
-for frontend and backend respectively.
+# Memos
 
-Structure within frontend/backend folder taken from \[1\]. Notably, 
-we distinguish between `lib/` and `src/` directories, the latter for
-files that we have to process (eg, transpile) into `build/` or `dist/`. 
+## Getting started
 
-## Linting
-Done with ESLint, using the following rule configs:
+Ensure that you have access to a PostgreSQL instance running in your development environment. You have two options if you
+do not have PostgreSQL already set up:
 
-- `eslint:recommended` 
-- `plugin:prettier/recommended`
+1. Install using Homebrew: `brew install postgresql@13`
+2. Run PostgreSQL using Docker
 
-Prettier is further configured using the rules in `.prettierrc.js`.
+After setting up PostgreSQL, run the following to start up the development environment.
 
-VSCode users will have to add the following to their ESLint extension
-settings for linting to work in both `frontend/` and `backend/`:
+```sh
+# Create development database
+$ createdb healthpass_dev
 
-```json
-    "eslint.workingDirectories": [
-        "backend",
-        "frontend"
-    ],
+# Setup .env files and replace values within it
+$ cp backend/.env-example backend/.env
+
+# Install dependencies
+$ npm install
+
+# Run migrations
+$ npm run on-backend -- migration:run
+
+# Start development client and server
+$ npm run dev
 ```
 
-### Additional rules
-Developers are free to add more ESLint rules that bring their project
-in-line with norms specific to their language or framework of choice,
-eg. typescript or React.
+## Migrations
 
-## Conventional Commits
-Commit messages follow [conventional commits](https://conventionalcommits.org/).
-This is enforced by commitlint, when pushing to remote branch.
+_In backend folder,_
 
-### Commitizen
-[Commitizen](https://github.com/commitizen/cz-cli) has been installed as a 
-convenience for writing conventional commit messages, via `npm run cz`.
-This may be removed to minimise project dependencies.
+### Run migrations
 
-## Commit Hooks
-Husky is used in tandem with:
+```
+npm run migration:run
+```
 
-- lint-staged to ensure files are linted on commit
-- commitlint to ensure commits adhere to convention on push
+### To auto-generate migrations
 
-The pre-push hook will interfere on initial push since commitlint
-uses the remote branch as the lower bound in the commit range to inspect,
-and there would be no remote branch. Bypass this the first time with
-`git push --no-verify`.
-
-## Continuous Integration
-Travis is commonly used in OGP. A `.travis.yml` config has been provided
-for convenience, which will run the following in order:
-
-- unit-tests
-- linting
-- commit linting
-
-Builds will fail if any of these tasks fail.
-
-## Miscellany
-
-### Dependabot
-`.github/dependabot.yml` is in place so that npm dependencies will be 
-regularly updated.
-
-### Gitpod
-A `.gitpod.yml` has been configured to run `npm install` for 
-Gitpod users creating workspaces from the repository.
-
-## References
-
-\[1\]: https://gist.github.com/tracker1/59f2c13044315f88bee9
+```
+npm run migration:gen -- -n <migration-name>
+```
