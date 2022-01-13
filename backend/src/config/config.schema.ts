@@ -4,6 +4,16 @@ export interface ConfigSchema {
   port: number
   environment: 'development' | 'staging' | 'production' | 'test'
   awsRegion: string
+  database: {
+    host: string
+    username: string
+    password: string
+    port: number
+    name: string
+    logging: boolean
+    minPool: number
+    maxPool: number
+  }
   session: { name: string; secret: string; cookie: { maxAge: number } }
   otp: {
     expiry: number
@@ -54,6 +64,47 @@ export const schema: Schema<ConfigSchema> = {
     env: 'AWS_REGION',
     format: '*',
     default: 'ap-southeast-1',
+  },
+  database: {
+    username: {
+      env: 'DB_USERNAME',
+      sensitive: true,
+      default: '',
+      format: String,
+    },
+    password: {
+      env: 'DB_PASSWORD',
+      sensitive: true,
+      default: '',
+      format: String,
+    },
+    host: {
+      env: 'DB_HOST',
+      default: 'localhost',
+      format: String,
+    },
+    port: {
+      env: 'DB_PORT',
+      default: 5432,
+      format: Number,
+    },
+    name: {
+      env: 'DB_NAME',
+      default: '',
+      format: 'required-string',
+    },
+    logging: {
+      env: 'DB_LOGGING',
+      default: false,
+    },
+    minPool: {
+      env: 'DB_MIN_POOL_SIZE',
+      default: 50,
+    },
+    maxPool: {
+      env: 'DB_MAX_POOL_SIZE',
+      default: 200,
+    },
   },
   session: {
     name: {

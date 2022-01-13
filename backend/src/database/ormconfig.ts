@@ -1,11 +1,17 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
+import convict from 'convict'
 import { join } from 'path'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
-
+import { schema } from '../config/config.schema'
+const config = convict(schema)
 export default {
-  type: 'sqlite',
-  name: 'default',
-  database: 'db.sqlite3',
+  type: 'postgres',
+  host: config.get('database.host'),
+  port: config.get('database.port'),
+  username: config.get('database.username'),
+  password: config.get('database.password'),
+  database: config.get('database.name'),
+  logging: config.get('database.logging'),
   synchronize: false, // do not automatically sync entities
   // js for runtime, ts for typeorm cli
   entities: [join(__dirname, 'entities', '*.entity{.js,.ts}')],
@@ -14,4 +20,8 @@ export default {
     migrationsDir: join(__dirname, 'migrations'),
   },
   namingStrategy: new SnakeNamingStrategy(),
+  extra: {
+    min: config.get('database.minPool'),
+    max: config.get('database.maxPool'),
+  },
 } as TypeOrmModuleOptions
