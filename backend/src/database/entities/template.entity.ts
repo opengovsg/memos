@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm'
+import { TemplateStatus } from '../../types'
 import { BaseEntity, User } from '.'
 
 @Entity({ name: 'templates' })
@@ -10,6 +11,6 @@ export class Template extends BaseEntity {
   @JoinColumn({ name: 'author' })
   author!: User
 
-  @Column({ default: false })
-  isArchived!: boolean
+  @Column()
+  status!: TemplateStatus
 }
