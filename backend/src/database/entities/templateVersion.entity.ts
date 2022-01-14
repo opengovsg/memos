@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm'
+import { TemplateBlock } from '../../types'
 import { BaseEntity, Template, User } from '.'
 
 @Entity({ name: 'template_versions' })
@@ -11,8 +12,8 @@ export class TemplateVersion extends BaseEntity {
   @JoinColumn({ name: 'editor' })
   editor!: User
 
-  @Column()
-  body!: string
+  @Column({ type: 'jsonb' })
+  body!: TemplateBlock[]
 
   @Column({
     type: 'jsonb',
