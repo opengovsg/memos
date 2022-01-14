@@ -47,10 +47,12 @@ export class AuthService {
             where: { email: email },
           })
           if (!foundUser) {
-            foundUser = manager.create(User, user)
+            const newUser = manager.create(User, {
+              email,
+            })
+            foundUser = await manager.save(newUser)
           }
-          const result: User = await manager.save(foundUser)
-          return result
+          return foundUser
         },
       )
       return user
