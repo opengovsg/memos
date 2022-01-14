@@ -22,4 +22,7 @@ export class TemplateVersion extends BaseEntity {
   // Defaults to true because a new version should, by definition, be the latest
   @Column({ default: true })
   isLatestVersion!: boolean
+
+  @Column()
+  version!: number
 }
