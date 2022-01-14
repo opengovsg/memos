@@ -20,7 +20,7 @@ export abstract class BaseEntity {
   deletedAt?: Date
 
   @Column({
-    type: 'json',
+    type: 'jsonb',
     nullable: true,
   })
   metadata?: Record<string, string>

@@ -14,7 +14,7 @@ export class User extends BaseEntity {
   apiKeyHash?: string
 
   @Column({
-    type: 'json',
+    type: 'jsonb',
     nullable: true,
   })
   apiKeyScopes?: string[]

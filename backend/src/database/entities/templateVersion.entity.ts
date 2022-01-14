@@ -15,7 +15,7 @@ export class TemplateVersion extends BaseEntity {
   body!: string
 
   @Column({
-    type: 'json',
+    type: 'jsonb',
   })
   paramsRequired!: Record<string, string>
 

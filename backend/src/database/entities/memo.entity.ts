@@ -26,7 +26,7 @@ export class Memo extends BaseEntity {
   @Index({ unique: true }) // optimize for queries
   slug!: string
 
-  @Column({ type: 'json' })
+  @Column({ type: 'jsonb' })
   params!: Record<string, string>
 
   @Column({ nullable: true })
