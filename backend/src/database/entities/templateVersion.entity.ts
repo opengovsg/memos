@@ -1,14 +1,14 @@
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm'
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm'
 import { TemplateBlock } from '../../types'
 import { BaseEntity, Template, User } from '.'
 
 @Entity({ name: 'template_versions' })
 export class TemplateVersion extends BaseEntity {
-  @OneToOne(() => Template, { nullable: false })
+  @ManyToOne(() => Template, { nullable: false })
   @JoinColumn({ name: 'template' })
   template!: Template
 
-  @OneToOne(() => User, { nullable: false })
+  @ManyToOne(() => User, { nullable: false })
   @JoinColumn({ name: 'editor' })
   editor!: User
 

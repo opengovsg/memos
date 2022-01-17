@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, OneToOne } from 'typeorm'
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
 import { BaseEntity, TemplateVersion, User } from '.'
 
 // TODO: Abstract constants
@@ -8,11 +8,11 @@ enum UinType {
 
 @Entity({ name: 'memos' })
 export class Memo extends BaseEntity {
-  @OneToOne(() => TemplateVersion, { nullable: false })
+  @ManyToOne(() => TemplateVersion, { nullable: false })
   @JoinColumn({ name: 'template_version' })
   templateVersion!: TemplateVersion
 
-  @OneToOne(() => User, { nullable: false })
+  @ManyToOne(() => User, { nullable: false })
   @JoinColumn({ name: 'issuer' })
   issuer!: User
 
