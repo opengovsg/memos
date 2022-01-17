@@ -1,8 +1,11 @@
+import { TemplateBlock } from '../../types'
+
 export class CreateTemplateDto {
   name!: string
-  content!: string
+  body!: TemplateBlock[]
 }
+
 export class CreateTemplateResponseDto {
-  id!: number
-  version!: number
+  id!: number // template.id, not template_version.id
+  version!: number // template_version.version
 }
