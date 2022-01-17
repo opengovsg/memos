@@ -1,5 +1,15 @@
-import { Body, Controller, Get, Param, Post, Put, Res } from '@nestjs/common'
-import { ApiResponse, ApiTags } from '@nestjs/swagger'
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Res,
+  Session,
+  UseGuards,
+} from '@nestjs/common'
+import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Response } from 'express'
 import {
   AddPermissionDto,
@@ -16,26 +26,34 @@ import {
 
 import { PermissionsService } from './permissions.service'
 import { TemplatesService } from './templates.service'
+import { AuthGuard } from 'auth/auth.guard'
+import { SessionData } from 'express-session'
 
 @Controller('templates')
 @ApiTags('templates')
+@UseGuards(AuthGuard)
 export class TemplatesController {
   constructor(
     private readonly templatesService: TemplatesService,
     private readonly permissionsService: PermissionsService,
   ) {}
+
   /**
    * Create a new template
    */
   @Post()
-  @ApiResponse({ type: CreateTemplateResponseDto })
+  @ApiCreatedResponse({ type: CreateTemplateResponseDto })
   async createTemplate(
-    @Res() res: Response,
+    @Session() session: SessionData,
     @Body() createTemplateDto: CreateTemplateDto,
-  ): Promise<void> {
-    const result = await this.templatesService.createTemplate(createTemplateDto)
-    res.json(result)
+  ): Promise<CreateTemplateResponseDto> {
+    const result = await this.templatesService.createTemplate(
+      session.user,
+      createTemplateDto,
+    )
+    return result
   }
+
   /**
    * Get the latest version of a template by id
    */
