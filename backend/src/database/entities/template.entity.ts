@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm'
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm'
 import { TemplateStatus } from '../../types'
 import { BaseEntity, User } from '.'
 
@@ -7,7 +7,7 @@ export class Template extends BaseEntity {
   @Column()
   name!: string
 
-  @OneToOne(() => User, { nullable: false })
+  @ManyToOne(() => User, { nullable: false })
   @JoinColumn({ name: 'author' })
   author!: User
 
