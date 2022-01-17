@@ -1,10 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import { Entity, Column } from 'typeorm'
+import { BaseEntity } from './'
 
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id!: number
-
+@Entity({ name: 'users' })
+export class User extends BaseEntity {
   @Column({
     unique: true,
   })
@@ -13,8 +11,11 @@ export class User {
   @Column({
     nullable: true,
   })
-  apiKeyHash!: string
+  apiKeyHash?: string
 
-  // @Column({ default: {} })
-  // scopes?: Record<string, string>
+  @Column({
+    type: 'jsonb',
+    nullable: true,
+  })
+  apiKeyScopes?: string[]
 }
