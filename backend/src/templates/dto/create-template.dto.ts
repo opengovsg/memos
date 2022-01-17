@@ -1,7 +1,12 @@
+import { ArrayNotEmpty, IsArray, IsNotEmpty } from 'class-validator'
 import { TemplateBlock } from '../../types'
 
 export class CreateTemplateDto {
+  @IsNotEmpty()
   name!: string
+
+  @IsArray()
+  @ArrayNotEmpty()
   body!: TemplateBlock[]
 }
 
