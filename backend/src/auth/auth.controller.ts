@@ -7,9 +7,11 @@ import {
   Res,
   Logger,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { Request, Response } from 'express'
+import { AuthGuard } from './auth.guard'
 import { AuthService } from './auth.service'
 import { GenerateOtpDto, VerifyOtpDto } from './dto'
 
@@ -61,6 +63,7 @@ export class AuthController {
   }
 
   @Post('logout')
+  @UseGuards(AuthGuard)
   async logout(@Req() req: Request, @Res() res: Response): Promise<void> {
     req.session.destroy(() =>
       res.status(HttpStatus.OK).json({ message: 'Logged out' }),
@@ -68,7 +71,8 @@ export class AuthController {
   }
 
   @Get('whoami')
+  @UseGuards(AuthGuard)
   async whoami(@Req() req: Request, @Res() res: Response): Promise<void> {
-    res.status(HttpStatus.OK).json(req.session.user || null)
+    res.status(HttpStatus.OK).json(req.session.user)
   }
 }
