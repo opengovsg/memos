@@ -1,4 +1,11 @@
-import { createContext, FC, useCallback, useContext } from 'react'
+import {
+  createContext,
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 
 import { LOGGED_IN_KEY } from '../localStorage/constants'
@@ -8,7 +15,7 @@ import * as AuthService from './AuthService'
 
 type AuthContextProps = {
   user?: any
-  isLoading: boolean
+  // isLoading: boolean
   sendLoginOtp: typeof AuthService.sendLoginOtp
   verifyLoginOtp: (params: { token: string; email: string }) => Promise<void>
   logout: typeof AuthService.logout
@@ -40,9 +47,19 @@ export const useAuth = (): AuthContextProps => {
 // Provider hook that creates auth object and handles state
 const useProvideAuth = () => {
   const [isLoggedIn, setIsLoggedIn] = useLocalStorage<boolean>(LOGGED_IN_KEY)
-  const queryClient = useQueryClient()
+  const [user, setUser] = useState<AuthService.User | undefined>(undefined)
 
-  const { data: user, isLoading } = useQuery(
+  useEffect(() => {
+    if (isLoggedIn)
+      AuthService.fetchUser()
+        .then((user) => {
+          setUser(user)
+        })
+        .catch(() => setUser(undefined))
+  }, [isLoggedIn])
+
+  const queryClient = useQueryClient()
+  const { data } = useQuery(
     'currentUser',
     () => AuthService.fetchUser(),
     // 10 minutes staletime, do not need to retrieve so often.
@@ -62,14 +79,14 @@ const useProvideAuth = () => {
     if (isLoggedIn) {
       // Clear logged in state.
       setIsLoggedIn(undefined)
+      setUser(undefined)
     }
     queryClient.clear()
-  }, [isLoggedIn, queryClient, setIsLoggedIn])
+  }, [isLoggedIn, queryClient, setIsLoggedIn, setUser])
 
   // Return the user object and auth methods
   return {
-    user: isLoggedIn ? user : undefined,
-    isLoading,
+    user: isLoggedIn ? data || user : undefined,
     sendLoginOtp: AuthService.sendLoginOtp,
     verifyLoginOtp: verifyLoginOtp,
     logout,

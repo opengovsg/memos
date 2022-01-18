@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
   Box,
   chakra,
@@ -22,10 +22,9 @@ export type LoginOtpData = {
   email: string
 }
 
-export const LoginPage: FC = () => {
+export const LoginPage = (): JSX.Element => {
   const [email, setEmail] = useState<string>()
   const { sendLoginOtp, verifyLoginOtp } = useAuth()
-
   const currentYear = new Date().getFullYear()
   const isDesktop = useBreakpointValue({ base: false, xs: false, lg: true })
   const isTablet = useBreakpointValue({ base: false, xs: false, md: true })
@@ -46,7 +45,7 @@ export const LoginPage: FC = () => {
     return setEmail(email)
   }
 
-  const handleVerifyOtp = ({ otp }: OtpFormInputs) => {
+  const handleVerifyOtp = async ({ otp }: OtpFormInputs) => {
     // Should not happen, since OtpForm component is only shown when there is
     // already an email state set.
     if (!email) {

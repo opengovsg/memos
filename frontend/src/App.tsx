@@ -1,9 +1,10 @@
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
-import { Button, ChakraProvider } from '@chakra-ui/react'
+import { BrowserRouter } from 'react-router-dom'
+import { ChakraProvider } from '@chakra-ui/react'
 
-import { AuthProvider, useAuth } from './features/auth/AuthContext'
-import { LoginPage } from './pages/login/LoginPage'
+import { AuthProvider } from './features/auth/AuthContext'
+import { AppRouter } from './AppRouter'
 import { theme } from './theme'
 
 const queryClient = new QueryClient()
@@ -13,31 +14,14 @@ function App(): JSX.Element {
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
       <ChakraProvider theme={theme} resetCSS>
-        <AuthProvider>
-          <InnerApp />
-        </AuthProvider>
+        <BrowserRouter>
+          <AuthProvider>
+            <AppRouter />
+          </AuthProvider>
+        </BrowserRouter>
       </ChakraProvider>
     </QueryClientProvider>
   )
 }
 
 export default App
-
-export const InnerApp = () => {
-  const { user, isLoading, logout } = useAuth()
-
-  if (isLoading) {
-    return <div>...Loading...</div>
-  }
-
-  if (!user) {
-    return <LoginPage />
-  }
-
-  return (
-    <div>
-      Logged in: {JSON.stringify(user)}
-      <Button onClick={logout}>Logout</Button>
-    </div>
-  )
-}
