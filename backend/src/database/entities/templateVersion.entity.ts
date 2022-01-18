@@ -18,7 +18,7 @@ export class TemplateVersion extends BaseEntity {
   @Column({
     type: 'jsonb',
   })
-  paramsRequired!: Record<string, string>
+  paramsRequired!: string[]
 
   // Defaults to true because a new version should, by definition, be the latest
   @Column({ default: true })

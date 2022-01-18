@@ -51,7 +51,7 @@ export class TemplatesService {
         editor: author,
         version: 1, // new template, first version
         body,
-        paramsRequired: {}, // TODO fix once templating service is implemented
+        paramsRequired: [], // TODO fix once templating service is implemented
       })
       await this.templateVersionRepository.save(templateVersion)
 
