@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common'
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import {
   Editor,
@@ -12,9 +16,11 @@ import { TemplateStatus } from 'types'
 import {
   CreateTemplateDto,
   CreateTemplateResponseDto,
+  GetTemplateResponseDto,
   UpdateTemplateDto,
   UpdateTemplateResponseDto,
 } from './dto'
+import { isTemplateEditorOrIssuer } from './templates.util'
 
 @Injectable()
 export class TemplatesService {
@@ -81,9 +87,62 @@ export class TemplatesService {
   async hideTemplate(_templateId: number): Promise<void> {
     return
   }
-  async getTemplate(_templateId: number): Promise<void> {
-    return
+
+  // Retrieves an existing template
+  async getTemplate(
+    requester: User,
+    _templateId: number,
+  ): Promise<GetTemplateResponseDto> {
+    // Find template
+    const template = await this.templateRepository.findOne({
+      where: {
+        id: _templateId,
+      },
+      relations: ['author'],
+    })
+    if (!template) {
+      throw new NotFoundException()
+    }
+
+    // Check if requester is editor/issuer
+    // TODO: this might be a guard (?)
+    const isAllowed = await isTemplateEditorOrIssuer(
+      requester,
+      this.editorRepository,
+      this.issuerRepository,
+      _templateId,
+    )
+    if (!isAllowed) {
+      throw new ForbiddenException()
+    }
+
+    // Find latest template version
+    const templateVersion = await this.templateVersionRepository.findOne({
+      where: {
+        template,
+      },
+      order: {
+        version: 'DESC',
+      },
+      relations: ['editor'],
+    })
+    if (!templateVersion) {
+      // Template found but no versions exist. This is an anomaly, should take a closer look into the error.
+      throw new NotFoundException()
+    }
+
+    return {
+      id: template.id,
+      version: templateVersion.version,
+      status: template.status,
+      author: template.author.id,
+      editor: templateVersion.editor.id,
+      name: template.name,
+      body: templateVersion.body,
+      paramsRequired: templateVersion.paramsRequired,
+    }
   }
+
   async listTemplatesForUser(): Promise<void> {
     return
   }

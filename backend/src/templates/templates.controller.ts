@@ -18,6 +18,7 @@ import {
   CreateTemplateResponseDto,
   DeletePermissionDto,
   DeletePermissionResponseDto,
+  GetTemplateResponseDto,
   ListPermissionsDto,
   ListPermissionsResponseDto,
   UpdateTemplateDto,
@@ -59,12 +60,16 @@ export class TemplatesController {
    */
   @Get(':id')
   async getTemplate(
-    @Res() res: Response,
+    @Session() session: SessionData,
     @Param('id') templateId: number,
-  ): Promise<void> {
-    const result = await this.templatesService.getTemplate(templateId)
-    res.json(result)
+  ): Promise<GetTemplateResponseDto> {
+    const result = await this.templatesService.getTemplate(
+      session.user,
+      templateId,
+    )
+    return result
   }
+
   /**
    * Create a new version of a template by id
    */
