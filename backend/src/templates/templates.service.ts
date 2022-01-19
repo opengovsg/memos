@@ -53,7 +53,7 @@ export class TemplatesService {
 
       // Add author as an editor and issuer
       const editor = manager.create(Editor, {
-        // template,
+        template,
         user: author,
       })
       await manager.save(editor)
