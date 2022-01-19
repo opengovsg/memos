@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post } from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import {
   CreateMemoDto,
@@ -10,6 +10,7 @@ import {
   VoidMemosDto,
   VoidMemosResponseDto,
 } from './dto'
+import { GetMemoResponseDto } from './dto/get-memo.dto'
 import { MemosService } from './memos.service'
 
 @Controller('memos')
@@ -50,5 +51,15 @@ export class MemosController {
     @Body() _uploadMemosDto: UploadMemosCompleteDto,
   ): Promise<void> {
     await this.memosService.uploadMemosComplete()
+  }
+
+  /**
+   * Get memo based on slug
+   */
+  @Get(':slug')
+  @ApiResponse({ type: GetMemoResponseDto })
+  async getMemo(@Param('slug') slug: string): Promise<GetMemoResponseDto> {
+    const result = await this.memosService.getMemo(slug)
+    return result
   }
 }
