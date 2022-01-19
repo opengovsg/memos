@@ -165,7 +165,7 @@ export const Button = {
   },
   defaultProps: {
     variant: 'solid',
-    colorScheme: 'primary',
+    colorScheme: 'theme-orange',
     size: 'md',
   },
 }
