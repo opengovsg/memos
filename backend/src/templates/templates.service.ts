@@ -32,7 +32,7 @@ export class TemplatesService {
   ): Promise<CreateTemplateResponseDto> {
     const { name, body } = _data
 
-    return await this.connection.transaction(async (manager) => {
+    return this.connection.transaction(async (manager) => {
       const templateRepository = manager.getRepository(Template)
       const templateVersionRepository = manager.getRepository(TemplateVersion)
       const editorRepository = manager.getRepository(Editor)
