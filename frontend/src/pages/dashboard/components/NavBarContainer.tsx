@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { TEMPLATES_ROUTE } from '~constants/routes'
+import { DASHBOARD_ROUTE } from '~constants/routes'
 
 import { NavBar } from './NavBar'
 
@@ -9,7 +9,7 @@ const useBuilderNavBar = () => {
   const navigate = useNavigate()
 
   const handleBackToDashboard = useCallback(
-    (): void => navigate(TEMPLATES_ROUTE),
+    (): void => navigate(DASHBOARD_ROUTE),
     [navigate],
   )
 

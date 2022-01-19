@@ -1,10 +1,14 @@
-import { Center, Spinner, Text } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
+import { Button, Flex } from '@chakra-ui/react'
+
+import { BUILDER_ROUTE } from '~constants/routes'
 
 export const MemosPage = (): JSX.Element => {
   return (
-    <Center>
-      <Text>Memos Page</Text>
-      <Spinner thickness="4px" color="primary.500" size="xl" />
-    </Center>
+    <Flex flex={1} bg="neutral.200">
+      <Link to={BUILDER_ROUTE}>
+        <Button>Create a memo</Button>
+      </Link>
+    </Flex>
   )
 }

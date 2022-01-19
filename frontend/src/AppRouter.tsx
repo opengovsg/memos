@@ -5,16 +5,12 @@ import {
   BUILDER_ROUTE,
   DASHBOARD_ROUTE,
   LOGIN_ROUTE,
-  MEMOS_ROUTE,
   ROOT_ROUTE,
-  TEMPLATES_ROUTE,
 } from '~constants/routes'
 
 import { Builder } from '~pages/builder/Builder'
 import { Dashboard } from '~pages/dashboard/Dashboard'
 import { LoginPage } from '~pages/login/LoginPage'
-import { MemosPage } from '~pages/memos/MemosPage'
-import { TemplatesPage } from '~pages/templates/TemplatesPage'
 
 import { PrivateElement } from './PrivateElement'
 import { PublicElement } from './PublicElement'
@@ -33,11 +29,7 @@ export const AppRouter = (): JSX.Element => {
         <Route
           path={DASHBOARD_ROUTE}
           element={<PrivateElement element={<Dashboard />} />}
-        >
-          <Route index element={<TemplatesPage />} />
-          <Route path={TEMPLATES_ROUTE} element={<TemplatesPage />} />
-          <Route path={MEMOS_ROUTE} element={<MemosPage />} />
-        </Route>
+        />
 
         <Route
           path={BUILDER_ROUTE}
