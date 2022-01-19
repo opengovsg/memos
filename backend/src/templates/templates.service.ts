@@ -33,41 +33,36 @@ export class TemplatesService {
     const { name, body } = _data
 
     return this.connection.transaction(async (manager) => {
-      const templateRepository = manager.getRepository(Template)
-      const templateVersionRepository = manager.getRepository(TemplateVersion)
-      const editorRepository = manager.getRepository(Editor)
-      const issuerRepository = manager.getRepository(Issuer)
-
       // Create template
-      const template = templateRepository.create({
+      const template = manager.create(Template, {
         name,
         author,
         status: TemplateStatus.Public,
       })
-      await templateRepository.save(template)
+      await manager.save(template)
 
       // Create template version
-      const templateVersion = templateVersionRepository.create({
+      const templateVersion = manager.create(TemplateVersion, {
         template,
         editor: author,
         version: 1, // new template, first version
         body,
         paramsRequired: [], // TODO fix once templating service is implemented
       })
-      await templateVersionRepository.save(templateVersion)
+      await manager.save(templateVersion)
 
       // Add author as an editor and issuer
-      const editor = editorRepository.create({
-        template,
+      const editor = manager.create(Editor, {
+        // template,
         user: author,
       })
-      await editorRepository.save(editor)
+      await manager.save(editor)
 
-      const issuer = issuerRepository.create({
+      const issuer = manager.create(Issuer, {
         template,
         user: author,
       })
-      await issuerRepository.save(issuer)
+      await manager.save(issuer)
 
       return { id: template.id, version: templateVersion.version }
     })
@@ -88,14 +83,8 @@ export class TemplatesService {
     requester: User,
     _templateId: number,
   ): Promise<GetTemplateResponseDto> {
-    const templateRepository = this.connection.getRepository(Template)
-    const templateVersionRepository =
-      this.connection.getRepository(TemplateVersion)
-    const editorRepository = this.connection.getRepository(Editor)
-    const issuerRepository = this.connection.getRepository(Issuer)
-
     // Find template
-    const template = await templateRepository.findOne({
+    const template = await this.connection.manager.findOne(Template, {
       where: {
         id: _templateId,
       },
@@ -109,8 +98,7 @@ export class TemplatesService {
     // TODO: this might be a guard (?)
     const isAllowed = await isTemplateEditorOrIssuer(
       requester,
-      editorRepository,
-      issuerRepository,
+      this.connection.manager,
       _templateId,
     )
     if (!isAllowed) {
@@ -118,15 +106,18 @@ export class TemplatesService {
     }
 
     // Find latest template version
-    const templateVersion = await templateVersionRepository.findOne({
-      where: {
-        template,
+    const templateVersion = await this.connection.manager.findOne(
+      TemplateVersion,
+      {
+        where: {
+          template,
+        },
+        order: {
+          version: 'DESC',
+        },
+        relations: ['editor'],
       },
-      order: {
-        version: 'DESC',
-      },
-      relations: ['editor'],
-    })
+    )
     if (!templateVersion) {
       // Template found but no versions exist. This is an anomaly, should take a closer look into the error.
       throw new NotFoundException()

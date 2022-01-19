@@ -1,5 +1,5 @@
 import { Editor, Issuer, User } from 'database/entities'
-import { Repository } from 'typeorm'
+import { EntityManager } from 'typeorm'
 import mustache from 'mustache'
 
 /**
@@ -7,10 +7,10 @@ import mustache from 'mustache'
  */
 export const isTemplateEditor = async (
   user: User,
-  editorRepo: Repository<Editor>,
+  manager: EntityManager,
   templateId: number,
 ) => {
-  const editor = await editorRepo.findOne({
+  const editor = await manager.findOne(Editor, {
     where: {
       user,
       template: {
@@ -26,10 +26,10 @@ export const isTemplateEditor = async (
  */
 export const isTemplateIssuer = async (
   user: User,
-  issuerRepo: Repository<Issuer>,
+  manager: EntityManager,
   templateId: number,
 ) => {
-  const issuer = await issuerRepo.findOne({
+  const issuer = await manager.findOne(Issuer, {
     where: {
       user,
       template: {
@@ -45,13 +45,12 @@ export const isTemplateIssuer = async (
  */
 export const isTemplateEditorOrIssuer = async (
   user: User,
-  editorRepo: Repository<Editor>,
-  issuerRepo: Repository<Issuer>,
+  manager: EntityManager,
   templateId: number,
 ) => {
   return (
-    (await isTemplateEditor(user, editorRepo, templateId)) ||
-    (await isTemplateIssuer(user, issuerRepo, templateId))
+    (await isTemplateEditor(user, manager, templateId)) ||
+    (await isTemplateIssuer(user, manager, templateId))
   )
 }
 
