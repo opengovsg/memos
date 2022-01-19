@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Session,
+  UseGuards,
+} from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import {
   CreateMemoDto,
@@ -12,9 +20,12 @@ import {
 } from './dto'
 import { GetMemoResponseDto } from './dto/get-memo.dto'
 import { MemosService } from './memos.service'
+import { AuthGuard } from 'auth/auth.guard'
+import { SessionData } from 'express-session'
 
 @Controller('memos')
 @ApiTags('memos')
+@UseGuards(AuthGuard)
 export class MemosController {
   constructor(private readonly memosService: MemosService) {}
   /**
@@ -22,8 +33,15 @@ export class MemosController {
    */
   @Post()
   @ApiResponse({ type: CreateMemoResponseDto })
-  async createMemo(@Body() _createMemoDto: CreateMemoDto): Promise<void> {
-    await this.memosService.createMemo()
+  async createMemo(
+    @Session() session: SessionData,
+    @Body() createMemoDto: CreateMemoDto,
+  ): Promise<CreateMemoResponseDto> {
+    const result = await this.memosService.createMemo(
+      session.user,
+      createMemoDto,
+    )
+    return result
   }
   /**
    * Void a list of memos
