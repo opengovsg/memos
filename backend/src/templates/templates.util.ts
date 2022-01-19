@@ -1,5 +1,6 @@
 import { Editor, Issuer, User } from 'database/entities'
 import { Repository } from 'typeorm'
+import mustache from 'mustache'
 
 /**
  * Checks whether a user is an editor of a template.
@@ -52,4 +53,30 @@ export const isTemplateEditorOrIssuer = async (
     (await isTemplateEditor(user, editorRepo, templateId)) ||
     (await isTemplateIssuer(user, issuerRepo, templateId))
   )
+}
+
+/**
+ * eg. "This {{noun}} is {{adjective}}." -> ["noun", "adjective"]
+ * @param body - body of block
+ * @returns Array of parameter keys
+ */
+
+export const parseTemplate = (body: string): Array<string> => {
+  const vars: Set<string> = new Set()
+
+  const parsed = mustache.parse(body)
+  for (const meta of parsed) {
+    const type = meta[0]
+    const token = meta[1]
+    if (type === 'name') {
+      const key = token.toLowerCase()
+      if (!key) {
+        // TODO: throw an error? This currently ignores empty keys
+        continue
+      }
+      vars.add(key)
+    }
+  }
+
+  return Array.from(vars)
 }
