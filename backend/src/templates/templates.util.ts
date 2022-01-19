@@ -55,6 +55,12 @@ export const isTemplateEditorOrIssuer = async (
   )
 }
 
+/**
+ * eg. "This {{noun}} is {{adjective}}." -> ["noun", "adjective"]
+ * @param body - body of block
+ * @returns Array of parameter keys
+ */
+
 export const parseTemplate = (body: string): Array<string> => {
   const vars: Set<string> = new Set()
 
