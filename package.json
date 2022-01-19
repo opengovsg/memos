@@ -24,6 +24,7 @@
     "@commitlint/cli": "^13.2.1",
     "@commitlint/config-conventional": "^13.2.0",
     "@commitlint/travis-cli": "^13.2.1",
+    "@types/mustache": "^4.1.2",
     "commitizen": "^4.2.4",
     "concurrently": "^6.3.0",
     "cz-conventional-changelog": "^3.3.0",
@@ -40,7 +41,9 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "dependencies": {},
+  "dependencies": {
+    "mustache": "^4.2.0"
+  },
   "engines": {
     "node": ">=14.17.0"
   }
