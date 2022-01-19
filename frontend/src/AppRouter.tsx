@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import {
+  BUILDER_ROUTE,
   DASHBOARD_ROUTE,
   LOGIN_ROUTE,
   MEMOS_ROUTE,
@@ -9,6 +10,7 @@ import {
   TEMPLATES_ROUTE,
 } from '~constants/routes'
 
+import { Builder } from '~pages/builder/Builder'
 import { Dashboard } from '~pages/dashboard/Dashboard'
 import { LoginPage } from '~pages/login/LoginPage'
 import { MemosPage } from '~pages/memos/MemosPage'
@@ -36,6 +38,11 @@ export const AppRouter = (): JSX.Element => {
           <Route path={TEMPLATES_ROUTE} element={<TemplatesPage />} />
           <Route path={MEMOS_ROUTE} element={<MemosPage />} />
         </Route>
+
+        <Route
+          path={BUILDER_ROUTE}
+          element={<PrivateElement element={<Builder />} />}
+        />
 
         <Route path="*" element={<Navigate to={LOGIN_ROUTE} />} />
       </Routes>

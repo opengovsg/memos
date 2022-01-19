@@ -17,19 +17,19 @@ const useBuilderNavBar = () => {
     console.log('add collab button clicked')
   }, [])
 
-  const handlePreviewForm = useCallback((): void => {
-    console.log('preview form button clicked')
+  const handleSaveTemplate = useCallback((): void => {
+    console.log('save template button clicked')
   }, [])
 
-  const handleShareForm = useCallback((): void => {
-    console.log('share form button clicked')
+  const handleCreateMemo = useCallback((): void => {
+    console.log('create memo button clicked')
   }, [])
 
   return {
     handleBackToDashboard,
     handleAddCollaborator,
-    handlePreviewForm,
-    handleShareForm,
+    handleCreateMemo,
+    handleSaveTemplate,
   }
 }
 
@@ -40,16 +40,16 @@ export const BuilderNavBarContainer = (): JSX.Element => {
   const {
     handleBackToDashboard,
     handleAddCollaborator,
-    handlePreviewForm,
-    handleShareForm,
+    handleCreateMemo,
+    handleSaveTemplate,
   } = useBuilderNavBar()
 
   return (
     <BuilderNavBar
       handleBackButtonClick={handleBackToDashboard}
       handleAddCollabButtonClick={handleAddCollaborator}
-      handlePreviewFormButtonClick={handlePreviewForm}
-      handleShareButtonClick={handleShareForm}
+      handleCreateMemoClick={handleCreateMemo}
+      handleSaveTemplateClick={handleSaveTemplate}
     />
   )
 }

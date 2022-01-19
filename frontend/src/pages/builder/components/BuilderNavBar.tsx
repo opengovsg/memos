@@ -30,8 +30,8 @@ export interface BuilderNavBarProps {
 
   handleBackButtonClick: () => void
   handleAddCollabButtonClick: () => void
-  handlePreviewFormButtonClick: () => void
-  handleShareButtonClick: () => void
+  handleSaveTemplateClick: () => void
+  handleCreateMemoClick: () => void
 }
 
 /**
@@ -40,8 +40,8 @@ export interface BuilderNavBarProps {
 export const BuilderNavBar = ({
   handleAddCollabButtonClick,
   handleBackButtonClick,
-  handlePreviewFormButtonClick,
-  handleShareButtonClick,
+  handleSaveTemplateClick,
+  handleCreateMemoClick,
 }: BuilderNavBarProps): JSX.Element => {
   const { isOpen, onClose, onOpen } = useDisclosure()
 
@@ -115,18 +115,14 @@ export const BuilderNavBar = ({
         <Box display={{ base: 'none', md: 'flex' }}>
           <ButtonGroup spacing="0.5rem">
             <IconButton
-              aria-label="Add collaborators to form"
+              aria-label="Manage collaborators"
               variant="outline"
               onClick={handleAddCollabButtonClick}
               icon={<BiUserPlus />}
+              disabled={true}
             />
-            <IconButton
-              aria-label="Preview form"
-              variant="outline"
-              onClick={handlePreviewFormButtonClick}
-              icon={<BiShow />}
-            />
-            <Button onClick={handleShareButtonClick}>Share</Button>
+            <Button onClick={handleSaveTemplateClick}>Save Template</Button>
+            <Button onClick={handleCreateMemoClick}>Create Memo</Button>
           </ButtonGroup>
         </Box>
       </Flex>
@@ -136,23 +132,24 @@ export const BuilderNavBar = ({
           <DrawerBody px={0} py="0.5rem">
             <ButtonGroup flexDir="column" spacing={0} w="100%">
               <Button
-                onClick={handlePreviewFormButtonClick}
+                onClick={handleSaveTemplateClick}
                 {...mobileDrawerExtraButtonProps}
                 leftIcon={<BiShow fontSize="1.25rem" />}
               >
-                Preview form
+                Save template
               </Button>
               <Button
                 {...mobileDrawerExtraButtonProps}
-                onClick={handleShareButtonClick}
+                onClick={handleCreateMemoClick}
                 leftIcon={<BiShareAlt fontSize="1.25rem" />}
               >
-                Share form link
+                Create a memo from this template
               </Button>
               <Button
                 {...mobileDrawerExtraButtonProps}
                 onClick={handleAddCollabButtonClick}
                 leftIcon={<BiUserPlus fontSize="1.25rem" />}
+                disabled={true}
               >
                 Manage collaborators
               </Button>

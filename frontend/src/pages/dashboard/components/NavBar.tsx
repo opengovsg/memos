@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import {
   BiDotsHorizontalRounded,
-  BiLeftArrowAlt,
   BiShareAlt,
   BiShow,
   BiUserPlus,
 } from 'react-icons/bi'
+import { Link } from 'react-router-dom'
 import {
   Box,
   Button,
@@ -19,8 +19,12 @@ import {
   Grid,
   GridItem,
   IconButton,
+  Image,
   useDisclosure,
 } from '@chakra-ui/react'
+
+import MemoLogo from '~assets/svgs/logo.svg'
+import { DASHBOARD_ROUTE } from '~constants/routes'
 
 export interface NavBarProps {
   /**
@@ -86,14 +90,9 @@ export const NavBar = ({
         pr="1rem"
       >
         <Box>
-          <IconButton
-            mr="0.5rem"
-            aria-label="Go back to dashboard"
-            variant="clear"
-            colorScheme="secondary"
-            onClick={handleBackButtonClick}
-            icon={<BiLeftArrowAlt />}
-          />
+          <Link to={DASHBOARD_ROUTE}>
+            <Image src={MemoLogo}></Image>
+          </Link>
         </Box>
       </GridItem>
 
