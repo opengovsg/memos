@@ -2,11 +2,12 @@ import { useMemo } from 'react'
 import { Flex } from '@chakra-ui/react'
 import { AnimatePresence } from 'framer-motion'
 
-import { Editor } from '~pages/fields/plate-examples/Editor'
 import {
   DrawerTabs,
   useBuilderDrawer,
 } from '~features/builder/BuilderDrawerContext'
+
+import { Keywords } from '../Keywords'
 
 import { MotionBox } from './MotionBox'
 
@@ -35,7 +36,7 @@ export const BuilderDrawer = (): JSX.Element => {
   const renderDrawerContent = useMemo(() => {
     switch (activeTab) {
       case DrawerTabs.AddElements: {
-        return <Editor />
+        return <Keywords />
       }
     }
   }, [activeTab])

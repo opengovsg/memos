@@ -1,6 +1,5 @@
-import { Container } from '@chakra-ui/react'
+import { useCallback, useState } from 'react'
 import { CodeAlt } from '@styled-icons/boxicons-regular/CodeAlt'
-import { CodeBlock } from '@styled-icons/boxicons-regular/CodeBlock'
 import { FormatBold } from '@styled-icons/material/FormatBold'
 import { FormatItalic } from '@styled-icons/material/FormatItalic'
 import { FormatQuote } from '@styled-icons/material/FormatQuote'
@@ -12,6 +11,7 @@ import { Looks6 } from '@styled-icons/material/Looks6'
 import { LooksOne } from '@styled-icons/material/LooksOne'
 import { LooksTwo } from '@styled-icons/material/LooksTwo'
 import {
+  AnyObject,
   BlockToolbarButton,
   CodeBlockToolbarButton,
   createBlockquotePlugin,
@@ -41,8 +41,12 @@ import {
   MARK_UNDERLINE,
   MarkToolbarButton,
   Plate,
+  TNode,
   usePlateEditorRef,
 } from '@udecode/plate'
+import { Node } from 'slate'
+
+import { useEditor } from '~features/builder/EditorContext'
 
 const createElement = (
   text: string,
@@ -123,10 +127,6 @@ const BasicElementToolbarButtons = () => {
         type={getPluginType(editor, ELEMENT_BLOCKQUOTE)}
         icon={<FormatQuote />}
       />
-      <CodeBlockToolbarButton
-        type={getPluginType(editor, ELEMENT_CODE_BLOCK)}
-        icon={<CodeBlock />}
-      />
     </>
   )
 }
@@ -155,7 +155,22 @@ const BasicMarkToolbarButtons = () => {
     </>
   )
 }
+
+const keywordRegexp = new RegExp('{{\\s*([a-zA-Z0-9_]+)\\s*}}', 'g')
+const getKeywords = (value: string): string[] => {
+  let match
+  const result = new Set<string>()
+  while ((match = keywordRegexp.exec(value))) {
+    result.add(match[1])
+  }
+  return Array.from(result)
+}
+const serialize = (nodes: Node[]) => {
+  return nodes.map((n) => Node.string(n)).join('\n')
+}
 export const Editor = (): JSX.Element => {
+  const [value, setValue] = useState<string>('')
+  const { setKeywords } = useEditor()
   const components = createPlateUI()
   const plugins = createPlugins(
     [
@@ -174,6 +189,13 @@ export const Editor = (): JSX.Element => {
     { components },
   )
 
+  const handleChange = useCallback(() => {
+    if (value.length > 4) {
+      const keywords = getKeywords(value)
+      setKeywords(keywords)
+    }
+  }, [value, setKeywords])
+
   return (
     <div style={{ maxWidth: 'fit-content' }}>
       <Plate
@@ -181,6 +203,10 @@ export const Editor = (): JSX.Element => {
         editableProps={CONFIG.editableProps}
         initialValue={initialValue}
         plugins={plugins}
+        onChange={(newValue) => {
+          setValue(serialize(newValue))
+          handleChange()
+        }}
       >
         <HeadingToolbar>
           <BasicElementToolbarButtons />

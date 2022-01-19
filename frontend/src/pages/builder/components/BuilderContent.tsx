@@ -1,4 +1,6 @@
-import { Flex, Text } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
+
+import { Editor } from '~pages/fields/plate/Editor'
 
 export const BuilderContent = (): JSX.Element => {
   return (
@@ -20,7 +22,7 @@ export const BuilderContent = (): JSX.Element => {
           w="100%"
           flexDir="column"
         >
-          <Text> Some preview text here </Text>
+          <Editor></Editor>
         </Flex>
       </Flex>
     </Flex>

@@ -50,7 +50,9 @@ export const useBuilderDrawer = (): BuilderDrawerContextProps => {
 }
 
 const useProvideDrawerContext = (): BuilderDrawerContextProps => {
-  const [activeTab, setActiveTab] = useState<DrawerTabs | null>(null)
+  const [activeTab, setActiveTab] = useState<DrawerTabs | null>(
+    DrawerTabs.AddElements,
+  )
 
   const isShowDrawer = useMemo(() => activeTab !== null, [activeTab])
 
