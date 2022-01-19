@@ -3,17 +3,17 @@ import { Flex } from '@chakra-ui/react'
 
 import { MEMOS_ROUTE, TEMPLATES_ROUTE } from '~constants/routes'
 
-export const Navbar = (): JSX.Element => {
+export const LeftNavBar = (): JSX.Element => {
   return (
     <Flex
       h="navbar-height"
-      alignItems="center"
+      alignItems="left"
       w="100%"
-      maxW="60ch"
+      maxW="20ch"
       zIndex={999}
-      justifyContent="space-between"
+      direction="column"
     >
-      <Link to={TEMPLATES_ROUTE}>Templates</Link>
+      <Link to={TEMPLATES_ROUTE}>All Templates</Link>
       <Link to={MEMOS_ROUTE}>Issued Memos</Link>
     </Flex>
   )
