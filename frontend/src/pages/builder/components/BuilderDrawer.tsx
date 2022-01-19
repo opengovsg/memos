@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { Flex } from '@chakra-ui/react'
 import { AnimatePresence } from 'framer-motion'
 
-import SearchHighlightingExample from '~pages/fields/slate-examples/Editor'
+import { Editor } from '~pages/fields/plate-examples/Editor'
 import {
   DrawerTabs,
   useBuilderDrawer,
@@ -35,7 +35,7 @@ export const BuilderDrawer = (): JSX.Element => {
   const renderDrawerContent = useMemo(() => {
     switch (activeTab) {
       case DrawerTabs.AddElements: {
-        return <SearchHighlightingExample />
+        return <Editor />
       }
     }
   }, [activeTab])
