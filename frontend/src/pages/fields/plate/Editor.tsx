@@ -11,9 +11,7 @@ import { Looks6 } from '@styled-icons/material/Looks6'
 import { LooksOne } from '@styled-icons/material/LooksOne'
 import { LooksTwo } from '@styled-icons/material/LooksTwo'
 import {
-  AnyObject,
   BlockToolbarButton,
-  CodeBlockToolbarButton,
   createBlockquotePlugin,
   createBoldPlugin,
   createCodeBlockPlugin,
@@ -25,7 +23,6 @@ import {
   createPlugins,
   createUnderlinePlugin,
   ELEMENT_BLOCKQUOTE,
-  ELEMENT_CODE_BLOCK,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
@@ -41,7 +38,6 @@ import {
   MARK_UNDERLINE,
   MarkToolbarButton,
   Plate,
-  TNode,
   usePlateEditorRef,
 } from '@udecode/plate'
 import { Node } from 'slate'
@@ -61,15 +57,14 @@ const createElement = (
 }
 
 const initialValue = [
-  createElement('🧱 Elements', { type: ELEMENT_H1 }),
-  createElement(
-    'You can customize the type, the component and the hotkey for each of these.',
-  ),
+  createElement('🧱 Memos', { type: ELEMENT_H1 }),
+  createElement('You can add {{keywords}} enclosed in {{ curly }} braces'),
   createElement('This text is bold.', { mark: MARK_BOLD }),
   createElement('This text is italic.', { mark: MARK_ITALIC }),
   createElement('This text is underlined.', {
     mark: MARK_UNDERLINE,
   }),
+
   {
     type: ELEMENT_PARAGRAPH,
     children: [
