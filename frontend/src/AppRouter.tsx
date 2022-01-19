@@ -9,7 +9,7 @@ import {
   TEMPLATES_ROUTE,
 } from '~constants/routes'
 
-import { Dashboard } from '~pages/core/dashboard/Dashboard'
+import { Dashboard } from '~pages/dashboard/Dashboard'
 import { LoginPage } from '~pages/login/LoginPage'
 import { MemosPage } from '~pages/memos/MemosPage'
 import { TemplatesPage } from '~pages/templates/TemplatesPage'
