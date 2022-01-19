@@ -3,7 +3,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
 import {
   Editor,
   Issuer,
@@ -11,7 +10,7 @@ import {
   TemplateVersion,
   User,
 } from 'database/entities'
-import { Repository } from 'typeorm'
+import { Connection } from 'typeorm'
 import { TemplateStatus } from 'types'
 import {
   CreateTemplateDto,
@@ -24,16 +23,7 @@ import { isTemplateEditorOrIssuer } from './templates.util'
 
 @Injectable()
 export class TemplatesService {
-  constructor(
-    @InjectRepository(Template)
-    private templateRepository: Repository<Template>,
-    @InjectRepository(TemplateVersion)
-    private templateVersionRepository: Repository<TemplateVersion>,
-    @InjectRepository(Editor)
-    private editorRepository: Repository<Editor>,
-    @InjectRepository(Issuer)
-    private issuerRepository: Repository<Issuer>,
-  ) {}
+  constructor(private connection: Connection) {}
 
   // Creates a new template
   async createTemplate(
@@ -42,37 +32,37 @@ export class TemplatesService {
   ): Promise<CreateTemplateResponseDto> {
     const { name, body } = _data
 
-    return this.templateRepository.manager.transaction(async () => {
+    return this.connection.transaction(async (manager) => {
       // Create template
-      const template = this.templateRepository.create({
+      const template = manager.create(Template, {
         name,
         author,
         status: TemplateStatus.Public,
       })
-      await this.templateRepository.save(template)
+      await manager.save(template)
 
       // Create template version
-      const templateVersion = this.templateVersionRepository.create({
+      const templateVersion = manager.create(TemplateVersion, {
         template,
         editor: author,
         version: 1, // new template, first version
         body,
         paramsRequired: [], // TODO fix once templating service is implemented
       })
-      await this.templateVersionRepository.save(templateVersion)
+      await manager.save(templateVersion)
 
       // Add author as an editor and issuer
-      const editor = this.editorRepository.create({
-        template,
+      const editor = manager.create(Editor, {
+        // template,
         user: author,
       })
-      await this.editorRepository.save(editor)
+      await manager.save(editor)
 
-      const issuer = this.issuerRepository.create({
+      const issuer = manager.create(Issuer, {
         template,
         user: author,
       })
-      await this.issuerRepository.save(issuer)
+      await manager.save(issuer)
 
       return { id: template.id, version: templateVersion.version }
     })
@@ -94,7 +84,7 @@ export class TemplatesService {
     _templateId: number,
   ): Promise<GetTemplateResponseDto> {
     // Find template
-    const template = await this.templateRepository.findOne({
+    const template = await this.connection.manager.findOne(Template, {
       where: {
         id: _templateId,
       },
@@ -108,8 +98,7 @@ export class TemplatesService {
     // TODO: this might be a guard (?)
     const isAllowed = await isTemplateEditorOrIssuer(
       requester,
-      this.editorRepository,
-      this.issuerRepository,
+      this.connection.manager,
       _templateId,
     )
     if (!isAllowed) {
@@ -117,15 +106,18 @@ export class TemplatesService {
     }
 
     // Find latest template version
-    const templateVersion = await this.templateVersionRepository.findOne({
-      where: {
-        template,
+    const templateVersion = await this.connection.manager.findOne(
+      TemplateVersion,
+      {
+        where: {
+          template,
+        },
+        order: {
+          version: 'DESC',
+        },
+        relations: ['editor'],
       },
-      order: {
-        version: 'DESC',
-      },
-      relations: ['editor'],
-    })
+    )
     if (!templateVersion) {
       // Template found but no versions exist. This is an anomaly, should take a closer look into the error.
       throw new NotFoundException()

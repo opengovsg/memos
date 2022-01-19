@@ -1,12 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { getRepositoryToken } from '@nestjs/typeorm'
-import { Template, TemplateVersion, Editor, Issuer } from 'database/entities'
+import { getConnectionToken } from '@nestjs/typeorm'
 import { PermissionsService } from './permissions.service'
 import { TemplatesService } from './templates.service'
 
 describe('TemplatesService', () => {
   let service: TemplatesService
-  const mockRepository = {}
+  const mockConnection = {}
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -14,20 +13,8 @@ describe('TemplatesService', () => {
         TemplatesService,
         PermissionsService,
         {
-          provide: getRepositoryToken(Template),
-          useValue: mockRepository,
-        },
-        {
-          provide: getRepositoryToken(TemplateVersion),
-          useValue: mockRepository,
-        },
-        {
-          provide: getRepositoryToken(Editor),
-          useValue: mockRepository,
-        },
-        {
-          provide: getRepositoryToken(Issuer),
-          useValue: mockRepository,
+          provide: getConnectionToken(),
+          useValue: mockConnection,
         },
       ],
     }).compile()

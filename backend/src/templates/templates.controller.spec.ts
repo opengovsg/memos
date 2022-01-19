@@ -2,12 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { TemplatesController } from './templates.controller'
 import { TemplatesService } from './templates.service'
 import { PermissionsService } from './permissions.service'
-import { getRepositoryToken } from '@nestjs/typeorm'
-import { Editor, Issuer, Template, TemplateVersion } from 'database/entities'
+import { getConnectionToken } from '@nestjs/typeorm'
 
 describe('TemplatesController', () => {
   let controller: TemplatesController
-  const mockRepository = {}
+  const mockConnection = {}
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -16,20 +15,8 @@ describe('TemplatesController', () => {
         TemplatesService,
         PermissionsService,
         {
-          provide: getRepositoryToken(Template),
-          useValue: mockRepository,
-        },
-        {
-          provide: getRepositoryToken(TemplateVersion),
-          useValue: mockRepository,
-        },
-        {
-          provide: getRepositoryToken(Editor),
-          useValue: mockRepository,
-        },
-        {
-          provide: getRepositoryToken(Issuer),
-          useValue: mockRepository,
+          provide: getConnectionToken(),
+          useValue: mockConnection,
         },
       ],
     }).compile()
