@@ -3,33 +3,26 @@ import { useNavigate } from 'react-router-dom'
 
 import { DASHBOARD_ROUTE } from '~constants/routes'
 
+import { useAuth } from '~features/auth/AuthContext'
+
 import { NavBar } from './NavBar'
 
-const useBuilderNavBar = () => {
+const useDashboardNavBar = () => {
   const navigate = useNavigate()
-
+  const { user, logout } = useAuth()
   const handleBackToDashboard = useCallback(
     (): void => navigate(DASHBOARD_ROUTE),
     [navigate],
   )
 
-  const handleAddCollaborator = useCallback((): void => {
-    console.log('add collab button clicked')
-  }, [])
-
-  const handlePreviewForm = useCallback((): void => {
-    console.log('preview form button clicked')
-  }, [])
-
-  const handleShareForm = useCallback((): void => {
-    console.log('share form button clicked')
-  }, [])
+  const handleLogout = useCallback((): void => {
+    logout()
+  }, [logout])
 
   return {
+    userInfo: { email: user.email },
     handleBackToDashboard,
-    handleAddCollaborator,
-    handlePreviewForm,
-    handleShareForm,
+    handleLogout,
   }
 }
 
@@ -37,19 +30,13 @@ const useBuilderNavBar = () => {
  * @precondition Must have AdminFormTabProvider parent due to usage of TabList and Tab.
  */
 export const NavBarContainer = (): JSX.Element => {
-  const {
-    handleBackToDashboard,
-    handleAddCollaborator,
-    handlePreviewForm,
-    handleShareForm,
-  } = useBuilderNavBar()
+  const { userInfo, handleBackToDashboard, handleLogout } = useDashboardNavBar()
 
   return (
     <NavBar
+      userInfo={userInfo}
       handleBackButtonClick={handleBackToDashboard}
-      handleAddCollabButtonClick={handleAddCollaborator}
-      handlePreviewFormButtonClick={handlePreviewForm}
-      handleShareButtonClick={handleShareForm}
+      handleLogoutButtonClick={handleLogout}
     />
   )
 }

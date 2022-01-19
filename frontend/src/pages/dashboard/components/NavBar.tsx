@@ -1,10 +1,5 @@
 import { useMemo } from 'react'
-import {
-  BiDotsHorizontalRounded,
-  BiShareAlt,
-  BiShow,
-  BiUserPlus,
-} from 'react-icons/bi'
+import { BiDotsHorizontalRounded, BiUserPlus } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 import {
   Box,
@@ -20,6 +15,7 @@ import {
   GridItem,
   IconButton,
   Image,
+  Text,
   useDisclosure,
 } from '@chakra-ui/react'
 
@@ -27,25 +23,20 @@ import MemoLogo from '~assets/svgs/logo.svg'
 import { DASHBOARD_ROUTE } from '~constants/routes'
 
 export interface NavBarProps {
-  /**
-   * Minimum form info needed to render the navbar.
-   * If not provided, the navbar will be in a loading state.
-   */
+  userInfo: { email: string }
 
   handleBackButtonClick: () => void
-  handleAddCollabButtonClick: () => void
-  handlePreviewFormButtonClick: () => void
-  handleShareButtonClick: () => void
+
+  handleLogoutButtonClick: () => void
 }
 
 /**
  * @precondition Must have AdminFormTabProvider parent due to usage of TabList and Tab.
  */
 export const NavBar = ({
-  handleAddCollabButtonClick,
+  userInfo,
   handleBackButtonClick,
-  handlePreviewFormButtonClick,
-  handleShareButtonClick,
+  handleLogoutButtonClick,
 }: NavBarProps): JSX.Element => {
   const { isOpen, onClose, onOpen } = useDisclosure()
 
@@ -112,20 +103,13 @@ export const NavBar = ({
           icon={<BiDotsHorizontalRounded />}
         />
         <Box display={{ base: 'none', md: 'flex' }}>
+          <Text alignSelf="center" marginRight="0.5rem">
+            {userInfo.email}
+          </Text>
           <ButtonGroup spacing="0.5rem">
-            <IconButton
-              aria-label="Add collaborators to form"
-              variant="outline"
-              onClick={handleAddCollabButtonClick}
-              icon={<BiUserPlus />}
-            />
-            <IconButton
-              aria-label="Preview form"
-              variant="outline"
-              onClick={handlePreviewFormButtonClick}
-              icon={<BiShow />}
-            />
-            <Button onClick={handleShareButtonClick}>Share</Button>
+            <Button variant="outline" onClick={handleLogoutButtonClick}>
+              Logout
+            </Button>
           </ButtonGroup>
         </Box>
       </Flex>
@@ -135,25 +119,11 @@ export const NavBar = ({
           <DrawerBody px={0} py="0.5rem">
             <ButtonGroup flexDir="column" spacing={0} w="100%">
               <Button
-                onClick={handlePreviewFormButtonClick}
                 {...mobileDrawerExtraButtonProps}
-                leftIcon={<BiShow fontSize="1.25rem" />}
-              >
-                Preview form
-              </Button>
-              <Button
-                {...mobileDrawerExtraButtonProps}
-                onClick={handleShareButtonClick}
-                leftIcon={<BiShareAlt fontSize="1.25rem" />}
-              >
-                Share form link
-              </Button>
-              <Button
-                {...mobileDrawerExtraButtonProps}
-                onClick={handleAddCollabButtonClick}
+                onClick={handleLogoutButtonClick}
                 leftIcon={<BiUserPlus fontSize="1.25rem" />}
               >
-                Manage collaborators
+                Logout
               </Button>
             </ButtonGroup>
           </DrawerBody>
