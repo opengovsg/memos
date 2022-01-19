@@ -1,36 +1,44 @@
 import { Suspense } from 'react'
-import { Redirect, Route, Switch } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
 import {
   DASHBOARD_ROUTE,
   LOGIN_ROUTE,
+  MEMOS_ROUTE,
   ROOT_ROUTE,
   TEMPLATES_ROUTE,
 } from '~constants/routes'
 
-import { DashboardRouter } from '~pages/core/dashboard/DashboardRouter'
+import { Dashboard } from '~pages/core/dashboard/Dashboard'
 import { LoginPage } from '~pages/login/LoginPage'
+import { MemosPage } from '~pages/memos/MemosPage'
+import { TemplatesPage } from '~pages/templates/TemplatesPage'
 
-import { PrivateRoute } from './PrivateRoute'
-import { PublicRoute } from './PublicRoute'
+import { PrivateElement } from './PrivateElement'
+import { PublicElement } from './PublicElement'
 
 export const AppRouter = (): JSX.Element => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <Switch>
-        <PrivateRoute path={DASHBOARD_ROUTE}>
-          <DashboardRouter />
-        </PrivateRoute>
-        <PublicRoute exact path={LOGIN_ROUTE}>
-          <LoginPage />
-        </PublicRoute>
-        <PrivateRoute exact path={ROOT_ROUTE}>
-          <Redirect to={TEMPLATES_ROUTE} />
-        </PrivateRoute>
-        <Route path="*">
-          <Redirect to={LOGIN_ROUTE} />
+      <Routes>
+        <Route path={ROOT_ROUTE} element={<Navigate to={DASHBOARD_ROUTE} />} />
+
+        <Route
+          path={LOGIN_ROUTE}
+          element={<PublicElement strict element={<LoginPage />} />}
+        />
+
+        <Route
+          path={DASHBOARD_ROUTE}
+          element={<PrivateElement element={<Dashboard />} />}
+        >
+          <Route index element={<TemplatesPage />} />
+          <Route path={TEMPLATES_ROUTE} element={<TemplatesPage />} />
+          <Route path={MEMOS_ROUTE} element={<MemosPage />} />
         </Route>
-      </Switch>
+
+        <Route path="*" element={<Navigate to={LOGIN_ROUTE} />} />
+      </Routes>
     </Suspense>
   )
 }
