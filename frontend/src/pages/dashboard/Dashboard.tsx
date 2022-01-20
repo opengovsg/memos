@@ -23,7 +23,7 @@ export const Dashboard = (): JSX.Element => {
             <Tab>All Memos</Tab>
           </TabList>
           <TabPanels bg="neutral.200">
-            <TabPanel>
+            <TabPanel padding="0">
               <TemplatesPage />
             </TabPanel>
             <TabPanel>
