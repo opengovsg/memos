@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   ForbiddenException,
-  GoneException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
@@ -26,15 +25,13 @@ export class MemosService {
     const { templateId, versionId, uin, uinType, params } = _data
     /*
     1. Check template status
-      a. If Public, OK
-      b. If Private, check if user is Issuer
-      c. If Archived, fail
-    2. Check if versionId exists, if not, retrieve latest version
-    3. Retrieve template version
+      b. If not public, fail.
+    2. Check if user is an issuer.  
+    3. Check if versionId exists, if not, retrieve latest version
+    4. Retrieve template version
       a. body, paramsRequired
-    4. Check if params provided matches the params_required.
+    5. Check if params provided matches the params_required.
       a. uin and uinType must exist.
-      b. If not, fail.
     5. Create memo, return slug.
     */
     const template = await this.connection.manager.findOne(Template, {
@@ -43,25 +40,19 @@ export class MemosService {
       },
     })
 
-    if (!template) {
-      throw new NotFoundException('Template not found.')
+    if (!template || template.status !== TemplateStatus.Public) {
+      // Whether the template is private or archived shouldn't matter to issuers
+      throw new NotFoundException("Template doesn't exist, or is inaccessible.")
     }
 
-    if (template.status === TemplateStatus.Archived) {
-      // Cannot issue an archived memo
-      throw new GoneException('This template is archived.')
-    }
-
-    if (template.status === TemplateStatus.Private) {
-      // Check if user is an issuer
-      const isIssuer = await isTemplateIssuer(
-        issuer,
-        this.connection.manager,
-        templateId,
-      )
-      if (!isIssuer) {
-        throw new ForbiddenException('User is not issuer of this template.')
-      }
+    // Check if user is an issuer
+    const isIssuer = await isTemplateIssuer(
+      issuer,
+      this.connection.manager,
+      templateId,
+    )
+    if (!isIssuer) {
+      throw new ForbiddenException('User is not issuer of this template.')
     }
 
     const templateVersion = await this.connection.manager.findOne(
