@@ -1,8 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import dayjs from 'dayjs'
+import calendar from 'dayjs/plugin/calendar'
 
 import App from './App'
 import * as serviceWorker from './serviceWorker'
+
+// Init calendar plugin
+dayjs.extend(calendar)
 
 ReactDOM.render(
   <React.StrictMode>
