@@ -1,4 +1,9 @@
-import { IsNotEmpty, IsNotEmptyObject, IsOptional } from 'class-validator'
+import {
+  IsDateString,
+  IsNotEmpty,
+  IsNotEmptyObject,
+  IsOptional,
+} from 'class-validator'
 import { UinType } from 'database/entities'
 export class CreateMemoDto {
   @IsNotEmpty()
@@ -16,6 +21,10 @@ export class CreateMemoDto {
 
   @IsNotEmptyObject()
   params!: Record<string, string>
+
+  @IsOptional()
+  @IsDateString()
+  expiresAt?: string
 }
 
 export class CreateMemoResponseDto {

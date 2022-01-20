@@ -7,6 +7,7 @@ import {
 import { Template, TemplateVersion, User, Memo } from 'database/entities'
 import { randomBytes } from 'crypto'
 import { pick } from 'lodash'
+import { DateTime } from 'luxon'
 import { isTemplateIssuer, renderTemplate } from 'templates/templates.util'
 import { Connection } from 'typeorm'
 import { TemplateStatus } from 'types'
@@ -22,7 +23,7 @@ export class MemosService {
     issuer: User,
     _data: CreateMemoDto,
   ): Promise<CreateMemoResponseDto> {
-    const { templateId, versionId, uin, uinType, params } = _data
+    const { templateId, versionId, uin, uinType, params, expiresAt } = _data
     /*
     1. Check template status
       b. If not public, fail.
@@ -78,6 +79,14 @@ export class MemosService {
       }
     }
 
+    // Expiry must be at least the next day.
+    if (expiresAt) {
+      const expiry = DateTime.fromISO(expiresAt)
+      if (expiry < DateTime.now()) {
+        throw new BadRequestException('Expiry date cannot be in the past.')
+      }
+    }
+
     // TODO: Verify uin against uinType.
 
     let slug
@@ -91,7 +100,6 @@ export class MemosService {
       if (!sameSlug) break
     }
 
-    // TODO: expiresAt
     const pending = this.connection.manager.create(Memo, {
       templateVersion,
       issuer,
@@ -99,6 +107,7 @@ export class MemosService {
       uinType,
       slug,
       params,
+      expiresAt,
     })
     const memo = await this.connection.manager.save(pending)
 
