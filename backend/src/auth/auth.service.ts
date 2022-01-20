@@ -18,7 +18,7 @@ export class AuthService {
 
   async generateOtp(generateOtpDto: GenerateOtpDto): Promise<void> {
     const { email } = generateOtpDto
-    const { token, timeLeft } = this.otpService.generateOtp(email)
+    const { token, timeLeft } = await this.otpService.generateOtp(email)
 
     const html = `Your OTP is <b>${token}</b>. It will expire in ${timeLeft} minutes.
     Please use this to login to your account.
@@ -38,7 +38,7 @@ export class AuthService {
 
   async verifyOtp(verifyOtpDto: VerifyOtpDto): Promise<User | undefined> {
     const { email, token } = verifyOtpDto
-    const isVerified = this.otpService.verifyOtp(email, token)
+    const isVerified = await this.otpService.verifyOtp(email, token)
     if (isVerified) {
       // findOrCreateUser
       const user = await this.userRepository.manager.transaction<User>(
