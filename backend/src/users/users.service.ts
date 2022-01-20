@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { TemplatesService } from 'templates/templates.service'
 import { MemosService } from 'memos/memos.service'
+import { GetTemplateMetaResponseDto } from 'templates/dto'
 @Injectable()
 export class UsersService {
   constructor(
@@ -10,7 +11,8 @@ export class UsersService {
   async listMemos(): Promise<void> {
     this.memosService.listMemosForUser()
   }
-  async listTemplates(): Promise<void> {
-    this.templatesService.listTemplatesForUser()
+  async listTemplates(userId: number): Promise<GetTemplateMetaResponseDto[]> {
+    const result = this.templatesService.listTemplatesForUser(userId)
+    return result
   }
 }

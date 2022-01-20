@@ -1,10 +1,13 @@
-import { Controller, Get, Param, Query } from '@nestjs/common'
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
+import { AuthGuard } from 'auth/auth.guard'
+import { GetTemplateMetaResponseDto } from 'templates/dto'
 import { ListMemosForUserDto, ListTemplatesForUserResponseDto } from './dto'
 import { UsersService } from './users.service'
 
 @Controller('users')
 @ApiTags('users')
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   /**
@@ -12,8 +15,11 @@ export class UsersController {
    */
   @Get(':id/templates')
   @ApiResponse({ type: ListTemplatesForUserResponseDto })
-  async listTemplates(@Param('id') _userId: number): Promise<void> {
-    await this.usersService.listTemplates()
+  async listTemplates(
+    @Param('id') _userId: number,
+  ): Promise<GetTemplateMetaResponseDto[]> {
+    const result = await this.usersService.listTemplates(_userId)
+    return result
   }
   /**
    * List memos that the user has access to

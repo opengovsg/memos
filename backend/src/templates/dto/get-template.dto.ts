@@ -11,3 +11,13 @@ export class GetTemplateResponseDto {
   body!: TemplateBlock[]
   paramsRequired!: string[]
 }
+
+export class GetTemplateMetaResponseDto {
+  id!: number
+  status!: TemplateStatus
+  author!: number
+  editor!: number
+
+  name!: string
+  updatedAt!: Date
+}

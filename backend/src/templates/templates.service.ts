@@ -10,11 +10,13 @@ import {
   TemplateVersion,
   User,
 } from 'database/entities'
-import { Connection } from 'typeorm'
+import { unionBy } from 'lodash'
+import { Connection, In } from 'typeorm'
 import { TemplateStatus } from 'types'
 import {
   CreateTemplateDto,
   CreateTemplateResponseDto,
+  GetTemplateMetaResponseDto,
   GetTemplateResponseDto,
   UpdateTemplateDto,
   UpdateTemplateResponseDto,
@@ -138,8 +140,47 @@ export class TemplatesService {
       paramsRequired: templateVersion.paramsRequired,
     }
   }
+  /**
+   * This is so inefficient, I want to die.
+   * Should have just used the query builder...
+   * @param userId
+   * @returns All template metadata which user is editor or issuer of.
+   */
+  async listTemplatesForUser(
+    userId: number,
+  ): Promise<GetTemplateMetaResponseDto[]> {
+    const editorOf = await this.connection.manager.find(Editor, {
+      where: {
+        user: userId,
+      },
+      relations: ['template', 'template.author'],
+    })
 
-  async listTemplatesForUser(): Promise<void> {
-    return
+    const issuerOf = await this.connection.manager.find(Issuer, {
+      where: {
+        user: userId,
+      },
+      relations: ['template', 'template.author'],
+    })
+
+    const templateIds = unionBy(editorOf, issuerOf, (e) => e.template.id).map(
+      (e) => e.template.id,
+    )
+    const templates = await this.connection.manager.find(TemplateVersion, {
+      where: {
+        template: In(templateIds),
+        isLatestVersion: true,
+      },
+      relations: ['editor', 'template', 'template.author'],
+    })
+
+    return templates.map((t) => ({
+      id: t.template.id,
+      status: t.template.status,
+      author: t.template.author.id,
+      editor: t.editor.id,
+      name: t.template.name,
+      updatedAt: t.updatedAt,
+    }))
   }
 }
