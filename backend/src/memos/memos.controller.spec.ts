@@ -1,16 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing'
+import { getConnectionToken } from '@nestjs/typeorm'
 import { MemosController } from './memos.controller'
 import { MemosService } from './memos.service'
-import { ConfigModule } from '../config/config.module'
 
 describe('MemosController', () => {
   let controller: MemosController
+  const mockConnection = {}
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule],
       controllers: [MemosController],
-      providers: [MemosService],
+      providers: [
+        MemosService,
+        {
+          provide: getConnectionToken(),
+          useValue: mockConnection,
+        },
+      ],
     }).compile()
 
     controller = module.get<MemosController>(MemosController)

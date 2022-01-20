@@ -79,3 +79,13 @@ export const parseTemplate = (body: string): Array<string> => {
 
   return Array.from(vars)
 }
+
+/**
+ * Returns a templated string given the template string and required parameters.
+ */
+export const renderTemplate = (
+  template: string,
+  params: Record<string, string>,
+): string => {
+  return mustache.render(template, params)
+}
