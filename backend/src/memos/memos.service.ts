@@ -79,7 +79,7 @@ export class MemosService {
       }
     }
 
-    // Expiry must be at least the next day.
+    // Expiry cannot be in the past, for now.
     if (expiresAt) {
       const expiry = DateTime.fromISO(expiresAt)
       if (expiry < DateTime.now()) {
