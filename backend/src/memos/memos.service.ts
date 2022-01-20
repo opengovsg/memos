@@ -7,7 +7,6 @@ import {
 import { Template, TemplateVersion, User, Memo } from 'database/entities'
 import { randomBytes } from 'crypto'
 import { pick } from 'lodash'
-import { DateTime } from 'luxon'
 import { isTemplateIssuer, renderTemplate } from 'templates/templates.util'
 import { Connection } from 'typeorm'
 import { TemplateStatus } from 'types'
@@ -81,8 +80,8 @@ export class MemosService {
 
     // Expiry cannot be in the past, for now.
     if (expiresAt) {
-      const expiry = DateTime.fromISO(expiresAt)
-      if (expiry < DateTime.now()) {
+      const expiry = new Date(expiresAt)
+      if (expiry < new Date()) {
         throw new BadRequestException('Expiry date cannot be in the past.')
       }
     }
