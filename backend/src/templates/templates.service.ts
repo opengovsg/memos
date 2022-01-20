@@ -19,7 +19,7 @@ import {
   UpdateTemplateDto,
   UpdateTemplateResponseDto,
 } from './dto'
-import { isTemplateEditorOrIssuer } from './templates.util'
+import { isTemplateEditorOrIssuer, parseTemplate } from './templates.util'
 
 @Injectable()
 export class TemplatesService {
@@ -42,12 +42,16 @@ export class TemplatesService {
       await manager.save(template)
 
       // Create template version
+      const paramsRequired = body.flatMap((block) => {
+        if (typeof block.data !== 'string') return []
+        return parseTemplate(block.data)
+      })
       const templateVersion = manager.create(TemplateVersion, {
         template,
         editor: author,
         version: 1, // new template, first version
         body,
-        paramsRequired: [], // TODO fix once templating service is implemented
+        paramsRequired,
       })
       await manager.save(templateVersion)
 
