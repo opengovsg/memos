@@ -1,4 +1,5 @@
-import { IsEmail } from 'class-validator'
+import { IsEmail, Validate } from 'class-validator'
+import { IsStringEndsWith } from 'validators/IsStringEndsWith'
 
 export class GenerateOtpDto {
   /**
@@ -6,5 +7,8 @@ export class GenerateOtpDto {
    * @example example@example.gov.sg
    */
   @IsEmail()
+  @Validate(IsStringEndsWith, ['.gov.sg'], {
+    message: 'Invalid email. Only government officers can login.',
+  })
   email!: string
 }

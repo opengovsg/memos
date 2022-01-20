@@ -26,12 +26,13 @@ export const LoginForm = ({ onSubmit }: LoginFormProps): JSX.Element => {
     useForm<LoginFormInputs>()
 
   const validateEmail = useCallback((value: string) => {
-    const isValidEmail = isEmail(value)
+    const lowercasedValue = value.toLowerCase()
+    const isValidEmail = isEmail(lowercasedValue)
     if (!isValidEmail) {
       return 'Please enter a valid email'
     }
 
-    const isGovDomain = value.split('@').pop()?.includes('gov.sg')
+    const isGovDomain = lowercasedValue.split('@').pop()?.endsWith('gov.sg')
     return isGovDomain || 'Please sign in with a gov.sg email address.'
   }, [])
 
