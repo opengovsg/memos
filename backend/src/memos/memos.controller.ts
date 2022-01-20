@@ -25,13 +25,13 @@ import { SessionData } from 'express-session'
 
 @Controller('memos')
 @ApiTags('memos')
-@UseGuards(AuthGuard)
 export class MemosController {
   constructor(private readonly memosService: MemosService) {}
   /**
    * Create a single new memo
    */
   @Post()
+  @UseGuards(AuthGuard)
   @ApiResponse({ type: CreateMemoResponseDto })
   async createMemo(
     @Session() session: SessionData,
@@ -47,6 +47,7 @@ export class MemosController {
    * Void a list of memos
    */
   @Post('void')
+  @UseGuards(AuthGuard)
   @ApiResponse({ type: VoidMemosResponseDto })
   async voidMemos(@Body() _voidMemosDto: VoidMemosDto): Promise<void> {
     await this.memosService.voidMemos()
@@ -56,6 +57,7 @@ export class MemosController {
    * Get a presigned url for uploading file of parameters for multiple memos
    */
   @Post('upload')
+  @UseGuards(AuthGuard)
   @ApiResponse({ type: UploadMemosResponseDto })
   async uploadMemos(@Body() _uploadMemosDto: UploadMemosDto): Promise<void> {
     await this.memosService.uploadMemos()
@@ -64,6 +66,7 @@ export class MemosController {
    * Indicate that the file has been uploaded
    */
   @Post('upload/complete')
+  @UseGuards(AuthGuard)
   @ApiResponse({ type: UploadMemosCompleteResponseDto })
   async uploadMemosComplete(
     @Body() _uploadMemosDto: UploadMemosCompleteDto,
@@ -73,6 +76,9 @@ export class MemosController {
 
   /**
    * Get memo based on slug
+   * This endpoint is public and does not require auth.
+   * If we have more public endpoints, we can consider a bypass decorator -
+   * : https://dev.kuffel.io/nestjs-bypass-endpoint-auth-guards/
    */
   @Get(':slug')
   @ApiResponse({ type: GetMemoResponseDto })
