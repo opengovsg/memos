@@ -1,9 +1,24 @@
-import { createContext, FC, useContext } from 'react'
+import {
+  createContext,
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
+import { useQuery, useQueryClient } from 'react-query'
 
-import { LOGGED_IN_KEY, useLocalStorage } from '~features/localStorage'
+import { LOGGED_IN_KEY } from '../localStorage/constants'
+import { useLocalStorage } from '../localStorage/useLocalStorage'
+
+import * as AuthService from './AuthService'
 
 type AuthContextProps = {
-  isAuthenticated?: boolean
+  user?: any
+  // isLoading: boolean
+  sendLoginOtp: typeof AuthService.sendLoginOtp
+  verifyLoginOtp: (params: { token: string; email: string }) => Promise<void>
+  logout: typeof AuthService.logout
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined)
@@ -31,10 +46,49 @@ export const useAuth = (): AuthContextProps => {
 
 // Provider hook that creates auth object and handles state
 const useProvideAuth = () => {
-  const [isAuthenticated] = useLocalStorage<boolean>(LOGGED_IN_KEY)
+  const [isLoggedIn, setIsLoggedIn] = useLocalStorage<boolean>(LOGGED_IN_KEY)
+  const [user, setUser] = useState<AuthService.User | undefined>(undefined)
+
+  useEffect(() => {
+    if (isLoggedIn)
+      AuthService.fetchUser()
+        .then((user) => {
+          setUser(user)
+        })
+        .catch(() => setUser(undefined))
+  }, [isLoggedIn])
+
+  const queryClient = useQueryClient()
+  const { data } = useQuery(
+    'currentUser',
+    () => AuthService.fetchUser(),
+    // 10 minutes staletime, do not need to retrieve so often.
+    { staleTime: 600000, enabled: !!isLoggedIn },
+  )
+
+  const verifyLoginOtp = useCallback(
+    async (params: { token: string; email: string }) => {
+      await AuthService.verifyLoginOtp(params)
+      setIsLoggedIn(true)
+    },
+    [setIsLoggedIn],
+  )
+
+  const logout = useCallback(async () => {
+    await AuthService.logout()
+    if (isLoggedIn) {
+      // Clear logged in state.
+      setIsLoggedIn(undefined)
+      setUser(undefined)
+    }
+    queryClient.clear()
+  }, [isLoggedIn, queryClient, setIsLoggedIn, setUser])
 
   // Return the user object and auth methods
   return {
-    isAuthenticated,
+    user: isLoggedIn ? data || user : undefined,
+    sendLoginOtp: AuthService.sendLoginOtp,
+    verifyLoginOtp: verifyLoginOtp,
+    logout,
   }
 }

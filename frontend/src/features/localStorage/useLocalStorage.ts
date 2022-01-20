@@ -1,4 +1,5 @@
 // Retrieved from https://usehooks-typescript.com/react-hook/use-local-storage
+
 import { useCallback, useEffect, useState } from 'react'
 
 import { LOCAL_STORAGE_EVENT } from './constants'
@@ -42,9 +43,7 @@ export const useLocalStorage = <T>(
       // We dispatch a custom event so every useLocalStorage hook are notified
       window.dispatchEvent(new Event(LOCAL_STORAGE_EVENT))
       // eslint-disable-next-line no-empty
-    } catch {
-      // TODO (#2640) Pass in some sort of logger here.
-    }
+    } catch {}
   }
   useEffect(() => {
     setStoredValue(readValue())
