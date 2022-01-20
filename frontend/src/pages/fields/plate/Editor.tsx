@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { CodeAlt } from '@styled-icons/boxicons-regular/CodeAlt'
 import { FormatBold } from '@styled-icons/material/FormatBold'
 import { FormatItalic } from '@styled-icons/material/FormatItalic'
@@ -39,12 +40,25 @@ import {
   Plate,
   usePlateEditorRef,
 } from '@udecode/plate'
+import { EditableProps } from 'slate-react/dist/components/editable'
 
 import { useEditor } from '~features/builder/EditorContext'
 
-import { createElement } from './util'
+import { getKeywords } from './util'
 
-const initialValue = [
+const createElement = (
+  text: string,
+  { type, mark }: { type?: string; mark?: string } = {},
+) => {
+  const leaf = { text, ...(mark ? { [mark]: true } : {}) }
+
+  return {
+    type: type || ELEMENT_PARAGRAPH,
+    children: [leaf],
+  }
+}
+
+const defaultValue = [
   createElement('🧱 Memos', { type: ELEMENT_H1 }),
   createElement('You can add {{keywords}} enclosed in {{ curly }} braces'),
   createElement('This text is bold.', { mark: MARK_BOLD }),
@@ -65,19 +79,9 @@ const initialValue = [
     ],
   },
 ]
-const CONFIG = {
-  editableProps: {
-    autoFocus: false,
-    spellCheck: false,
-    placeholder: 'Type…',
-    style: {
-      padding: '15px',
-    },
-  },
-}
 
-const BasicElementToolbarButtons = () => {
-  const editor = usePlateEditorRef()!
+const BasicElementToolbarButtons = ({ id }: { id: string }) => {
+  const editor = usePlateEditorRef(id)!
 
   return (
     <>
@@ -113,8 +117,8 @@ const BasicElementToolbarButtons = () => {
   )
 }
 
-const BasicMarkToolbarButtons = () => {
-  const editor = usePlateEditorRef()!
+const BasicMarkToolbarButtons = ({ id }: { id: string }) => {
+  const editor = usePlateEditorRef(id)!
 
   return (
     <>
@@ -138,8 +142,17 @@ const BasicMarkToolbarButtons = () => {
   )
 }
 
-export const Editor = (): JSX.Element => {
+export interface EditorProps {
+  editableProps?: EditableProps
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  initialValue?: any
+}
+export const Editor = ({
+  editableProps = { readOnly: false, autoFocus: false, spellCheck: false },
+  initialValue = defaultValue,
+}: EditorProps): JSX.Element => {
   const { activeEditorId } = useEditor()
+  const [readOnly] = useState<boolean>(editableProps?.readOnly || false)
   const components = createPlateUI()
   const plugins = createPlugins(
     [
@@ -159,18 +172,20 @@ export const Editor = (): JSX.Element => {
   )
 
   return (
-    <div style={{ maxWidth: 'fit-content' }}>
-      <Plate
-        id={activeEditorId}
-        editableProps={CONFIG.editableProps}
-        initialValue={initialValue}
-        plugins={plugins}
-      >
+    <Plate
+      id={activeEditorId}
+      editableProps={editableProps}
+      initialValue={initialValue}
+      plugins={plugins}
+    >
+      {readOnly ? (
+        <></>
+      ) : (
         <HeadingToolbar>
-          <BasicElementToolbarButtons />
-          <BasicMarkToolbarButtons />
+          <BasicElementToolbarButtons id={activeEditorId} />
+          <BasicMarkToolbarButtons id={activeEditorId} />
         </HeadingToolbar>
-      </Plate>
-    </div>
+      )}
+    </Plate>
   )
 }

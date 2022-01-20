@@ -1,11 +1,17 @@
 import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import { Node } from 'slate'
 
+type Leaf = {
+  text: string
+} & {
+  [key: string]: boolean
+}
+
 export const createElement = (
   text: string,
   { type, mark }: { type?: string; mark?: string } = {},
-) => {
-  const leaf = { text, ...(mark ? { [mark]: true } : {}) }
+): unknown => {
+  const leaf: Leaf = Object.assign({ text }, mark ? { [mark]: true } : {})
 
   return {
     type: type || ELEMENT_PARAGRAPH,
