@@ -22,7 +22,7 @@ export const BuilderContent = (): JSX.Element => {
           w="100%"
           flexDir="column"
         >
-          <Editor></Editor>
+          <Editor />
         </Flex>
       </Flex>
     </Flex>

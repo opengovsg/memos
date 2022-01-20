@@ -1,17 +1,17 @@
 import React, { createContext, FC, useContext, useState } from 'react'
 
 type EditorContextProps = {
-  keywords: string[]
-  setKeywords: React.Dispatch<React.SetStateAction<string[]>>
+  activeEditorId: string
+  setActiveEditorId: React.Dispatch<React.SetStateAction<string>>
 }
 
 const EditorContext = createContext<EditorContextProps | undefined>(undefined)
 
 export const EditorContextProvider: FC = ({ children }) => {
-  const auth = useProvideEditor()
+  const editor = useProvideEditor()
 
   return (
-    <EditorContext.Provider value={auth}>{children}</EditorContext.Provider>
+    <EditorContext.Provider value={editor}>{children}</EditorContext.Provider>
   )
 }
 
@@ -26,9 +26,9 @@ export const useEditor = (): EditorContextProps => {
 }
 
 export const useProvideEditor = () => {
-  const [keywords, setKeywords] = useState<string[]>([])
+  const [activeEditorId, setActiveEditorId] = useState<string>('hello')
   return {
-    keywords,
-    setKeywords,
+    activeEditorId,
+    setActiveEditorId,
   }
 }

@@ -40,21 +40,10 @@ import {
   Plate,
   usePlateEditorRef,
 } from '@udecode/plate'
-import { Node } from 'slate'
 
 import { useEditor } from '~features/builder/EditorContext'
 
-const createElement = (
-  text: string,
-  { type, mark }: { type?: string; mark?: string } = {},
-) => {
-  const leaf = { text, ...(mark ? { [mark]: true } : {}) }
-
-  return {
-    type: type || ELEMENT_PARAGRAPH,
-    children: [leaf],
-  }
-}
+import { createElement, getKeywords, serializeNodesToString } from './util'
 
 const initialValue = [
   createElement('🧱 Memos', { type: ELEMENT_H1 }),
@@ -79,7 +68,6 @@ const initialValue = [
 ]
 const CONFIG = {
   editableProps: {
-    // autoFocus: process.env.NODE_ENV !== 'production',
     autoFocus: false,
     spellCheck: false,
     placeholder: 'Type…',
@@ -151,22 +139,8 @@ const BasicMarkToolbarButtons = () => {
   )
 }
 
-const keywordRegexp = new RegExp('{{\\s*([a-zA-Z0-9_]+)\\s*}}', 'g')
-const getKeywords = (value: string): string[] => {
-  let match
-  const result = new Set<string>()
-  while ((match = keywordRegexp.exec(value))) {
-    result.add(match[1])
-  }
-  return Array.from(result)
-}
-const serialize = (nodes: Node[]) => {
-  return nodes.map((n) => Node.string(n)).join('\n')
-}
 export const Editor = (): JSX.Element => {
-  const [value, setValue] = useState<string>('')
-
-  const { setKeywords } = useEditor()
+  const { activeEditorId } = useEditor()
   const components = createPlateUI()
   const plugins = createPlugins(
     [
@@ -185,26 +159,13 @@ export const Editor = (): JSX.Element => {
     { components },
   )
 
-  const handleChange = useCallback(() => {
-    if (value.length > 4) {
-      console.log(value)
-      const keywords = getKeywords(value)
-      setKeywords(keywords)
-    }
-  }, [value, setKeywords])
-
   return (
     <div style={{ maxWidth: 'fit-content' }}>
       <Plate
-        id="playground"
+        id={activeEditorId}
         editableProps={CONFIG.editableProps}
         initialValue={initialValue}
         plugins={plugins}
-        onChange={(newValue) => {
-          console.log(newValue)
-          setValue(serialize(newValue))
-          handleChange()
-        }}
       >
         <HeadingToolbar>
           <BasicElementToolbarButtons />
