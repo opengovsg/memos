@@ -1,10 +1,20 @@
-import React, { createContext, FC, useContext, useState } from 'react'
+import React, {
+  createContext,
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
+import { serializeHtml, usePlateSelectors } from '@udecode/plate'
+
+import * as BuilderService from './BuilderService'
 
 type EditorContextProps = {
   activeEditorId: string
   setActiveEditorId: React.Dispatch<React.SetStateAction<string>>
   activeHtmlValue: string
-  setActiveHtmlValue: React.Dispatch<React.SetStateAction<string>>
+  saveTemplate: () => Promise<void>
 }
 
 const EditorContext = createContext<EditorContextProps | undefined>(undefined)
@@ -30,10 +40,34 @@ export const useEditor = (): EditorContextProps => {
 export const useProvideEditor = () => {
   const [activeEditorId, setActiveEditorId] = useState<string>('hello')
   const [activeHtmlValue, setActiveHtmlValue] = useState<string>('')
+  const { editor: getEditor, value: getValue } =
+    usePlateSelectors(activeEditorId)
+  const editor = getEditor()
+  const value = getValue()
+  useEffect(() => {
+    if (editor && value) {
+      setActiveHtmlValue(serializeHtml(editor, { nodes: value || [] }))
+    } else {
+      setActiveHtmlValue('')
+    }
+  }, [editor, value])
+
+  const saveTemplate = useCallback(async () => {
+    return BuilderService.saveTemplate({
+      name: 'name',
+      body: [
+        {
+          type: 'TEXT',
+          data: activeHtmlValue,
+        },
+      ],
+    })
+  }, [activeHtmlValue])
+
   return {
     activeEditorId,
     setActiveEditorId,
     activeHtmlValue,
-    setActiveHtmlValue,
+    saveTemplate,
   }
 }

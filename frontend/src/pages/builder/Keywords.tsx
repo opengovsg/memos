@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Box, Text, VStack } from '@chakra-ui/react'
-import { serializeHtml, usePlateEditorRef, usePlateStore } from '@udecode/plate'
+import { usePlateSelectors } from '@udecode/plate'
+import { Node } from 'slate'
 
 import { getKeywords, serializeNodesToString } from '~pages/fields/plate/util'
 import { useEditor } from '~features/builder/EditorContext'
@@ -10,24 +11,20 @@ export const Keywords = (): JSX.Element => {
   // Debug
   const [debugTextValue, setDebugTextValue] = useState<string>('')
 
-  const { activeEditorId, activeHtmlValue, setActiveHtmlValue } = useEditor()
-  const { useStore } = usePlateStore(activeEditorId)
-  const editor = usePlateEditorRef(activeEditorId)
-  const store = useStore()
-
+  const { activeEditorId, activeHtmlValue } = useEditor()
+  const { value: getValue } = usePlateSelectors(activeEditorId)
+  const value: Node[] | null = getValue()
   //   console.log(serializeHtml(editor, { nodes: store.value || [] }))
   useEffect(() => {
-    if (editor && store.value && store.value.length > 0) {
-      const textValue = serializeNodesToString(store.value || [])
+    if (value) {
+      const textValue = serializeNodesToString(value || [])
       setKeywords(getKeywords(textValue))
-      setActiveHtmlValue(serializeHtml(editor, { nodes: store.value || [] }))
       setDebugTextValue(textValue)
     } else {
       setKeywords([])
       setDebugTextValue('')
-      setActiveHtmlValue('')
     }
-  }, [store.value, activeEditorId, editor, setActiveHtmlValue])
+  }, [value])
 
   return (
     <VStack align="start">

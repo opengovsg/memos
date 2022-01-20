@@ -1,4 +1,3 @@
-import { useCallback, useState } from 'react'
 import { CodeAlt } from '@styled-icons/boxicons-regular/CodeAlt'
 import { FormatBold } from '@styled-icons/material/FormatBold'
 import { FormatItalic } from '@styled-icons/material/FormatItalic'
@@ -43,7 +42,7 @@ import {
 
 import { useEditor } from '~features/builder/EditorContext'
 
-import { createElement, getKeywords, serializeNodesToString } from './util'
+import { createElement } from './util'
 
 const initialValue = [
   createElement('🧱 Memos', { type: ELEMENT_H1 }),
