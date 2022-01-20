@@ -3,6 +3,8 @@ import React, { createContext, FC, useContext, useState } from 'react'
 type EditorContextProps = {
   activeEditorId: string
   setActiveEditorId: React.Dispatch<React.SetStateAction<string>>
+  activeHtmlValue: string
+  setActiveHtmlValue: React.Dispatch<React.SetStateAction<string>>
 }
 
 const EditorContext = createContext<EditorContextProps | undefined>(undefined)
@@ -27,8 +29,11 @@ export const useEditor = (): EditorContextProps => {
 
 export const useProvideEditor = () => {
   const [activeEditorId, setActiveEditorId] = useState<string>('hello')
+  const [activeHtmlValue, setActiveHtmlValue] = useState<string>('')
   return {
     activeEditorId,
     setActiveEditorId,
+    activeHtmlValue,
+    setActiveHtmlValue,
   }
 }

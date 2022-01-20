@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Text, VStack } from '@chakra-ui/react'
 import { serializeHtml, usePlateEditorRef, usePlateStore } from '@udecode/plate'
 
@@ -9,24 +9,25 @@ export const Keywords = (): JSX.Element => {
   const [keywords, setKeywords] = useState<string[]>([])
   // Debug
   const [debugTextValue, setDebugTextValue] = useState<string>('')
-  const [debugHtmlValue, setDebugHtmlValue] = useState<string>('')
 
-  const { activeEditorId } = useEditor()
+  const { activeEditorId, activeHtmlValue, setActiveHtmlValue } = useEditor()
   const { useStore } = usePlateStore(activeEditorId)
   const editor = usePlateEditorRef(activeEditorId)
   const store = useStore()
 
   //   console.log(serializeHtml(editor, { nodes: store.value || [] }))
   useEffect(() => {
-    if (store.value && store.value.length > 0) {
-      const textValue = serializeNodesToString(store.value)
+    if (editor && store.value && store.value.length > 0) {
+      const textValue = serializeNodesToString(store.value || [])
       setKeywords(getKeywords(textValue))
-      setDebugHtmlValue(serializeHtml(editor, { nodes: store.value || [] }))
+      setActiveHtmlValue(serializeHtml(editor, { nodes: store.value || [] }))
       setDebugTextValue(textValue)
     } else {
       setKeywords([])
+      setDebugTextValue('')
+      setActiveHtmlValue('')
     }
-  }, [store.value, activeEditorId, editor])
+  }, [store.value, activeEditorId, editor, setActiveHtmlValue])
 
   return (
     <VStack align="start">
@@ -42,7 +43,7 @@ export const Keywords = (): JSX.Element => {
       <Box maxWidth="fit-content">{debugTextValue}</Box>
 
       <Text textStyle="h3">Debug HTML</Text>
-      <Box maxWidth="fit-content">{debugHtmlValue}</Box>
+      <Box maxWidth="fit-content">{activeHtmlValue}</Box>
     </VStack>
   )
 }
