@@ -2,7 +2,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
 import { BaseEntity, TemplateVersion, User } from '.'
 
 // TODO: Abstract constants
-enum UinType {
+export enum UinType {
   'NRIC' = 'NRIC',
 }
 
