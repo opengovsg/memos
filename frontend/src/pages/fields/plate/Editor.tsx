@@ -165,6 +165,7 @@ const serialize = (nodes: Node[]) => {
 }
 export const Editor = (): JSX.Element => {
   const [value, setValue] = useState<string>('')
+
   const { setKeywords } = useEditor()
   const components = createPlateUI()
   const plugins = createPlugins(
@@ -186,6 +187,7 @@ export const Editor = (): JSX.Element => {
 
   const handleChange = useCallback(() => {
     if (value.length > 4) {
+      console.log(value)
       const keywords = getKeywords(value)
       setKeywords(keywords)
     }
@@ -199,6 +201,7 @@ export const Editor = (): JSX.Element => {
         initialValue={initialValue}
         plugins={plugins}
         onChange={(newValue) => {
+          console.log(newValue)
           setValue(serialize(newValue))
           handleChange()
         }}
