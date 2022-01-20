@@ -1,11 +1,5 @@
-import { IsNotEmpty } from 'class-validator'
 import { User } from 'database/entities'
 import { TemplateBlock } from 'types'
-
-export class GetMemoDto {
-  @IsNotEmpty()
-  slug!: string
-}
 
 export class GetMemoResponseDto {
   id!: number
