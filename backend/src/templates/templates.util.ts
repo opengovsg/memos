@@ -67,7 +67,9 @@ export const parseTemplate = (body: string): Array<string> => {
   for (const meta of parsed) {
     const type = meta[0]
     const token = meta[1]
-    if (type === 'name') {
+
+    // uin and uin_type are required properties of the memo and should not be included in the params
+    if (type === 'name' && token !== 'uin' && token !== 'uin_type') {
       const key = token.toLowerCase()
       if (!key) {
         // TODO: throw an error? This currently ignores empty keys
