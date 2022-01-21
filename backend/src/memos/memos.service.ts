@@ -26,7 +26,7 @@ export class MemosService {
     /*
     1. Check template status
       b. If not public, fail.
-    2. Check if user is an issuer.  
+    2. Check if user is an issuer.
     3. Check if versionId exists, if not, retrieve latest version
     4. Retrieve template version
       a. body, paramsRequired
@@ -148,7 +148,11 @@ export class MemosService {
       if (typeof block.data !== 'string') return block
       return {
         ...block,
-        data: renderTemplate(block.data, { ...params, uin: memo.uin }),
+        data: renderTemplate(block.data, {
+          ...params,
+          uin: memo.uin,
+          uin_type: memo.uinType,
+        }),
       }
     })
 
