@@ -1,40 +1,66 @@
-import { useRef } from 'react'
-import { Box, Container, Flex, Grid } from '@chakra-ui/react'
+import { useCallback, useMemo, useRef } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { Box, Container, Grid } from '@chakra-ui/react'
+import { chunk } from 'lodash'
+
+import Pagination from '~components/Pagination'
 
 import { TemplateHeader } from './components/TemplateHeader'
 import { TemplateRows } from './components/TemplateRows'
-
-export class GetTemplateMetaResponseDto {
-  id!: number
-  status!: string
-  author!: number
-  editor!: number
-
-  name!: string
-  updatedAt!: Date
-}
+import { useTemplatesDashboard } from './queries'
 
 export const CONTAINER_MAXW = '120rem'
 const PAGE_DEFAULTS = {
-  size: 20,
+  size: 10,
   pageNumber: 1,
 }
 
-//placeholders
-const isLoading = false
-const paginatedData = [
-  {
-    id: 2,
-    status: 'PUBLIC',
-    author: 1,
-    editor: 1,
+const useTemplatesPage = () => {
+  const { data: dashboardTemplates, isLoading } = useTemplatesDashboard()
+  const [searchParams, setSearchParams] = useSearchParams()
 
-    name: 'Test Template',
-    updatedAt: new Date(),
-  },
-]
+  const currentPage = Number(
+    searchParams.get('page') ?? PAGE_DEFAULTS.pageNumber,
+  )
+  const pageSize = Number(searchParams.get('size') ?? PAGE_DEFAULTS.size)
+
+  const setPageNumber = useCallback(
+    (page: number) => {
+      setSearchParams({ page: String(page) })
+    },
+    [setSearchParams],
+  )
+
+  const chunkedData = useMemo(
+    () => chunk(dashboardTemplates, pageSize),
+    [pageSize, dashboardTemplates],
+  )
+
+  const paginatedData = useMemo(() => {
+    if (currentPage < 1 || currentPage > chunkedData.length) {
+      return []
+    }
+    return chunkedData[currentPage - 1]
+  }, [chunkedData, currentPage])
+
+  return {
+    isLoading: isLoading,
+    currentPage,
+    totalTemplateCount: dashboardTemplates?.length,
+    paginatedData,
+    setPageNumber,
+  }
+}
 
 export const TemplatesPage = (): JSX.Element => {
+  const {
+    isLoading,
+    totalTemplateCount,
+    paginatedData,
+    currentPage,
+    setPageNumber,
+  } = useTemplatesPage()
+
   const topRef = useRef<HTMLDivElement>(null)
   return (
     <Grid
@@ -65,13 +91,13 @@ export const TemplatesPage = (): JSX.Element => {
         maxW={CONTAINER_MAXW}
         borderTop="1px solid var(--chakra-colors-neutral-300)"
       >
-        {/* <Pagination
+        <Pagination
           isDisabled={isLoading}
           currentPage={currentPage}
           totalCount={totalTemplateCount ?? 0}
           onPageChange={setPageNumber}
           pageSize={PAGE_DEFAULTS.size}
-        /> */}
+        />
       </Container>
     </Grid>
   )

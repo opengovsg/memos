@@ -47,9 +47,9 @@ export const TemplateHeader = ({
           <Button
             isFullWidth={isMobile}
             isDisabled={isLoading}
-            leftIcon={<BiPlus fontSize="1.5rem" />}
+            rightIcon={<BiPlus fontSize="1.5rem" />}
           >
-            Create form
+            Create New
           </Button>
         </Link>
       </Stack>

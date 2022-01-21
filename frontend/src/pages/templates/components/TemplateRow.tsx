@@ -9,13 +9,13 @@ import {
 } from '@chakra-ui/react'
 import dayjs from 'dayjs'
 
-import { GetTemplateMetaResponseDto } from '~/pages/templates/TemplatesPage'
+import { TemplateMetaResponseDto } from '~/pages/dashboard/DashboardService'
 
 import { useRowActionDropdown } from './RowActions/useRowActionDropdown'
 import { RowActions } from './RowActions'
 
 export interface TemplateRowProps extends ButtonProps {
-  templateMeta: GetTemplateMetaResponseDto
+  templateMeta: TemplateMetaResponseDto
 }
 
 const RELATIVE_DATE_FORMAT = {
