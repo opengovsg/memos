@@ -5,7 +5,7 @@ import {
   LOGGED_IN_KEY,
 } from '~features/localStorage/constants'
 
-const API_BASE_URL = process.env.REACT_APP_BASE_URL ?? '/api/v1'
+const API_BASE_URL = process.env.REACT_APP_BASE_URL ?? '/api'
 
 // Create own instance with defaults.
 const ApiService = wretch(API_BASE_URL).catcher(401, async (error, request) => {
