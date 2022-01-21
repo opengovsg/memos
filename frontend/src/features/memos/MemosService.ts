@@ -17,7 +17,10 @@ interface Memo {
   isVoid: boolean
   voidReason?: string
 
-  body: []
+  body: Array<{
+    type: string
+    data: string
+  }>
 }
 
 /**
