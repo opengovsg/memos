@@ -24,7 +24,15 @@ export const Viewer = (): JSX.Element => {
         ) : isError || !memo ? (
           'dead'
         ) : (
-          <ReadonlyEditor value={memo.body[0].data} />
+          <>
+            {/* TODO: how to display void/expired? */}
+            {memo.isVoid && <p>void</p>}
+            {memo.expiresAt && new Date() > new Date(memo.expiresAt) && (
+              <p>expired</p>
+            )}
+
+            <ReadonlyEditor value={memo.body[0].data} />
+          </>
         )}
       </Container>
     </Box>
