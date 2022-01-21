@@ -1,13 +1,13 @@
 import { Divider, Spinner, Stack } from '@chakra-ui/react'
 
-import { GetTemplateMetaResponseDto } from '~/pages/templates/TemplatesPage'
+import { TemplateMetaResponseDto } from '~/pages/dashboard/DashboardService'
 
 import { CONTAINER_MAXW } from '../TemplatesPage'
 
 import { TemplateRow } from './TemplateRow'
 
 export interface TemplateRowsProps {
-  rows: GetTemplateMetaResponseDto[]
+  rows: TemplateMetaResponseDto[]
   isLoading: boolean
 }
 
