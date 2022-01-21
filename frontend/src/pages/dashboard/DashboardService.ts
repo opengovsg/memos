@@ -30,5 +30,5 @@ export const getTemplatesView = async (): Promise<
   // This definitely should be cached somewhere xD
   const user = await AuthApi.url('/whoami').get().json()
   const userId = user.id
-  return UsersApi.url(`/${userId}/templates`).get()
+  return UsersApi.url(`/${userId}/templates`).get().json()
 }
