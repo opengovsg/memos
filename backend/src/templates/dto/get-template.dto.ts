@@ -15,8 +15,10 @@ export class GetTemplateResponseDto {
 export class GetTemplateMetaResponseDto {
   id!: number
   status!: TemplateStatus
-  author!: number
-  editor!: number
+  editor!: number // Last edited by
+
+  isEditor!: boolean // Can user edit
+  isIssuer!: boolean
 
   name!: string
   updatedAt!: Date

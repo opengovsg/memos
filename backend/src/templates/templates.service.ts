@@ -10,7 +10,7 @@ import {
   TemplateVersion,
   User,
 } from 'database/entities'
-import { unionBy } from 'lodash'
+import { union } from 'lodash'
 import { Connection, In } from 'typeorm'
 import { TemplateStatus } from 'types'
 import {
@@ -140,6 +140,7 @@ export class TemplatesService {
       paramsRequired: templateVersion.paramsRequired,
     }
   }
+
   /**
    * This is so inefficient, I want to die.
    * Should have just used the query builder...
@@ -153,32 +154,36 @@ export class TemplatesService {
       where: {
         user: userId,
       },
-      relations: ['template', 'template.author'],
+      relations: ['template'],
     })
+    // IDs of templates this user can edit
+    const eTemplateIds = editorOf.map((_) => _.template.id)
 
     const issuerOf = await this.connection.manager.find(Issuer, {
       where: {
         user: userId,
       },
-      relations: ['template', 'template.author'],
+      relations: ['template'],
     })
+    // IDs of templates this user can issue
+    const iTemplateIds = issuerOf.map((_) => _.template.id)
 
-    const templateIds = unionBy(editorOf, issuerOf, (e) => e.template.id).map(
-      (e) => e.template.id,
-    )
+    const templateIds = union(eTemplateIds, iTemplateIds)
+    // We have to do this extra fetch to get the last editor
     const templates = await this.connection.manager.find(TemplateVersion, {
       where: {
-        template: In(templateIds),
+        template: { id: In(templateIds) },
         isLatestVersion: true,
       },
-      relations: ['editor', 'template', 'template.author'],
+      relations: ['editor', 'template'],
     })
 
     return templates.map((t) => ({
       id: t.template.id,
       status: t.template.status,
-      author: t.template.author.id,
       editor: t.editor.id,
+      isEditor: eTemplateIds.includes(t.template.id),
+      isIssuer: iTemplateIds.includes(t.template.id),
       name: t.template.name,
       updatedAt: t.updatedAt,
     }))
