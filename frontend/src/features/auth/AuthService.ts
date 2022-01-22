@@ -32,11 +32,10 @@ export const sendLoginOtp = async (email: string) => {
 export const verifyLoginOtp = async (params: {
   token: string
   email: string
-}): Promise<boolean> => {
+}) => {
   return AuthApi.url('/verify')
     .post(params)
     .json((data) => !!data)
-    .catch(() => false)
 }
 
 export const logout = async (): Promise<void> => {

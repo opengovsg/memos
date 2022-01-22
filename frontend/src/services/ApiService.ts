@@ -15,6 +15,8 @@ const ApiService = wretch(API_BASE_URL, {
   localStorage.removeItem(LOGGED_IN_KEY)
   // Event to let useLocalStorage know that key is being deleted.
   window.dispatchEvent(new Event(LOCAL_STORAGE_EVENT))
+
+  throw error
 })
 
 export default ApiService
