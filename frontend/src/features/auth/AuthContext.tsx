@@ -68,8 +68,8 @@ const useProvideAuth = () => {
 
   const verifyLoginOtp = useCallback(
     async (params: { token: string; email: string }) => {
-      await AuthService.verifyLoginOtp(params)
-      setIsLoggedIn(true)
+      const isVerified = await AuthService.verifyLoginOtp(params)
+      setIsLoggedIn(isVerified)
     },
     [setIsLoggedIn],
   )
