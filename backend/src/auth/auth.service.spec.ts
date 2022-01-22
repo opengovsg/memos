@@ -15,7 +15,13 @@ describe('AuthService', () => {
       providers: [
         AuthService,
         ConfigService,
-        OtpService,
+        {
+          provide: OtpService,
+          useValue: {
+            generateOtp: jest.fn(),
+            verifyOtp: jest.fn(),
+          },
+        },
         MailerService,
         {
           provide: getRepositoryToken(User),
