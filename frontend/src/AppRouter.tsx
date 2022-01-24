@@ -5,6 +5,7 @@ import {
   BUILDER_ROUTE,
   DASHBOARD_ROUTE,
   ISSUE_MEMO_LANDING_ROUTE,
+  ISSUE_MEMO_SINGLE_ROUTE,
   LOGIN_ROUTE,
   ROOT_ROUTE,
   VIEWER_ROUTE,
@@ -13,6 +14,7 @@ import {
 import { Builder } from '~pages/builder/Builder'
 import { Dashboard } from '~pages/dashboard/Dashboard'
 import { IssueMemoChooseModePage } from '~pages/issue/IssueMemoChooseModePage'
+import { IssueSingleMemoPage } from '~pages/issue/IssueSingleMemoPage'
 import { LoginPage } from '~pages/login/LoginPage'
 import { Viewer } from '~pages/viewer/Viewer'
 
@@ -49,6 +51,11 @@ export const AppRouter = (): JSX.Element => {
         <Route
           path={ISSUE_MEMO_LANDING_ROUTE}
           element={<PrivateElement element={<IssueMemoChooseModePage />} />}
+        />
+
+        <Route
+          path={ISSUE_MEMO_SINGLE_ROUTE}
+          element={<PrivateElement element={<IssueSingleMemoPage />} />}
         />
 
         <Route path="*" element={<Navigate to={LOGIN_ROUTE} />} />
