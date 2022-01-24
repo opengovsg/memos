@@ -12,6 +12,7 @@ import {
 
 import { Builder } from '~pages/builder/Builder'
 import { Dashboard } from '~pages/dashboard/Dashboard'
+import { IssueMemoChooseModePage } from '~pages/issue/IssueMemoChooseModePage'
 import { LoginPage } from '~pages/login/LoginPage'
 import { Viewer } from '~pages/viewer/Viewer'
 
@@ -47,7 +48,7 @@ export const AppRouter = (): JSX.Element => {
         {/* TODO abstract routes related to issuing memos into separate router */}
         <Route
           path={ISSUE_MEMO_LANDING_ROUTE}
-          element={<PrivateElement element={<p>issue memo</p>} />}
+          element={<PrivateElement element={<IssueMemoChooseModePage />} />}
         />
 
         <Route path="*" element={<Navigate to={LOGIN_ROUTE} />} />
