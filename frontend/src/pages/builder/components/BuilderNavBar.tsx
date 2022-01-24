@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import {
   BiDotsHorizontalRounded,
   BiLeftArrowAlt,
-  BiShareAlt,
   BiShow,
   BiUserPlus,
 } from 'react-icons/bi'
@@ -34,7 +33,6 @@ export interface BuilderNavBarProps {
   handleBackButtonClick: () => void
   handleAddCollabButtonClick: () => void
   handleSaveTemplateClick: () => void
-  handleCreateMemoClick: () => void
 }
 
 /**
@@ -44,10 +42,9 @@ export const BuilderNavBar = ({
   handleAddCollabButtonClick,
   handleBackButtonClick,
   handleSaveTemplateClick,
-  handleCreateMemoClick,
 }: BuilderNavBarProps): JSX.Element => {
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const { templateName, setTemplateName, isPreview, setIsPreview } = useEditor()
+  const { templateName, setTemplateName, isPreview } = useEditor()
   const mobileDrawerExtraButtonProps: Partial<ButtonProps> = useMemo(
     () => ({
       isFullWidth: true,
@@ -100,6 +97,7 @@ export const BuilderNavBar = ({
         </Box>
         <Box>
           <Input
+            disabled={isPreview}
             value={templateName}
             type="text"
             aria-label="Enter a name for template"
@@ -132,13 +130,8 @@ export const BuilderNavBar = ({
               icon={<BiUserPlus />}
               disabled={true}
             />
-            <Button onClick={handleSaveTemplateClick}>Save Template</Button>
-            <Button
-              onClick={() => {
-                setIsPreview(!isPreview)
-              }}
-            >
-              Create Memo
+            <Button disabled={isPreview} onClick={handleSaveTemplateClick}>
+              Save Template
             </Button>
           </ButtonGroup>
         </Box>
@@ -155,13 +148,7 @@ export const BuilderNavBar = ({
               >
                 Save template
               </Button>
-              <Button
-                {...mobileDrawerExtraButtonProps}
-                onClick={handleCreateMemoClick}
-                leftIcon={<BiShareAlt fontSize="1.25rem" />}
-              >
-                Create a memo from this template
-              </Button>
+
               <Button
                 {...mobileDrawerExtraButtonProps}
                 onClick={handleAddCollabButtonClick}

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
-import { BUILDER_ROUTE } from '~constants/routes'
+import { BUILDER_ROUTE, PREVIEW_ROUTE } from '~constants/routes'
 
 type UseRowActionDropdownReturn = {
   handleUseTemplate: () => void
@@ -17,8 +17,7 @@ export const useRowActionDropdown = (
     handleUseTemplate: () =>
       console.log(`use button clicked for template id: ${templateId}`),
     handleEditTemplate: () => navigate(`${BUILDER_ROUTE}/${templateId}`),
-    handlePreviewTemplate: () =>
-      console.log(`preview button clicked for template id: ${templateId}`),
+    handlePreviewTemplate: () => navigate(`${PREVIEW_ROUTE}/${templateId}`),
     handleDeleteTemplate: () =>
       console.log(
         `delete template button clicked for template id: ${templateId}`,

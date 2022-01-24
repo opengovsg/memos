@@ -25,14 +25,9 @@ const useBuilderNavBar = () => {
     return saveTemplate()
   }
 
-  const handleCreateMemo = useCallback((): void => {
-    console.log('create memo button clicked')
-  }, [])
-
   return {
     handleBackToDashboard,
     handleAddCollaborator,
-    handleCreateMemo,
     handleSaveTemplate,
   }
 }
@@ -41,18 +36,13 @@ const useBuilderNavBar = () => {
  * @precondition Must have AdminFormTabProvider parent due to usage of TabList and Tab.
  */
 export const BuilderNavBarContainer = (): JSX.Element => {
-  const {
-    handleBackToDashboard,
-    handleAddCollaborator,
-    handleCreateMemo,
-    handleSaveTemplate,
-  } = useBuilderNavBar()
+  const { handleBackToDashboard, handleAddCollaborator, handleSaveTemplate } =
+    useBuilderNavBar()
 
   return (
     <BuilderNavBar
       handleBackButtonClick={handleBackToDashboard}
       handleAddCollabButtonClick={handleAddCollaborator}
-      handleCreateMemoClick={handleCreateMemo}
       handleSaveTemplateClick={handleSaveTemplate}
     />
   )

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import {
   Box,
   FormControl,
@@ -58,7 +58,7 @@ export const Keywords = (): JSX.Element => {
   }, [addKey, deleteKey, previewParams, value])
 
   return (
-    <VStack align="start">
+    <VStack align="start" padding="2em">
       <Text textStyle="h3">Fields Required</Text>
 
       <Box>

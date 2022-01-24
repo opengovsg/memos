@@ -93,7 +93,8 @@ export const useProvideEditor = (): EditorContextProps => {
   }, [templateName, templateValue])
 
   // Toggle readonly
-  const [isPreview, setIsPreview] = useState(true)
+
+  const [isPreview, setIsPreview] = useState(false)
   const [previewParams, setPreviewParams] = useState<Record<string, string>>({})
   // Hook to update value of the readonly editor
   const roEditor = getPlateActions(`${activeEditorId}-ro`)
@@ -123,7 +124,7 @@ export const useProvideEditor = (): EditorContextProps => {
           templateValue,
           previewParams,
         )
-        console.log(templatedValue)
+
         value = templatedValue ? JSON.parse(templatedValue) : value
       } catch (e) {
         console.error(e)

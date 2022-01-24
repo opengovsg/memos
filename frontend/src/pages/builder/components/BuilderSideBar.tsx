@@ -1,4 +1,4 @@
-import { BiUserPlus } from 'react-icons/bi'
+import { BsEyeFill } from 'react-icons/bs'
 import { Stack } from '@chakra-ui/react'
 
 import {
@@ -22,7 +22,7 @@ export const BuilderSidebar = (): JSX.Element => {
     >
       <DrawerTabIcon
         label="Add Elements"
-        icon={<BiUserPlus fontSize="1.5rem" />}
+        icon={<BsEyeFill fontSize="1.5rem" />}
         onClick={handlePreviewClick}
         isActive={activeTab === DrawerTabs.Preview}
       />

@@ -3,9 +3,15 @@ import {
   FC,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react'
+import { useLocation } from 'react-router-dom'
+
+import { PREVIEW_ROUTE } from '~constants/routes'
+
+import { useEditor } from './EditorContext'
 
 export enum DrawerTabs {
   Preview,
@@ -50,6 +56,8 @@ export const useBuilderDrawer = (): BuilderDrawerContextProps => {
 }
 
 const useProvideDrawerContext = (): BuilderDrawerContextProps => {
+  const { pathname } = useLocation()
+  const { setIsPreview } = useEditor()
   const [activeTab, setActiveTab] = useState<DrawerTabs | null>(null)
 
   const isShowDrawer = useMemo(() => activeTab !== null, [activeTab])
@@ -63,11 +71,19 @@ const useProvideDrawerContext = (): BuilderDrawerContextProps => {
   const handlePreviewClick = useCallback(() => {
     if (activeTab !== DrawerTabs.Preview) {
       setActiveTab(DrawerTabs.Preview)
+      setIsPreview(true)
     } else {
+      setIsPreview(false)
       handleClose()
     }
-  }, [activeTab, handleClose])
+  }, [activeTab, handleClose, setIsPreview])
 
+  useEffect(() => {
+    if (pathname.startsWith(PREVIEW_ROUTE)) {
+      setActiveTab(DrawerTabs.Preview)
+      setIsPreview(true)
+    }
+  }, [pathname, setIsPreview])
   return {
     activeTab,
     isShowDrawer,

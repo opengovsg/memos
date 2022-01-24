@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Box, Center } from '@chakra-ui/react'
 import { Spinner } from '@chakra-ui/spinner'
@@ -33,7 +33,6 @@ import {
   Plate,
   usePlateEditorRef,
 } from '@udecode/plate'
-import { EditableProps } from 'slate-react/dist/components/editable'
 
 import { useEditor } from '~features/builder/EditorContext'
 import { getCommonPlugins } from '~features/common/editor'
@@ -170,7 +169,7 @@ export const Editor = (): JSX.Element => {
             </HeadingToolbar>
           </Plate>
         </Box>
-        <Box>
+        <Box hidden={!readOnly}>
           <Plate
             id={`${activeEditorId}-ro`}
             editableProps={{ readOnly: true }}
