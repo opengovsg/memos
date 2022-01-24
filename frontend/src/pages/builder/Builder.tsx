@@ -10,17 +10,23 @@ import { BuilderSidebar } from './components/BuilderSideBar'
 
 export const Builder = (): JSX.Element => {
   return (
-    <Flex flexDir="column" height="100vh" overflow="hidden" pos="relative">
-      <BuilderNavBarContainer />
-      <Flex h="100%" w="100%" overflow="auto" bg="neutral.200" direction="row">
-        <EditorContextProvider>
+    <EditorContextProvider>
+      <Flex flexDir="column" height="100vh" overflow="hidden" pos="relative">
+        <BuilderNavBarContainer />
+        <Flex
+          h="100%"
+          w="100%"
+          overflow="auto"
+          bg="neutral.200"
+          direction="row"
+        >
           <BuilderDrawerProvider>
             <BuilderSidebar />
             <BuilderDrawer />
           </BuilderDrawerProvider>
           <BuilderContent />
-        </EditorContextProvider>
+        </Flex>
       </Flex>
-    </Flex>
+    </EditorContextProvider>
   )
 }

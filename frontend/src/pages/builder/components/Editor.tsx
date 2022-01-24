@@ -1,4 +1,7 @@
-import { useCallback, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { Center } from '@chakra-ui/react'
+import { Spinner } from '@chakra-ui/spinner'
 import { CodeAlt } from '@styled-icons/boxicons-regular/CodeAlt'
 import { FormatBold } from '@styled-icons/material/FormatBold'
 import { FormatItalic } from '@styled-icons/material/FormatItalic'
@@ -12,16 +15,6 @@ import { LooksOne } from '@styled-icons/material/LooksOne'
 import { LooksTwo } from '@styled-icons/material/LooksTwo'
 import {
   BlockToolbarButton,
-  createBlockquotePlugin,
-  createBoldPlugin,
-  createCodeBlockPlugin,
-  createCodePlugin,
-  createHeadingPlugin,
-  createItalicPlugin,
-  createParagraphPlugin,
-  createPlateUI,
-  createPlugins,
-  createUnderlinePlugin,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_H1,
   ELEMENT_H2,
@@ -40,9 +33,10 @@ import {
   Plate,
   usePlateEditorRef,
 } from '@udecode/plate'
-import { Node } from 'slate'
+import { EditableProps } from 'slate-react/dist/components/editable'
 
 import { useEditor } from '~features/builder/EditorContext'
+import { getCommonPlugins } from '~features/common/editor'
 
 const createElement = (
   text: string,
@@ -56,7 +50,7 @@ const createElement = (
   }
 }
 
-const initialValue = [
+const defaultValue = [
   createElement('🧱 Memos', { type: ELEMENT_H1 }),
   createElement('You can add {{keywords}} enclosed in {{ curly }} braces'),
   createElement('This text is bold.', { mark: MARK_BOLD }),
@@ -77,20 +71,9 @@ const initialValue = [
     ],
   },
 ]
-const CONFIG = {
-  editableProps: {
-    // autoFocus: process.env.NODE_ENV !== 'production',
-    autoFocus: false,
-    spellCheck: false,
-    placeholder: 'Type…',
-    style: {
-      padding: '15px',
-    },
-  },
-}
 
-const BasicElementToolbarButtons = () => {
-  const editor = usePlateEditorRef()!
+const BasicElementToolbarButtons = ({ id }: { id: string }) => {
+  const editor = usePlateEditorRef(id)!
 
   return (
     <>
@@ -126,8 +109,8 @@ const BasicElementToolbarButtons = () => {
   )
 }
 
-const BasicMarkToolbarButtons = () => {
-  const editor = usePlateEditorRef()!
+const BasicMarkToolbarButtons = ({ id }: { id: string }) => {
+  const editor = usePlateEditorRef(id)!
 
   return (
     <>
@@ -151,66 +134,44 @@ const BasicMarkToolbarButtons = () => {
   )
 }
 
-const keywordRegexp = new RegExp('{{\\s*([a-zA-Z0-9_]+)\\s*}}', 'g')
-const getKeywords = (value: string): string[] => {
-  let match
-  const result = new Set<string>()
-  while ((match = keywordRegexp.exec(value))) {
-    result.add(match[1])
-  }
-  return Array.from(result)
+export interface EditorProps {
+  editableProps?: EditableProps
 }
-const serialize = (nodes: Node[]) => {
-  return nodes.map((n) => Node.string(n)).join('\n')
-}
-export const Editor = (): JSX.Element => {
-  const [value, setValue] = useState<string>('')
+export const Editor = ({
+  editableProps = { readOnly: false, autoFocus: false, spellCheck: false },
+}: EditorProps): JSX.Element => {
+  const { templateId } = useParams()
+  const { activeEditorId, status, initialEditorValue } = useEditor()
+  const [waitForTemplate, setWaitForTemplate] = useState(true)
+  const [readOnly] = useState<boolean>(editableProps?.readOnly || false)
+  const plugins = getCommonPlugins()
+  useEffect(() => {
+    setWaitForTemplate(!!templateId && initialEditorValue === null)
+  }, [initialEditorValue, templateId])
 
-  const { setKeywords } = useEditor()
-  const components = createPlateUI()
-  const plugins = createPlugins(
-    [
-      // elements
-      createParagraphPlugin(), // paragraph element
-      createBlockquotePlugin(), // blockquote element
-      createCodeBlockPlugin(), // code block element
-      createHeadingPlugin(), // heading elements
-
-      // marks
-      createBoldPlugin(), // bold mark
-      createItalicPlugin(), // italic mark
-      createUnderlinePlugin(), // underline mark
-      createCodePlugin(), // code mark
-    ],
-    { components },
-  )
-
-  const handleChange = useCallback(() => {
-    if (value.length > 4) {
-      console.log(value)
-      const keywords = getKeywords(value)
-      setKeywords(keywords)
-    }
-  }, [value, setKeywords])
-
-  return (
-    <div style={{ maxWidth: 'fit-content' }}>
-      <Plate
-        id="playground"
-        editableProps={CONFIG.editableProps}
-        initialValue={initialValue}
-        plugins={plugins}
-        onChange={(newValue) => {
-          console.log(newValue)
-          setValue(serialize(newValue))
-          handleChange()
-        }}
-      >
+  return status === 'error' ? (
+    <Center>Could not retrieve template</Center>
+  ) : status === 'loading' || waitForTemplate ? (
+    <Center>
+      <Spinner></Spinner>
+    </Center>
+  ) : (
+    <Plate
+      id={activeEditorId}
+      editableProps={editableProps}
+      initialValue={
+        initialEditorValue ? JSON.parse(initialEditorValue) : defaultValue
+      }
+      plugins={plugins}
+    >
+      {readOnly ? (
+        <></>
+      ) : (
         <HeadingToolbar>
-          <BasicElementToolbarButtons />
-          <BasicMarkToolbarButtons />
+          <BasicElementToolbarButtons id={activeEditorId} />
+          <BasicMarkToolbarButtons id={activeEditorId} />
         </HeadingToolbar>
-      </Plate>
-    </div>
+      )}
+    </Plate>
   )
 }

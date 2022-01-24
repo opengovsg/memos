@@ -19,8 +19,11 @@ import {
   Grid,
   GridItem,
   IconButton,
+  Input,
   useDisclosure,
 } from '@chakra-ui/react'
+
+import { useEditor } from '~features/builder/EditorContext'
 
 export interface BuilderNavBarProps {
   /**
@@ -44,7 +47,7 @@ export const BuilderNavBar = ({
   handleCreateMemoClick,
 }: BuilderNavBarProps): JSX.Element => {
   const { isOpen, onClose, onOpen } = useDisclosure()
-
+  const { activeTemplateName, setActiveTemplateName } = useEditor()
   const mobileDrawerExtraButtonProps: Partial<ButtonProps> = useMemo(
     () => ({
       isFullWidth: true,
@@ -93,6 +96,14 @@ export const BuilderNavBar = ({
             colorScheme="secondary"
             onClick={handleBackButtonClick}
             icon={<BiLeftArrowAlt />}
+          />
+        </Box>
+        <Box>
+          <Input
+            value={activeTemplateName}
+            type="text"
+            aria-label="Enter a name for template"
+            onChange={(event) => setActiveTemplateName(event.target.value)}
           />
         </Box>
       </GridItem>

@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom'
 
 import { DASHBOARD_ROUTE } from '~constants/routes'
 
+import { useEditor } from '~features/builder/EditorContext'
+
 import { BuilderNavBar } from './BuilderNavBar'
 
 const useBuilderNavBar = () => {
   const navigate = useNavigate()
+  const { saveTemplate } = useEditor()
 
   const handleBackToDashboard = useCallback(
     (): void => navigate(DASHBOARD_ROUTE),
@@ -17,9 +20,10 @@ const useBuilderNavBar = () => {
     console.log('add collab button clicked')
   }, [])
 
-  const handleSaveTemplate = useCallback((): void => {
+  const handleSaveTemplate = async () => {
     console.log('save template button clicked')
-  }, [])
+    return saveTemplate()
+  }
 
   const handleCreateMemo = useCallback((): void => {
     console.log('create memo button clicked')
