@@ -11,7 +11,7 @@ import { useTemplatesDashboard } from './queries'
 
 export const CONTAINER_MAXW = '120rem'
 const PAGE_DEFAULTS = {
-  size: 10,
+  size: 5,
   pageNumber: 1,
 }
 
