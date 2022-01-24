@@ -144,7 +144,6 @@ export const Editor = ({
   const { activeEditorId, setActiveEditorId, status, initialEditorValue } =
     useEditor()
   const [waitForTemplate, setWaitForTemplate] = useState(true)
-  const [readOnly] = useState<boolean>(editableProps?.readOnly || false)
   const plugins = getCommonPlugins()
   useEffect(() => {
     setActiveEditorId(templateId || '')
@@ -166,14 +165,10 @@ export const Editor = ({
       }
       plugins={plugins}
     >
-      {readOnly ? (
-        <></>
-      ) : (
-        <HeadingToolbar>
-          <BasicElementToolbarButtons id={activeEditorId} />
-          <BasicMarkToolbarButtons id={activeEditorId} />
-        </HeadingToolbar>
-      )}
+      <HeadingToolbar hidden={editableProps.readOnly}>
+        <BasicElementToolbarButtons id={activeEditorId} />
+        <BasicMarkToolbarButtons id={activeEditorId} />
+      </HeadingToolbar>
     </Plate>
   )
 }

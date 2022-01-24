@@ -17,9 +17,9 @@ type EditorContextProps = {
   status: 'idle' | 'loading' | 'success' | 'error'
   activeEditorId: string
   setActiveEditorId: React.Dispatch<React.SetStateAction<string>>
-  activeTemplateName: string
+  templateName: string
   initialEditorValue: string | null
-  setActiveTemplateName: React.Dispatch<React.SetStateAction<string>>
+  setTemplateName: React.Dispatch<React.SetStateAction<string>>
   saveTemplate: () => Promise<void>
 }
 
@@ -45,50 +45,52 @@ export const useEditor = (): EditorContextProps => {
 
 export const useProvideEditor = (): EditorContextProps => {
   const { status, data: template } = useTemplate()
+
   const [activeEditorId, setActiveEditorId] = useState<string>('defaultEditor')
   const [initialEditorValue, setInitialEditorValue] = useState<string | null>(
     null,
   )
-  const [activeEditorValue, setActiveEditorValue] = useState<string>('')
-  const [activeTemplateName, setActiveTemplateName] =
-    useState<string>('My Template')
+
+  // Editable template value that will be saved
+  const [templateValue, setTemplateValue] = useState<string>('')
+  const [templateName, setTemplateName] = useState<string>('My Template')
   const { value: getValue } = usePlateSelectors(activeEditorId)
   const value = getValue()
 
   useEffect(() => {
     if (status === 'success') {
-      setActiveTemplateName(template?.name || 'My Template')
+      setTemplateName(template?.name || 'My Template')
       setInitialEditorValue(_.get(template, 'body[0].data', ''))
     }
   }, [status, template, activeEditorId])
 
   useEffect(() => {
     if (value) {
-      setActiveEditorValue(JSON.stringify(value))
+      setTemplateValue(JSON.stringify(value))
     } else {
-      setActiveEditorValue('')
+      setTemplateValue('')
     }
   }, [value])
 
   const saveTemplate = useCallback(async () => {
     return BuilderService.saveTemplate({
-      name: activeTemplateName,
+      name: templateName,
       body: [
         {
           type: 'TEXT',
-          data: activeEditorValue,
+          data: templateValue,
         },
       ],
     })
-  }, [activeTemplateName, activeEditorValue])
+  }, [templateName, templateValue])
 
   return {
     status,
     initialEditorValue,
     activeEditorId,
     setActiveEditorId,
-    activeTemplateName,
-    setActiveTemplateName,
+    templateName,
+    setTemplateName,
     saveTemplate,
   }
 }

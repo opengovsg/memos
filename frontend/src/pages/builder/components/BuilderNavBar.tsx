@@ -47,7 +47,7 @@ export const BuilderNavBar = ({
   handleCreateMemoClick,
 }: BuilderNavBarProps): JSX.Element => {
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const { activeTemplateName, setActiveTemplateName } = useEditor()
+  const { templateName, setTemplateName } = useEditor()
   const mobileDrawerExtraButtonProps: Partial<ButtonProps> = useMemo(
     () => ({
       isFullWidth: true,
@@ -100,10 +100,10 @@ export const BuilderNavBar = ({
         </Box>
         <Box>
           <Input
-            value={activeTemplateName}
+            value={templateName}
             type="text"
             aria-label="Enter a name for template"
-            onChange={(event) => setActiveTemplateName(event.target.value)}
+            onChange={(event) => setTemplateName(event.target.value)}
           />
         </Box>
       </GridItem>
