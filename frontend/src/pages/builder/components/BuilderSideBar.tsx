@@ -24,7 +24,7 @@ export const BuilderSidebar = (): JSX.Element => {
         label="Add Elements"
         icon={<BiUserPlus fontSize="1.5rem" />}
         onClick={handleAddElementClick}
-        isActive={activeTab === DrawerTabs.AddElements}
+        isActive={false}
       />
     </Stack>
   )
