@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Box, Container, Grid } from '@chakra-ui/react'
 import { chunk } from 'lodash'
@@ -61,7 +61,6 @@ export const TemplatesPage = (): JSX.Element => {
     setPageNumber,
   } = useTemplatesPage()
 
-  const topRef = useRef<HTMLDivElement>(null)
   return (
     <Grid
       flex={1}
@@ -81,7 +80,7 @@ export const TemplatesPage = (): JSX.Element => {
         <TemplateHeader isLoading={isLoading} />
       </Container>
       <Box gridArea="main">
-        <Box ref={topRef} />
+        <Box />
         <TemplateRows rows={paginatedData} isLoading={isLoading} />
       </Box>
       <Container

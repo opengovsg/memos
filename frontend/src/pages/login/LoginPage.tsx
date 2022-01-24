@@ -45,7 +45,7 @@ export const LoginPage = (): JSX.Element => {
     return setEmail(email)
   }
 
-  const handleVerifyOtp = async ({ otp }: OtpFormInputs) => {
+  const handleVerifyOtp = ({ otp }: OtpFormInputs) => {
     // Should not happen, since OtpForm component is only shown when there is
     // already an email state set.
     if (!email) {

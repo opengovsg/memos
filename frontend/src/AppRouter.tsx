@@ -6,11 +6,13 @@ import {
   DASHBOARD_ROUTE,
   LOGIN_ROUTE,
   ROOT_ROUTE,
+  VIEWER_ROUTE,
 } from '~constants/routes'
 
 import { Builder } from '~pages/builder/Builder'
 import { Dashboard } from '~pages/dashboard/Dashboard'
 import { LoginPage } from '~pages/login/LoginPage'
+import { Viewer } from '~pages/viewer/Viewer'
 
 import { PrivateElement } from './PrivateElement'
 import { PublicElement } from './PublicElement'
@@ -34,6 +36,11 @@ export const AppRouter = (): JSX.Element => {
         <Route
           path={BUILDER_ROUTE}
           element={<PrivateElement element={<Builder />} />}
+        />
+
+        <Route
+          path={VIEWER_ROUTE}
+          element={<PublicElement element={<Viewer />} />}
         />
 
         <Route path="*" element={<Navigate to={LOGIN_ROUTE} />} />
