@@ -36,7 +36,12 @@ export const AppRouter = (): JSX.Element => {
         <Route
           path={BUILDER_ROUTE}
           element={<PrivateElement element={<Builder />} />}
-        />
+        ></Route>
+
+        <Route
+          path={`${BUILDER_ROUTE}/:templateId`}
+          element={<PrivateElement element={<Builder />} />}
+        ></Route>
 
         <Route
           path={VIEWER_ROUTE}

@@ -6,14 +6,19 @@ import React, {
   useEffect,
   useState,
 } from 'react'
-import { serializeHtml, usePlateSelectors } from '@udecode/plate'
+import { usePlateSelectors } from '@udecode/plate'
+import _ from 'lodash'
+
+import { useTemplate } from '~features/common/queries'
 
 import * as BuilderService from './BuilderService'
 
 type EditorContextProps = {
+  status: 'idle' | 'loading' | 'success' | 'error'
   activeEditorId: string
-  setActiveEditorId: React.Dispatch<React.SetStateAction<string>>
-  activeHtmlValue: string
+  activeTemplateName: string
+  initialEditorValue: string | null
+  setActiveTemplateName: React.Dispatch<React.SetStateAction<string>>
   saveTemplate: () => Promise<void>
 }
 
@@ -37,37 +42,50 @@ export const useEditor = (): EditorContextProps => {
   return context
 }
 
-export const useProvideEditor = () => {
-  const [activeEditorId, setActiveEditorId] = useState<string>('hello')
-  const [activeHtmlValue, setActiveHtmlValue] = useState<string>('')
-  const { editor: getEditor, value: getValue } =
-    usePlateSelectors(activeEditorId)
-  const editor = getEditor()
+export const useProvideEditor = (): EditorContextProps => {
+  const { status, data: template } = useTemplate()
+  const [activeEditorId] = useState<string>('defaultEditor')
+  const [initialEditorValue, setInitialEditorValue] = useState<string | null>(
+    null,
+  )
+  const [activeEditorValue, setActiveEditorValue] = useState<string>('')
+  const [activeTemplateName, setActiveTemplateName] =
+    useState<string>('My Template')
+  const { value: getValue } = usePlateSelectors(activeEditorId)
   const value = getValue()
+
   useEffect(() => {
-    if (editor && value) {
-      setActiveHtmlValue(serializeHtml(editor, { nodes: value || [] }))
-    } else {
-      setActiveHtmlValue('')
+    if (status === 'success') {
+      setActiveTemplateName(template?.name || 'My active template')
+      setInitialEditorValue(_.get(template, 'body[0].data', ''))
     }
-  }, [editor, value])
+  }, [status, template])
+  useEffect(() => {
+    if (value) {
+      setActiveEditorValue(JSON.stringify(value))
+    } else {
+      setActiveEditorValue('')
+    }
+  }, [value])
 
   const saveTemplate = useCallback(async () => {
     return BuilderService.saveTemplate({
-      name: 'name',
+      name: activeTemplateName,
       body: [
         {
           type: 'TEXT',
-          data: activeHtmlValue,
+          data: activeEditorValue,
         },
       ],
     })
-  }, [activeHtmlValue])
+  }, [activeTemplateName, activeEditorValue])
 
   return {
+    status,
+    initialEditorValue,
     activeEditorId,
-    setActiveEditorId,
-    activeHtmlValue,
+    activeTemplateName,
+    setActiveTemplateName,
     saveTemplate,
   }
 }

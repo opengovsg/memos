@@ -1,4 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { Center } from '@chakra-ui/react'
+import { Spinner } from '@chakra-ui/spinner'
 import { CodeAlt } from '@styled-icons/boxicons-regular/CodeAlt'
 import { FormatBold } from '@styled-icons/material/FormatBold'
 import { FormatItalic } from '@styled-icons/material/FormatItalic'
@@ -40,11 +43,10 @@ import {
   Plate,
   usePlateEditorRef,
 } from '@udecode/plate'
+import _ from 'lodash'
 import { EditableProps } from 'slate-react/dist/components/editable'
 
 import { useEditor } from '~features/builder/EditorContext'
-
-import { getKeywords } from './util'
 
 const createElement = (
   text: string,
@@ -144,14 +146,13 @@ const BasicMarkToolbarButtons = ({ id }: { id: string }) => {
 
 export interface EditorProps {
   editableProps?: EditableProps
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  initialValue?: any
 }
 export const Editor = ({
   editableProps = { readOnly: false, autoFocus: false, spellCheck: false },
-  initialValue = defaultValue,
 }: EditorProps): JSX.Element => {
-  const { activeEditorId } = useEditor()
+  const { templateId } = useParams()
+  const { activeEditorId, status, initialEditorValue } = useEditor()
+  const [waitForTemplate, setWaitForTemplate] = useState(true)
   const [readOnly] = useState<boolean>(editableProps?.readOnly || false)
   const components = createPlateUI()
   const plugins = createPlugins(
@@ -170,12 +171,23 @@ export const Editor = ({
     ],
     { components },
   )
+  useEffect(() => {
+    setWaitForTemplate(!!templateId && initialEditorValue === null)
+  }, [initialEditorValue, templateId])
 
-  return (
+  return status === 'error' ? (
+    <Center>Could not retrieve template</Center>
+  ) : status === 'loading' || waitForTemplate ? (
+    <Center>
+      <Spinner></Spinner>
+    </Center>
+  ) : (
     <Plate
       id={activeEditorId}
       editableProps={editableProps}
-      initialValue={initialValue}
+      initialValue={
+        initialEditorValue ? JSON.parse(initialEditorValue) : defaultValue
+      }
       plugins={plugins}
     >
       {readOnly ? (

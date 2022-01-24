@@ -7,6 +7,14 @@ import {
 
 const API_BASE_URL = process.env.REACT_APP_BASE_URL ?? '/api'
 
+export class HttpError extends Error {
+  code: number
+  constructor(message: string, code: number) {
+    super(message)
+    this.code = code
+  }
+}
+
 // Create own instance with defaults.
 const ApiService = wretch(API_BASE_URL, {
   credentials: 'same-origin',

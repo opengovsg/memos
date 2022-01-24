@@ -12,3 +12,17 @@ export interface SaveTemplateProps {
 export const saveTemplate = async (data: SaveTemplateProps): Promise<void> => {
   return TemplatesApi.url('/').post(data)
 }
+
+export interface GetTemplateProps {
+  templateId: string
+}
+export class GetTemplateResponseDto {
+  name!: string
+  body!: { data: string }[]
+}
+
+export const getTemplate = async (
+  data: GetTemplateProps,
+): Promise<GetTemplateResponseDto> => {
+  return TemplatesApi.url(`/${data.templateId}`).get().json()
+}

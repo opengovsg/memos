@@ -11,10 +11,9 @@ export const Keywords = (): JSX.Element => {
   // Debug
   const [debugTextValue, setDebugTextValue] = useState<string>('')
 
-  const { activeEditorId, activeHtmlValue } = useEditor()
+  const { activeEditorId } = useEditor()
   const { value: getValue } = usePlateSelectors(activeEditorId)
   const value: Node[] | null = getValue()
-  //   console.log(serializeHtml(editor, { nodes: store.value || [] }))
   useEffect(() => {
     if (value) {
       const textValue = serializeNodesToString(value || [])
@@ -38,9 +37,6 @@ export const Keywords = (): JSX.Element => {
 
       <Text textStyle="h3">Debug Text</Text>
       <Box maxWidth="fit-content">{debugTextValue}</Box>
-
-      <Text textStyle="h3">Debug HTML</Text>
-      <Box maxWidth="fit-content">{activeHtmlValue}</Box>
     </VStack>
   )
 }
