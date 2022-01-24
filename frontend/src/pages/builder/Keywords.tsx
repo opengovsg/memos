@@ -3,7 +3,7 @@ import { Box, Text, VStack } from '@chakra-ui/react'
 import { usePlateSelectors } from '@udecode/plate'
 import { Node } from 'slate'
 
-import { getKeywords, serializeNodesToString } from '~pages/fields/plate/util'
+import { getKeywords, serializeNodesToString } from '~pages/builder/util'
 import { useEditor } from '~features/builder/EditorContext'
 
 export const Keywords = (): JSX.Element => {

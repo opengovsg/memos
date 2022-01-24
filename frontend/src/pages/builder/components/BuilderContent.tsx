@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react'
 import { EditableProps } from 'slate-react/dist/components/editable'
 
-import { Editor } from '~pages/fields/plate/Editor'
+import { Editor } from '~pages/builder/components/Editor'
 
 export const BuilderContent = ({
   readOnly = false,
