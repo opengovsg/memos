@@ -5,6 +5,7 @@ import {
   BUILDER_ROUTE,
   DASHBOARD_ROUTE,
   LOGIN_ROUTE,
+  PREVIEW_ROUTE,
   ROOT_ROUTE,
   VIEWER_ROUTE,
 } from '~constants/routes'
@@ -36,12 +37,17 @@ export const AppRouter = (): JSX.Element => {
         <Route
           path={BUILDER_ROUTE}
           element={<PrivateElement element={<Builder />} />}
-        ></Route>
+        />
 
         <Route
           path={`${BUILDER_ROUTE}/:templateId`}
           element={<PrivateElement element={<Builder />} />}
-        ></Route>
+        />
+
+        <Route
+          path={`${PREVIEW_ROUTE}/:templateId`}
+          element={<PrivateElement element={<Builder />} />}
+        />
 
         <Route
           path={VIEWER_ROUTE}
