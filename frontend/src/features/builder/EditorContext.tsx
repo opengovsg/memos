@@ -44,9 +44,13 @@ export const useEditor = (): EditorContextProps => {
 }
 
 export const useProvideEditor = (): EditorContextProps => {
-  const { status, data: template } = useTemplate()
-
+  // Id of editor -- will be set to template id when template is loaded
   const [activeEditorId, setActiveEditorId] = useState<string>('defaultEditor')
+  // Hook to retrieve value from the editor
+  const { value: getValue } = usePlateSelectors(activeEditorId)
+  const value = getValue()
+
+  // Value to initialize editor with
   const [initialEditorValue, setInitialEditorValue] = useState<string | null>(
     null,
   )
@@ -54,9 +58,11 @@ export const useProvideEditor = (): EditorContextProps => {
   // Editable template value that will be saved
   const [templateValue, setTemplateValue] = useState<string>('')
   const [templateName, setTemplateName] = useState<string>('My Template')
-  const { value: getValue } = usePlateSelectors(activeEditorId)
-  const value = getValue()
 
+  // Make an api call to fetch template
+  const { status, data: template } = useTemplate()
+  // When the api call to fetch the template is complete, set the values in the navbar
+  // and editor to the saved name and saved body
   useEffect(() => {
     if (status === 'success') {
       setTemplateName(template?.name || 'My Template')
@@ -64,6 +70,7 @@ export const useProvideEditor = (): EditorContextProps => {
     }
   }, [status, template, activeEditorId])
 
+  // Hook to set the template value on change so that we can save it after
   useEffect(() => {
     if (value) {
       setTemplateValue(JSON.stringify(value))
