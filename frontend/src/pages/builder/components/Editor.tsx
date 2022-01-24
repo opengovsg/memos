@@ -15,16 +15,6 @@ import { LooksOne } from '@styled-icons/material/LooksOne'
 import { LooksTwo } from '@styled-icons/material/LooksTwo'
 import {
   BlockToolbarButton,
-  createBlockquotePlugin,
-  createBoldPlugin,
-  createCodeBlockPlugin,
-  createCodePlugin,
-  createHeadingPlugin,
-  createItalicPlugin,
-  createParagraphPlugin,
-  createPlateUI,
-  createPlugins,
-  createUnderlinePlugin,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_H1,
   ELEMENT_H2,
@@ -47,6 +37,7 @@ import _ from 'lodash'
 import { EditableProps } from 'slate-react/dist/components/editable'
 
 import { useEditor } from '~features/builder/EditorContext'
+import { getCommonPlugins } from '~features/common/editor'
 
 const createElement = (
   text: string,
@@ -154,23 +145,7 @@ export const Editor = ({
   const { activeEditorId, status, initialEditorValue } = useEditor()
   const [waitForTemplate, setWaitForTemplate] = useState(true)
   const [readOnly] = useState<boolean>(editableProps?.readOnly || false)
-  const components = createPlateUI()
-  const plugins = createPlugins(
-    [
-      // elements
-      createParagraphPlugin(), // paragraph element
-      createBlockquotePlugin(), // blockquote element
-      createCodeBlockPlugin(), // code block element
-      createHeadingPlugin(), // heading elements
-
-      // marks
-      createBoldPlugin(), // bold mark
-      createItalicPlugin(), // italic mark
-      createUnderlinePlugin(), // underline mark
-      createCodePlugin(), // code mark
-    ],
-    { components },
-  )
+  const plugins = getCommonPlugins()
   useEffect(() => {
     setWaitForTemplate(!!templateId && initialEditorValue === null)
   }, [initialEditorValue, templateId])
