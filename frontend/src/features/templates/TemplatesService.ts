@@ -24,7 +24,7 @@ interface TemplateTextBlock {
 
 type TemplateBlock = TemplateHeaderBlock | TemplateTextBlock
 
-interface Template {
+export interface Template {
   id: number
   version: number
   status: TemplateStatus

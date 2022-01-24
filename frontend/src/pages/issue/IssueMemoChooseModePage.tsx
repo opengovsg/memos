@@ -1,5 +1,4 @@
 import { ReactElement, useState } from 'react'
-import { useQuery } from 'react-query'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import {
   Box,
@@ -17,20 +16,7 @@ import { Close, Description, FileCopy } from '@styled-icons/material'
 
 import { textStyles } from '~theme/textStyles'
 import { DASHBOARD_ROUTE } from '~constants/routes'
-
-import { getTemplate } from '~features/templates/TemplatesService'
-
-const useTemplate = (templateId: number) => {
-  const { isLoading, isError, data } = useQuery(
-    ['template', templateId],
-    () => getTemplate(templateId),
-    {
-      retry: false,
-    },
-  )
-
-  return { isLoading, isError, data }
-}
+import { useTemplate } from '~hooks/useTemplate'
 
 export const IssueMemoChooseModePage = (): ReactElement => {
   const navigate = useNavigate()
