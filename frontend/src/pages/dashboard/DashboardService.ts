@@ -1,9 +1,5 @@
 import ApiService from '~services/ApiService'
 
-// TODO: Refactor to UseUser hook?
-const AUTH_ENDPOINT = '/auth'
-const AuthApi = ApiService.url(AUTH_ENDPOINT)
-
 const USERS_ENDPOINT = '/users'
 const UsersApi = ApiService.url(USERS_ENDPOINT)
 
@@ -24,11 +20,8 @@ export class TemplateMetaResponseDto {
  * owns or collaborates on
  * @returns Metadata required for forms on dashboard view
  */
-export const getTemplatesView = async (): Promise<
-  TemplateMetaResponseDto[]
-> => {
-  // This definitely should be cached somewhere xD
-  const user = await AuthApi.url('/whoami').get().json()
-  const userId = user.id
+export const getTemplatesView = async (
+  userId: number,
+): Promise<TemplateMetaResponseDto[]> => {
   return UsersApi.url(`/${userId}/templates`).get().json()
 }

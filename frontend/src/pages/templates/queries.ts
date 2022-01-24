@@ -5,6 +5,8 @@ import {
   TemplateMetaResponseDto,
 } from '~/pages/dashboard/DashboardService'
 
+import { useAuth } from '~features/auth/AuthContext'
+
 const templatesKeys = {
   all: ['templates'] as const,
 }
@@ -12,7 +14,9 @@ const templatesKeys = {
 export const useTemplatesDashboard = (): UseQueryResult<
   TemplateMetaResponseDto[]
 > => {
-  return useQuery(templatesKeys.all, () => getTemplatesView(), {
+  const { user } = useAuth()
+
+  return useQuery(templatesKeys.all, () => getTemplatesView(user.id), {
     staleTime: 5000,
   })
 }
