@@ -4,6 +4,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import {
   BUILDER_ROUTE,
   DASHBOARD_ROUTE,
+  ISSUE_MEMO_LANDING_ROUTE,
   LOGIN_ROUTE,
   ROOT_ROUTE,
   VIEWER_ROUTE,
@@ -41,6 +42,12 @@ export const AppRouter = (): JSX.Element => {
         <Route
           path={VIEWER_ROUTE}
           element={<PublicElement element={<Viewer />} />}
+        />
+
+        {/* TODO abstract routes related to issuing memos into separate router */}
+        <Route
+          path={ISSUE_MEMO_LANDING_ROUTE}
+          element={<PrivateElement element={<p>issue memo</p>} />}
         />
 
         <Route path="*" element={<Navigate to={LOGIN_ROUTE} />} />
