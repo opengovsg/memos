@@ -28,6 +28,6 @@ export const getKeywords = (value: string): string[] => {
   }
   return Array.from(result)
 }
-export const serializeNodesToString = (nodes: Node[]) => {
+export const serializeNodesToString = (nodes: Node[]): string => {
   return nodes.map((n) => Node.string(n)).join('\n')
 }

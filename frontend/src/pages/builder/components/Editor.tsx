@@ -33,7 +33,6 @@ import {
   Plate,
   usePlateEditorRef,
 } from '@udecode/plate'
-import _ from 'lodash'
 import { EditableProps } from 'slate-react/dist/components/editable'
 
 import { useEditor } from '~features/builder/EditorContext'
