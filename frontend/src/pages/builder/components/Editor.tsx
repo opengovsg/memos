@@ -141,13 +141,15 @@ export const Editor = ({
   editableProps = { readOnly: false, autoFocus: false, spellCheck: false },
 }: EditorProps): JSX.Element => {
   const { templateId } = useParams()
-  const { activeEditorId, status, initialEditorValue } = useEditor()
+  const { activeEditorId, setActiveEditorId, status, initialEditorValue } =
+    useEditor()
   const [waitForTemplate, setWaitForTemplate] = useState(true)
   const [readOnly] = useState<boolean>(editableProps?.readOnly || false)
   const plugins = getCommonPlugins()
   useEffect(() => {
+    setActiveEditorId(templateId || '')
     setWaitForTemplate(!!templateId && initialEditorValue === null)
-  }, [initialEditorValue, templateId])
+  }, [initialEditorValue, setActiveEditorId, templateId])
 
   return status === 'error' ? (
     <Center>Could not retrieve template</Center>

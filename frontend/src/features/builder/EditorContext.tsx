@@ -16,6 +16,7 @@ import * as BuilderService from './BuilderService'
 type EditorContextProps = {
   status: 'idle' | 'loading' | 'success' | 'error'
   activeEditorId: string
+  setActiveEditorId: React.Dispatch<React.SetStateAction<string>>
   activeTemplateName: string
   initialEditorValue: string | null
   setActiveTemplateName: React.Dispatch<React.SetStateAction<string>>
@@ -44,7 +45,7 @@ export const useEditor = (): EditorContextProps => {
 
 export const useProvideEditor = (): EditorContextProps => {
   const { status, data: template } = useTemplate()
-  const [activeEditorId] = useState<string>('defaultEditor')
+  const [activeEditorId, setActiveEditorId] = useState<string>('defaultEditor')
   const [initialEditorValue, setInitialEditorValue] = useState<string | null>(
     null,
   )
@@ -56,10 +57,11 @@ export const useProvideEditor = (): EditorContextProps => {
 
   useEffect(() => {
     if (status === 'success') {
-      setActiveTemplateName(template?.name || 'My active template')
+      setActiveTemplateName(template?.name || 'My Template')
       setInitialEditorValue(_.get(template, 'body[0].data', ''))
     }
-  }, [status, template])
+  }, [status, template, activeEditorId])
+
   useEffect(() => {
     if (value) {
       setActiveEditorValue(JSON.stringify(value))
@@ -84,6 +86,7 @@ export const useProvideEditor = (): EditorContextProps => {
     status,
     initialEditorValue,
     activeEditorId,
+    setActiveEditorId,
     activeTemplateName,
     setActiveTemplateName,
     saveTemplate,
