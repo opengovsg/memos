@@ -29,7 +29,7 @@ export class Memo extends BaseEntity {
   @Column({ type: 'jsonb' })
   params!: Record<string, string>
 
-  @Column({ nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   expiresAt?: Date
 
   @Column({ default: false })
