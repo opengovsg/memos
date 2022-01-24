@@ -35,7 +35,7 @@ export const BuilderDrawer = (): JSX.Element => {
 
   const renderDrawerContent = useMemo(() => {
     switch (activeTab) {
-      case DrawerTabs.AddElements: {
+      case DrawerTabs.Preview: {
         return <Keywords />
       }
     }

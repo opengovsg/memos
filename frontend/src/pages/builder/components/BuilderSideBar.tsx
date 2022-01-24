@@ -9,7 +9,7 @@ import {
 import { DrawerTabIcon } from './DrawerTabIcon'
 
 export const BuilderSidebar = (): JSX.Element => {
-  const { activeTab, handleAddElementClick } = useBuilderDrawer()
+  const { activeTab, handlePreviewClick } = useBuilderDrawer()
 
   return (
     <Stack
@@ -23,8 +23,8 @@ export const BuilderSidebar = (): JSX.Element => {
       <DrawerTabIcon
         label="Add Elements"
         icon={<BiUserPlus fontSize="1.5rem" />}
-        onClick={handleAddElementClick}
-        isActive={activeTab === DrawerTabs.AddElements}
+        onClick={handlePreviewClick}
+        isActive={activeTab === DrawerTabs.Preview}
       />
     </Stack>
   )

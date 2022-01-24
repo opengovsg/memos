@@ -47,7 +47,7 @@ export const BuilderNavBar = ({
   handleCreateMemoClick,
 }: BuilderNavBarProps): JSX.Element => {
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const { templateName, setTemplateName } = useEditor()
+  const { templateName, setTemplateName, isPreview, setIsPreview } = useEditor()
   const mobileDrawerExtraButtonProps: Partial<ButtonProps> = useMemo(
     () => ({
       isFullWidth: true,
@@ -133,7 +133,13 @@ export const BuilderNavBar = ({
               disabled={true}
             />
             <Button onClick={handleSaveTemplateClick}>Save Template</Button>
-            <Button onClick={handleCreateMemoClick}>Create Memo</Button>
+            <Button
+              onClick={() => {
+                setIsPreview(!isPreview)
+              }}
+            >
+              Create Memo
+            </Button>
           </ButtonGroup>
         </Box>
       </Flex>

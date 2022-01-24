@@ -1,11 +1,8 @@
 import { Flex } from '@chakra-ui/react'
-import { EditableProps } from 'slate-react/dist/components/editable'
 
 import { Editor } from '~pages/builder/components/Editor'
 
-export const BuilderContent = ({
-  readOnly = false,
-}: EditableProps): JSX.Element => {
+export const BuilderContent = (): JSX.Element => {
   return (
     <Flex flex={1} bg="neutral.200" justifyContent="center">
       <Flex
@@ -25,9 +22,7 @@ export const BuilderContent = ({
           w="100%"
           flexDir="column"
         >
-          <Editor
-            editableProps={{ readOnly, autoFocus: false, spellCheck: false }}
-          />
+          <Editor />
         </Flex>
       </Flex>
     </Flex>

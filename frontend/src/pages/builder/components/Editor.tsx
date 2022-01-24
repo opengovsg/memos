@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Center } from '@chakra-ui/react'
+import { Box, Center } from '@chakra-ui/react'
 import { Spinner } from '@chakra-ui/spinner'
 import { CodeAlt } from '@styled-icons/boxicons-regular/CodeAlt'
 import { FormatBold } from '@styled-icons/material/FormatBold'
@@ -134,22 +134,53 @@ const BasicMarkToolbarButtons = ({ id }: { id: string }) => {
   )
 }
 
-export interface EditorProps {
-  editableProps?: EditableProps
-}
-export const Editor = ({
-  editableProps = { readOnly: false, autoFocus: false, spellCheck: false },
-}: EditorProps): JSX.Element => {
+export const Editor = (): JSX.Element => {
   const { templateId } = useParams()
-  const { activeEditorId, setActiveEditorId, status, initialEditorValue } =
-    useEditor()
+  const {
+    activeEditorId,
+    setActiveEditorId,
+    status,
+    initialEditorValue,
+    isPreview,
+  } = useEditor()
+
   const [waitForTemplate, setWaitForTemplate] = useState(true)
   const plugins = getCommonPlugins()
   useEffect(() => {
-    setActiveEditorId(templateId || '')
+    setActiveEditorId(`${templateId}` || '')
     setWaitForTemplate(!!templateId && initialEditorValue === null)
-  }, [initialEditorValue, setActiveEditorId, templateId])
+  }, [initialEditorValue, templateId, setActiveEditorId])
 
+  const renderEditor = (readOnly: boolean, initialValue: any[]) => {
+    return (
+      <>
+        <Box hidden={readOnly}>
+          <Plate
+            id={activeEditorId}
+            editableProps={{ readOnly: false }}
+            initialValue={
+              initialValue
+              // initialEditorValue ? JSON.parse(initialEditorValue) : defaultValue
+            }
+            plugins={plugins}
+          >
+            <HeadingToolbar>
+              <BasicElementToolbarButtons id={activeEditorId} />
+              <BasicMarkToolbarButtons id={activeEditorId} />
+            </HeadingToolbar>
+          </Plate>
+        </Box>
+        <Box>
+          <Plate
+            id={`${activeEditorId}-ro`}
+            editableProps={{ readOnly: true }}
+            initialValue={defaultValue}
+            plugins={plugins}
+          ></Plate>
+        </Box>
+      </>
+    )
+  }
   return status === 'error' ? (
     <Center>Could not retrieve template</Center>
   ) : status === 'loading' || waitForTemplate ? (
@@ -157,18 +188,9 @@ export const Editor = ({
       <Spinner></Spinner>
     </Center>
   ) : (
-    <Plate
-      id={activeEditorId}
-      editableProps={editableProps}
-      initialValue={
-        initialEditorValue ? JSON.parse(initialEditorValue) : defaultValue
-      }
-      plugins={plugins}
-    >
-      <HeadingToolbar hidden={editableProps.readOnly}>
-        <BasicElementToolbarButtons id={activeEditorId} />
-        <BasicMarkToolbarButtons id={activeEditorId} />
-      </HeadingToolbar>
-    </Plate>
+    renderEditor(
+      isPreview,
+      initialEditorValue ? JSON.parse(initialEditorValue) : defaultValue,
+    )
   )
 }

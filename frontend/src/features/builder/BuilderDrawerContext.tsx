@@ -8,14 +8,14 @@ import {
 } from 'react'
 
 export enum DrawerTabs {
-  AddElements,
+  Preview,
 }
 
 type BuilderDrawerContextProps = {
   activeTab: DrawerTabs | null
   isShowDrawer: boolean
   handleClose: (clearActiveTab?: boolean) => void
-  handleAddElementClick: () => void
+  handlePreviewClick: () => void
 }
 
 const BuilderDrawerContext = createContext<
@@ -60,9 +60,9 @@ const useProvideDrawerContext = (): BuilderDrawerContextProps => {
     }
   }, [])
 
-  const handleAddElementClick = useCallback(() => {
-    if (activeTab !== DrawerTabs.AddElements) {
-      setActiveTab(DrawerTabs.AddElements)
+  const handlePreviewClick = useCallback(() => {
+    if (activeTab !== DrawerTabs.Preview) {
+      setActiveTab(DrawerTabs.Preview)
     } else {
       handleClose()
     }
@@ -72,6 +72,6 @@ const useProvideDrawerContext = (): BuilderDrawerContextProps => {
     activeTab,
     isShowDrawer,
     handleClose,
-    handleAddElementClick,
+    handlePreviewClick,
   }
 }
