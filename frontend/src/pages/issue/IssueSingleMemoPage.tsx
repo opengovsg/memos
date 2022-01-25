@@ -105,7 +105,9 @@ export const IssueSingleMemoPage = (): ReactElement => {
             <GridItem
               borderRight="1px solid"
               borderColor="gray.200"
-              minH="100vh"
+              height="calc(100vh - 100px)"
+              overflowY="scroll"
+              colSpan={{ base: 4, lg: 1 }}
             >
               <Box
                 w="100%"
@@ -184,7 +186,9 @@ export const IssueSingleMemoPage = (): ReactElement => {
             </GridItem>
 
             {/* Content */}
-            <GridItem colSpan={3}>{/* TODO preview */}</GridItem>
+            <GridItem colSpan={{ base: 4, lg: 3 }}>
+              {/* TODO preview */}
+            </GridItem>
           </Grid>
         </>
       )}
