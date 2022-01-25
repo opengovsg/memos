@@ -67,7 +67,7 @@ export const TemplatesPage = (): JSX.Element => {
       bg="neutral.100"
       templateColumns="1fr"
       templateRows="auto 1fr auto"
-      minH="92vh" // TODO: Minus the nav bar (6vh) Don't hardcode.
+      // minH="93vh" // TODO: Minus the nav bar (6vh) Don't hardcode.
       templateAreas="'header' 'main' 'footer'"
     >
       <Container
