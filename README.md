@@ -43,3 +43,11 @@ npm run migration:run
 ```
 npm run migration:gen -- -n <migration-name>
 ```
+
+## Development and Deployment
+
+Deployment to Elastic Beanstalk is carried out through Github Actions.
+
+- To create a feature/bugfix: create a branch off `develop` 
+- To push to staging: force push onto `staging` 
+- To push to production: Squash a PR from your branch into `develop`, then merge a PR from `develop` into `production`
