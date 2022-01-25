@@ -23,9 +23,28 @@ interface Memo {
   }>
 }
 
+export interface CreateMemo {
+  templateId: number
+  versionId?: number
+  uin: string
+  uinType: string // TODO restrict
+  params: Record<string, string>
+  expiresAt?: string
+}
+
+interface CreateMemoResponse {
+  slug: string
+}
+
 /**
  * Gets a memo based on slug
  */
 export const getMemo = async (slug: string): Promise<Memo> => {
   return memosApi.url(`/${slug}`).get().json()
+}
+
+export const createMemo = async (
+  memo: CreateMemo,
+): Promise<CreateMemoResponse> => {
+  return memosApi.post(memo).json()
 }

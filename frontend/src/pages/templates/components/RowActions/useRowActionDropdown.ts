@@ -14,8 +14,7 @@ export const useRowActionDropdown = (
 ): UseRowActionDropdownReturn => {
   const navigate = useNavigate()
   return {
-    handleUseTemplate: () =>
-      console.log(`use button clicked for template id: ${templateId}`),
+    handleUseTemplate: () => navigate(`/issue/${templateId}`),
     handleEditTemplate: () => navigate(`${BUILDER_ROUTE}/${templateId}`),
     handlePreviewTemplate: () =>
       console.log(`preview button clicked for template id: ${templateId}`),
