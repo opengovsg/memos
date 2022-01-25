@@ -1,5 +1,6 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useMutation } from 'react-query'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   Box,
   Button,
@@ -19,6 +20,8 @@ import { DASHBOARD_ROUTE } from '~constants/routes'
 import { useTemplate } from '~hooks/useTemplate'
 import Spinner from '~components/Spinner'
 
+import { CreateMemo, createMemo } from '~features/memos/MemosService'
+
 export const IssueSingleMemoPage = (): ReactElement => {
   const { templateId } = useParams()
   const { isLoading, isError, data: template } = useTemplate(Number(templateId))
@@ -28,6 +31,10 @@ export const IssueSingleMemoPage = (): ReactElement => {
   const [params, setParams] = useState<Record<string, string>>({})
   const formRef = useRef<HTMLFormElement>(null)
 
+  const navigate = useNavigate()
+  const mutation = useMutation((data: CreateMemo) => createMemo(data))
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+
   const handleParamsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setParams({
@@ -36,9 +43,27 @@ export const IssueSingleMemoPage = (): ReactElement => {
     })
   }
 
-  const handleSubmit = () => {
-    formRef.current?.reportValidity()
-    // TODO submit
+  const handleSubmit = async () => {
+    // Basic validation
+    const form = formRef.current
+    if (!form) return
+    if (!form.checkValidity()) {
+      form.reportValidity()
+      return
+    }
+
+    // TODO: handle errors
+    if (!template) return
+
+    setIsSubmitting(true)
+    const { slug } = await mutation.mutateAsync({
+      templateId: template.id,
+      versionId: template.version,
+      uin,
+      uinType,
+      params,
+    })
+    navigate(`/issue/success?slug=${slug}`)
   }
 
   useEffect(() => {
@@ -68,7 +93,9 @@ export const IssueSingleMemoPage = (): ReactElement => {
                 {template.name}
               </Heading>
               <Spacer />
-              <Button onClick={handleSubmit}>Issue Memo</Button>
+              <Button onClick={handleSubmit} isLoading={isSubmitting}>
+                Issue Memo
+              </Button>
             </Flex>
           </Box>
 
@@ -106,6 +133,7 @@ export const IssueSingleMemoPage = (): ReactElement => {
                     onChange={(e) => setUin(e.target.value)}
                     placeholder="Enter a NRIC, FIN or Passport Number"
                     required
+                    disabled={isSubmitting}
                   />
                 </Box>
 
@@ -123,6 +151,7 @@ export const IssueSingleMemoPage = (): ReactElement => {
                     value={uinType}
                     onChange={(e) => setUinType(e.target.value)}
                     required
+                    disabled={isSubmitting}
                   >
                     <option value="NRIC">NRIC</option>
                     <option value="FIN">FIN</option>
@@ -147,6 +176,7 @@ export const IssueSingleMemoPage = (): ReactElement => {
                       value={params[key]}
                       onChange={handleParamsChange}
                       required
+                      disabled={isSubmitting}
                     />
                   </Box>
                 ))}
