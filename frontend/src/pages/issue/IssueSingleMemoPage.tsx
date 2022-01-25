@@ -63,7 +63,7 @@ export const IssueSingleMemoPage = (): ReactElement => {
       uinType,
       params,
     })
-    navigate(`/issue/success?slug=${slug}`)
+    navigate(`/issue/single/success?slug=${slug}`)
   }
 
   useEffect(() => {
