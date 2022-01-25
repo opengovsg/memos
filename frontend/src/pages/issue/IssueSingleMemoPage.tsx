@@ -20,6 +20,7 @@ import { DASHBOARD_ROUTE } from '~constants/routes'
 import { useTemplate } from '~hooks/useTemplate'
 import Spinner from '~components/Spinner'
 
+import { ReadonlyEditor } from '~pages/viewer/components/ReadonlyEditor'
 import { CreateMemo, createMemo } from '~features/memos/MemosService'
 
 export const IssueSingleMemoPage = (): ReactElement => {
@@ -187,7 +188,10 @@ export const IssueSingleMemoPage = (): ReactElement => {
 
             {/* Content */}
             <GridItem colSpan={{ base: 4, lg: 3 }}>
-              {/* TODO preview */}
+              <Box w="100%" maxW="48em" margin="0 auto" p="8" shadow="md">
+                {/* TODO: templating is broken but I guess being able to see the template is better than nothing */}
+                <ReadonlyEditor value={template.body[0].data} />
+              </Box>
             </GridItem>
           </Grid>
         </>
