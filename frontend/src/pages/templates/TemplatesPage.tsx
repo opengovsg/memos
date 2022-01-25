@@ -11,7 +11,7 @@ import { useTemplatesDashboard } from './queries'
 
 export const CONTAINER_MAXW = '120rem'
 const PAGE_DEFAULTS = {
-  size: 5,
+  size: 10,
   pageNumber: 1,
 }
 
@@ -67,7 +67,6 @@ export const TemplatesPage = (): JSX.Element => {
       bg="neutral.100"
       templateColumns="1fr"
       templateRows="auto 1fr auto"
-      minH="92vh" // TODO: Minus the nav bar (6vh) Don't hardcode.
       templateAreas="'header' 'main' 'footer'"
     >
       <Container
