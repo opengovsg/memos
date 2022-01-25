@@ -22,7 +22,7 @@ export class MailerService {
         port: this.config.get('smtp.port'),
         auth: {
           user: this.config.get('smtp.user'),
-          pass: this.config.get('smtp.port'),
+          pass: this.config.get('smtp.password'),
         },
       } as SMTPTransport.Options)
     }
