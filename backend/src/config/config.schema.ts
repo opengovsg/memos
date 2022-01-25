@@ -4,6 +4,13 @@ export interface ConfigSchema {
   port: number
   environment: 'development' | 'staging' | 'production' | 'test'
   awsRegion: string
+  mailFrom: string
+  smtp: {
+    host: string
+    user: string
+    password: string
+    port: number
+  }
   database: {
     host: string
     username: string
@@ -64,6 +71,33 @@ export const schema: Schema<ConfigSchema> = {
     env: 'AWS_REGION',
     format: '*',
     default: 'ap-southeast-1',
+  },
+  mailFrom: {
+    doc: 'Email address to send messages from.',
+    env: 'MAIL_FROM',
+    default: 'donotreply@memo.hack.gov.sg',
+  },
+  smtp: {
+    host: {
+      doc: 'SMTP Host, if not using SES via role permissions',
+      env: 'SMTP_HOST',
+      default: '',
+    },
+    user: {
+      doc: 'SMTP User, if not using SES via role permissions',
+      env: 'SMTP_USER',
+      default: '',
+    },
+    password: {
+      doc: 'SMTP Password, if not using SES via role permissions',
+      env: 'SMTP_PASSWORD',
+      default: '',
+    },
+    port: {
+      doc: 'SMTP Port, if not using SES via role permissions',
+      env: 'SMTP_PORT',
+      default: 465,
+    },
   },
   database: {
     username: {
