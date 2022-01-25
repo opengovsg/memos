@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '@chakra-ui/react'
 
 type UseRowActionDropdownReturn = {
   handleViewMemo: () => void
@@ -12,10 +13,22 @@ export const useRowActionDropdown = (
   slug: string,
 ): UseRowActionDropdownReturn => {
   const navigate = useNavigate()
+  const toast = useToast()
+  const handleCopyWeblink = async () => {
+    const { protocol, hostname, port } = new URL(window.location.href)
+    await navigator.clipboard.writeText(
+      `${protocol}//${hostname}:${port}/p/${slug}`,
+    )
+
+    toast({
+      title: 'Weblink copied to clipboard',
+      position: 'top',
+      status: 'success',
+    })
+  }
   return {
     handleViewMemo: () => navigate(`/p/${slug}`),
-    handleCopyWeblink: () =>
-      console.log(`copy weblink button clicked for memo id: ${memoId}`),
+    handleCopyWeblink: handleCopyWeblink,
     handleDownloadCsv: () =>
       console.log(`download csv button clicked for memo id: ${memoId}`),
     handleVoidMemo: () =>
