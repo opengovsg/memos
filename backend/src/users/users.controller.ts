@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { AuthGuard } from 'auth/auth.guard'
+import { GetMemoMetaResponseDto } from 'memos/dto'
 import { GetTemplateMetaResponseDto } from 'templates/dto'
 import { ListMemosForUserDto } from './dto'
 import { UsersService } from './users.service'
@@ -25,11 +26,12 @@ export class UsersController {
    * List memos that the user has access to
    */
   @Get(':id/memos')
-  @ApiResponse({ type: ListMemosForUserDto })
+  @ApiResponse({ type: [GetMemoMetaResponseDto] })
   async listMemos(
     @Param('id') _userId: number,
-    @Query('query') _query: ListMemosForUserDto,
-  ): Promise<void> {
-    await this.usersService.listMemos()
+    @Query() _query: ListMemosForUserDto,
+  ): Promise<GetMemoMetaResponseDto[]> {
+    const result = await this.usersService.listMemos(_userId, _query)
+    return result
   }
 }

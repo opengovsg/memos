@@ -11,7 +11,13 @@ import { isTemplateIssuer, renderTemplate } from 'templates/templates.util'
 import { Connection } from 'typeorm'
 import { TemplateStatus } from 'types'
 
-import { CreateMemoDto, CreateMemoResponseDto, GetMemoResponseDto } from './dto'
+import {
+  CreateMemoDto,
+  CreateMemoResponseDto,
+  GetMemoMetaResponseDto,
+  GetMemoResponseDto,
+} from './dto'
+import { ListMemosForUserDto } from 'users/dto'
 
 @Injectable()
 export class MemosService {
@@ -122,8 +128,41 @@ export class MemosService {
   async uploadMemosComplete(): Promise<void> {
     return
   }
-  async listMemosForUser(): Promise<void> {
-    return
+
+  async listMemosForUser(
+    userId: number,
+    query: ListMemosForUserDto,
+  ): Promise<GetMemoMetaResponseDto[]> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { templateId, version, page, limit } = query
+
+    // TODO: Fetch by page, limit
+    if (!templateId && version) {
+      throw new BadRequestException('Cannot provide version without template.')
+    }
+
+    const issued = await this.connection.manager.find(Memo, {
+      where: {
+        issuer: { id: userId },
+        // If templateId is provided, filter by it
+        ...(templateId && {
+          templateVersion: {
+            template: { id: templateId },
+            // If version is given, filter by it
+            ...(version && { version }),
+          },
+        }),
+      },
+      relations: ['templateVersion', 'templateVersion.template'],
+    })
+
+    return issued.map((m) => ({
+      id: m.id,
+      issuer: m.issuer,
+      slug: m.slug,
+      createdAt: m.createdAt,
+      template: m.templateVersion.template.name,
+    }))
   }
 
   // Retrieves an existing memo based on slug
