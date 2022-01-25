@@ -25,7 +25,9 @@ export const IssueSingleMemoSuccessPage = (): ReactElement => {
   const handleCopyWeblink = async () => {
     const { protocol, hostname, port } = new URL(window.location.href)
     await navigator.clipboard.writeText(
-      `${protocol}//${hostname}:${port}/p/${slug}`,
+      port
+        ? `${protocol}//${hostname}:${port}/p/${slug}`
+        : `${protocol}//${hostname}/p/${slug}`,
     )
 
     toast({
