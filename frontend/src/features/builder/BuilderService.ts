@@ -13,6 +13,13 @@ export const saveTemplate = async (data: SaveTemplateProps): Promise<void> => {
   return TemplatesApi.url('/').post(data)
 }
 
+export const updateTemplate = async (
+  templateId: string,
+  data: SaveTemplateProps,
+): Promise<void> => {
+  return TemplatesApi.url(`/${templateId}`).put(data)
+}
+
 export interface GetTemplateProps {
   templateId: string
 }

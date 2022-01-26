@@ -71,6 +71,17 @@ export const useProvideEditor = (): EditorContextProps => {
   }, [value])
 
   const saveTemplate = useCallback(async () => {
+    if (activeEditorId) {
+      return BuilderService.updateTemplate(activeEditorId, {
+        name: activeTemplateName,
+        body: [
+          {
+            type: 'TEXT',
+            data: activeEditorValue,
+          },
+        ],
+      })
+    }
     return BuilderService.saveTemplate({
       name: activeTemplateName,
       body: [
@@ -80,7 +91,7 @@ export const useProvideEditor = (): EditorContextProps => {
         },
       ],
     })
-  }, [activeTemplateName, activeEditorValue])
+  }, [activeTemplateName, activeEditorId, activeEditorValue])
 
   return {
     status,

@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '@chakra-ui/react'
 
 import { DASHBOARD_ROUTE } from '~constants/routes'
 
@@ -9,7 +10,8 @@ import { BuilderNavBar } from './BuilderNavBar'
 
 const useBuilderNavBar = () => {
   const navigate = useNavigate()
-  const { saveTemplate } = useEditor()
+  const { activeTemplateName, saveTemplate } = useEditor()
+  const toast = useToast()
 
   const handleBackToDashboard = useCallback(
     (): void => navigate(DASHBOARD_ROUTE),
@@ -22,7 +24,22 @@ const useBuilderNavBar = () => {
 
   const handleSaveTemplate = async () => {
     console.log('save template button clicked')
-    return saveTemplate()
+    try {
+      await saveTemplate()
+      toast({
+        title: `${activeTemplateName} saved.`,
+        position: 'top',
+        status: 'success',
+      })
+    } catch (err) {
+      // BUG: This doesn't catch the error if saveTemplate is rejected.
+      toast({
+        title: `Failed to save ${activeTemplateName}.`,
+        position: 'top',
+        status: 'error',
+      })
+    }
+    navigate(DASHBOARD_ROUTE)
   }
 
   const handleCreateMemo = useCallback((): void => {

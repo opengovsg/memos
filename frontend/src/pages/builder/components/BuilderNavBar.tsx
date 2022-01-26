@@ -133,7 +133,7 @@ export const BuilderNavBar = ({
               disabled={true}
             />
             <Button onClick={handleSaveTemplateClick}>Save Template</Button>
-            <Button onClick={handleCreateMemoClick}>Create Memo</Button>
+            {/* <Button onClick={handleCreateMemoClick}>Create Memo</Button> */}
           </ButtonGroup>
         </Box>
       </Flex>
