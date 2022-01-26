@@ -4,6 +4,7 @@ import {
   createCodeBlockPlugin,
   createCodePlugin,
   createHeadingPlugin,
+  createImagePlugin,
   createItalicPlugin,
   createParagraphPlugin,
   createPlateUI,
@@ -21,6 +22,7 @@ export const getCommonPlugins = (): PlatePlugin[] => {
       createBlockquotePlugin(), // blockquote element
       createCodeBlockPlugin(), // code block element
       createHeadingPlugin(), // heading elements
+      createImagePlugin(), // insert images
 
       // marks
       createBoldPlugin(), // bold mark

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Center } from '@chakra-ui/react'
 import { Spinner } from '@chakra-ui/spinner'
 import { CodeAlt } from '@styled-icons/boxicons-regular/CodeAlt'
+import { Image } from '@styled-icons/material'
 import { FormatBold } from '@styled-icons/material/FormatBold'
 import { FormatItalic } from '@styled-icons/material/FormatItalic'
 import { FormatQuote } from '@styled-icons/material/FormatQuote'
@@ -25,6 +26,7 @@ import {
   ELEMENT_PARAGRAPH,
   getPluginType,
   HeadingToolbar,
+  ImageToolbarButton,
   MARK_BOLD,
   MARK_CODE,
   MARK_ITALIC,
@@ -130,6 +132,7 @@ const BasicMarkToolbarButtons = ({ id }: { id: string }) => {
         type={getPluginType(editor, MARK_CODE)}
         icon={<CodeAlt />}
       />
+      <ImageToolbarButton icon={<Image />} />
     </>
   )
 }
