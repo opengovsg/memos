@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { Logger } from '@nestjs/common'
 import nodemailer, { SendMailOptions, Transporter } from 'nodemailer'
-import { SESClient } from '@aws-sdk/client-ses'
+import { SES } from 'aws-sdk'
 
 import { ConfigService } from '../config/config.service'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
@@ -28,7 +28,7 @@ export class MailerService {
     }
     if (this.config.get('awsRegion')) {
       return nodemailer.createTransport({
-        SES: new SESClient({
+        SES: new SES({
           region: this.config.get('awsRegion'),
         }),
       })

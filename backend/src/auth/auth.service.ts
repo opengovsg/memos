@@ -27,7 +27,7 @@ export class AuthService {
     // TODO: Replace the `from` and `subject` fields with content specific to your application
     const mail = {
       to: email,
-      subject: 'One-Time Password (OTP) for Starter Kit',
+      subject: 'One-Time Password (OTP) for Memo',
       html,
     }
 

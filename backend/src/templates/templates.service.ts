@@ -10,7 +10,7 @@ import {
   TemplateVersion,
   User,
 } from 'database/entities'
-import { union } from 'lodash'
+import { isEqual, union } from 'lodash'
 import { Connection, In } from 'typeorm'
 import { TemplateStatus } from 'types'
 import {
@@ -21,7 +21,11 @@ import {
   UpdateTemplateDto,
   UpdateTemplateResponseDto,
 } from './dto'
-import { isTemplateEditorOrIssuer, parseTemplate } from './templates.util'
+import {
+  isTemplateEditor,
+  isTemplateEditorOrIssuer,
+  parseTemplate,
+} from './templates.util'
 
 @Injectable()
 export class TemplatesService {
@@ -75,11 +79,74 @@ export class TemplatesService {
   }
 
   async updateTemplate(
+    editor: User,
     _data: UpdateTemplateDto & { templateId: number },
   ): Promise<UpdateTemplateResponseDto> {
-    // Do something with data
-    return { id: 1, version: 2 }
+    const { name, body, templateId } = _data
+
+    // Check that there is a template version to actually update
+    const oldVersion = await this.connection.manager.findOne(TemplateVersion, {
+      where: {
+        template: { id: templateId },
+        isLatestVersion: true,
+      },
+      relations: ['template'],
+    })
+
+    if (!oldVersion) {
+      throw new NotFoundException('Template to update not found.')
+    }
+
+    // Check if user is editor.
+    const isAllowed = await isTemplateEditor(
+      editor,
+      this.connection.manager,
+      templateId,
+    )
+
+    if (!isAllowed) {
+      throw new ForbiddenException('User has no edit permissions.')
+    }
+
+    // If no changes, return as is.
+    if (isEqual(oldVersion.body, body) && oldVersion.template.name == name) {
+      return { id: oldVersion.template.id, version: oldVersion.version }
+    }
+
+    return this.connection.transaction(async (manager) => {
+      // Update the template name if required.
+      if (oldVersion.template.name !== name) {
+        await manager.update(Template, templateId, {
+          name,
+        })
+      }
+
+      let version = oldVersion.version
+      if (!isEqual(oldVersion.body, body)) {
+        // Deprecate old version
+        await manager.update(TemplateVersion, oldVersion.id, {
+          isLatestVersion: false,
+        })
+        // Create new template version
+        const paramsRequired = body.flatMap((block) => {
+          if (typeof block.data !== 'string') return []
+          return parseTemplate(block.data)
+        })
+        version += 1 // Bump up version number
+        const templateVersion = manager.create(TemplateVersion, {
+          template: { id: templateId },
+          editor,
+          version,
+          body,
+          paramsRequired,
+        })
+        await manager.save(templateVersion)
+      }
+
+      return { id: templateId, version }
+    })
   }
+
   async hideTemplate(_templateId: number): Promise<void> {
     return
   }
