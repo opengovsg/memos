@@ -5,14 +5,17 @@ import {
   Flex,
   Grid,
   GridItem,
+  Image,
   Link,
   Text,
   useBreakpointValue,
   Wrap,
 } from '@chakra-ui/react'
 
-import { ReactComponent as LoginImageSvg } from '../../assets/svgs/login.svg'
-import { useAuth } from '../../features/auth/AuthContext'
+import { ReactComponent as LoginImageSvg } from '~/assets/svgs/login.svg'
+import { useAuth } from '~/features/auth/AuthContext'
+
+import MemoLogo from '~assets/svgs/logo.svg'
 
 import { LoginForm, LoginFormInputs } from './components/LoginForm'
 import { OtpForm, OtpFormInputs } from './components/OtpForm'
@@ -70,8 +73,8 @@ export const LoginPage = (): JSX.Element => {
         px={{ base: '1.5rem', md: '5.5rem', lg: 0 }}
         bg={{
           base: 'initial',
-          md: 'linear-gradient(180deg, var(--chakra-colors-primary-500) 20.625rem, white 0)',
-          lg: 'linear-gradient(90deg, var(--chakra-colors-primary-500) 42%, white 0)',
+          md: 'linear-gradient(180deg, var(--chakra-colors-primary-100) 20.625rem, white 0)',
+          lg: 'linear-gradient(90deg, var(--chakra-colors-primary-100) 42%, white 0)',
         }}
       >
         <Grid
@@ -90,7 +93,7 @@ export const LoginPage = (): JSX.Element => {
             <GridItem
               d="flex"
               gridArea="sidebar"
-              bg={{ base: 'transparent', lg: 'primary.500' }}
+              bg={{ base: 'transparent', lg: 'primary.100' }}
               px={{ base: '1.5rem', lg: '5rem' }}
               pt={{ base: '1.5rem', md: '4rem', lg: '6rem' }}
               pb={{ lg: '6rem' }}
@@ -100,17 +103,18 @@ export const LoginPage = (): JSX.Element => {
             >
               <Text
                 display={{ base: 'none', lg: 'initial' }}
-                textStyle="h1"
-                h="100"
-                color="white"
+                textStyle="h2"
+                color="#0E2245"
+                fontSize="2rem"
               >
-                Memos
+                Generate and issue personalised documents for citizens easily
               </Text>
 
               <LoginImage
                 aria-hidden
                 maxH={{ base: '22rem', lg: '28rem' }}
                 w="100%"
+                mt={{ base: '2rem', lg: '2.5rem' }}
               />
             </GridItem>
           )}
@@ -129,13 +133,10 @@ export const LoginPage = (): JSX.Element => {
               minH={{ base: 'auto', lg: '24rem' }}
             >
               <Flex flexDir="column" align="flex-start">
-                <Text
-                  textStyle="h3"
-                  color="secondary.500"
+                <Image
+                  src={MemoLogo}
                   mb={{ base: '2rem', lg: '2.5rem' }}
-                >
-                  Get started with Memos
-                </Text>
+                ></Image>
               </Flex>
               {!email ? (
                 <LoginForm onSubmit={handleSendOtp} />
@@ -151,12 +152,12 @@ export const LoginPage = (): JSX.Element => {
             <>
               <GridItem
                 gridArea="copy"
-                bg={{ base: 'transparent', lg: 'primary.500' }}
+                bg={{ base: 'transparent', lg: 'primary.100' }}
                 px={{ base: '1.5rem', lg: '5rem' }}
                 pt="0.5rem"
                 pb="4rem"
               >
-                <Text textStyle="legal" color="white">
+                <Text textStyle="legal" color="black">
                   © {currentYear} Open Government Products, GovTech Singapore
                 </Text>
               </GridItem>
