@@ -98,7 +98,7 @@ export const BuilderNavBar = ({
             icon={<BiLeftArrowAlt />}
           />
         </Box>
-        <Box>
+        <Box flex={1}>
           <Input
             value={activeTemplateName}
             type="text"
