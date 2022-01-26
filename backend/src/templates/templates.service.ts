@@ -1,5 +1,4 @@
 import {
-  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -117,29 +116,17 @@ export class TemplatesService {
     return this.connection.transaction(async (manager) => {
       // Update the template name if required.
       if (oldVersion.template.name !== name) {
-        const updatedTemplate = await manager.update(Template, templateId, {
+        await manager.update(Template, templateId, {
           name,
         })
-        if (!updatedTemplate.affected) {
-          throw new ConflictException()
-        }
       }
 
       let version = oldVersion.version
       if (!isEqual(oldVersion.body, body)) {
         // Deprecate old version
-        const updatedVersion = await manager.update(
-          TemplateVersion,
-          oldVersion.id,
-          {
-            isLatestVersion: false,
-          },
-        )
-        if (!updatedVersion.affected) {
-          // Updating old template verion failed.
-          throw new ConflictException()
-        }
-
+        await manager.update(TemplateVersion, oldVersion.id, {
+          isLatestVersion: false,
+        })
         // Create new template version
         const paramsRequired = body.flatMap((block) => {
           if (typeof block.data !== 'string') return []
