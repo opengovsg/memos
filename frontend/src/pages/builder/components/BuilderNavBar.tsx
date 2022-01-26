@@ -98,7 +98,7 @@ export const BuilderNavBar = ({
             icon={<BiLeftArrowAlt />}
           />
         </Box>
-        <Box>
+        <Box flex={1}>
           <Input
             value={activeTemplateName}
             type="text"
@@ -133,7 +133,7 @@ export const BuilderNavBar = ({
               disabled={true}
             />
             <Button onClick={handleSaveTemplateClick}>Save Template</Button>
-            <Button onClick={handleCreateMemoClick}>Create Memo</Button>
+            {/* <Button onClick={handleCreateMemoClick}>Create Memo</Button> */}
           </ButtonGroup>
         </Box>
       </Flex>
