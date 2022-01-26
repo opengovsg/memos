@@ -14,6 +14,7 @@ import {
   Spacer,
 } from '@chakra-ui/react'
 import { ArrowBack } from '@styled-icons/boxicons-regular'
+import { render } from 'mustache'
 
 import { textStyles } from '~theme/textStyles'
 import { DASHBOARD_ROUTE } from '~constants/routes'
@@ -189,8 +190,13 @@ export const IssueSingleMemoPage = (): ReactElement => {
             {/* Content */}
             <GridItem colSpan={{ base: 4, lg: 3 }}>
               <Box w="100%" maxW="48em" margin="0 auto" p="8" shadow="md">
-                {/* TODO: templating is broken but I guess being able to see the template is better than nothing */}
-                <ReadonlyEditor value={template.body[0].data} />
+                <ReadonlyEditor
+                  value={render(template.body[0].data, {
+                    ...params,
+                    uin,
+                    uin_type: uinType,
+                  })}
+                />
               </Box>
             </GridItem>
           </Grid>
