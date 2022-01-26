@@ -5,12 +5,10 @@ import {
   Param,
   Post,
   Put,
-  Res,
   Session,
   UseGuards,
 } from '@nestjs/common'
 import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { Response } from 'express'
 import {
   AddPermissionDto,
   AddPermissionResponseDto,
@@ -76,16 +74,17 @@ export class TemplatesController {
   @Put(':id')
   @ApiResponse({ type: UpdateTemplateResponseDto })
   async updateTemplate(
-    @Res() res: Response,
+    @Session() session: SessionData,
     @Param('id') templateId: number,
     @Body() updateTemplateDto: UpdateTemplateDto,
-  ): Promise<void> {
-    const result = await this.templatesService.updateTemplate({
+  ): Promise<UpdateTemplateResponseDto> {
+    const result = await this.templatesService.updateTemplate(session.user, {
       ...updateTemplateDto,
       templateId,
     })
-    res.json(result)
+    return result
   }
+
   /**
    * Hide all versions of a template by id such that the template is no longer displayed
    * and cannot be used for issuance
