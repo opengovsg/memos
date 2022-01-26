@@ -135,8 +135,8 @@ export class TemplatesService {
         version += 1 // Bump up version number
         const templateVersion = manager.create(TemplateVersion, {
           template: { id: templateId },
-          editor: editor,
-          version: version,
+          editor,
+          version,
           body,
           paramsRequired,
         })

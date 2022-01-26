@@ -5,10 +5,15 @@ const TEMPLATES_ENDPOINT = '/templates'
 
 const TemplatesApi = ApiService.url(TEMPLATES_ENDPOINT)
 
+export enum TemplateBlockType {
+  Header = 'HEADER',
+  Text = 'TEXT',
+}
 export interface SaveTemplateProps {
   name: string
-  body: Array<{ type: 'TEXT' | 'HEADER'; data: string }>
+  body: Array<{ type: TemplateBlockType; data: string }>
 }
+
 export const saveTemplate = async (data: SaveTemplateProps): Promise<void> => {
   return TemplatesApi.url('/').post(data).res()
 }
