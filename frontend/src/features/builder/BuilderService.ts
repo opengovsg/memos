@@ -10,14 +10,14 @@ export interface SaveTemplateProps {
   body: Array<{ type: 'TEXT' | 'HEADER'; data: string }>
 }
 export const saveTemplate = async (data: SaveTemplateProps): Promise<void> => {
-  return TemplatesApi.url('/').post(data)
+  return TemplatesApi.url('/').post(data).res()
 }
 
 export const updateTemplate = async (
   templateId: string,
   data: SaveTemplateProps,
 ): Promise<void> => {
-  return TemplatesApi.url(`/${templateId}`).put(data)
+  return TemplatesApi.url(`/${templateId}`).put(data).res()
 }
 
 export interface GetTemplateProps {

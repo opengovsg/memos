@@ -23,7 +23,6 @@ const useBuilderNavBar = () => {
   }, [])
 
   const handleSaveTemplate = async () => {
-    console.log('save template button clicked')
     try {
       await saveTemplate()
       toast({
@@ -32,7 +31,6 @@ const useBuilderNavBar = () => {
         status: 'success',
       })
     } catch (err) {
-      // BUG: This doesn't catch the error if saveTemplate is rejected.
       toast({
         title: `Failed to save ${activeTemplateName}.`,
         position: 'top',
