@@ -103,12 +103,15 @@ export const IssueSingleMemoPage = (): ReactElement => {
           </Box>
 
           {/* Body */}
-          <Grid templateColumns="repeat(4, 1fr)">
+          <Grid
+            templateColumns="repeat(4, 1fr)"
+            width="100%"
+            height="calc(100% - 77px)" // TODO fix this
+          >
             {/* Sidebar */}
             <GridItem
               borderRight="1px solid"
               borderColor="gray.200"
-              height="calc(100vh - 100px)"
               overflowY="scroll"
               colSpan={{ base: 4, lg: 1 }}
             >
@@ -191,7 +194,7 @@ export const IssueSingleMemoPage = (): ReactElement => {
             </GridItem>
 
             {/* Content */}
-            <GridItem colSpan={{ base: 4, lg: 3 }}>
+            <GridItem colSpan={{ base: 4, lg: 3 }} overflowY="scroll">
               <Box w="100%" maxW="48em" margin="0 auto" p="8" shadow="md">
                 <ReadonlyEditor
                   value={render(template.body[0].data, {
