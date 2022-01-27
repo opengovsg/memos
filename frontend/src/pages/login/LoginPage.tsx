@@ -103,9 +103,10 @@ export const LoginPage = (): JSX.Element => {
             >
               <Text
                 display={{ base: 'none', lg: 'initial' }}
-                textStyle="h2"
+                textStyle="h3"
                 color="#0E2245"
-                fontSize="2rem"
+                fontSize="4xl"
+                letterSpacing={0.5}
               >
                 Generate and issue personalised documents for citizens easily
               </Text>
@@ -131,6 +132,9 @@ export const LoginPage = (): JSX.Element => {
               maxW={{ base: '100%', lg: '28rem' }}
               w="100%"
               minH={{ base: 'auto', lg: '24rem' }}
+              d="flex"
+              flexDir="column"
+              justifyContent="center"
             >
               <Flex flexDir="column" align="flex-start">
                 <Image
