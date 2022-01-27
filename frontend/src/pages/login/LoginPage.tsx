@@ -106,11 +106,11 @@ export const LoginPage = (): JSX.Element => {
                 textStyle="h3"
                 color="#0E2245"
                 fontSize="4xl"
-                letterSpacing={0.5}
+                // letterSpacing={0.5}
+                lineHeight="2.5rem"
               >
                 Generate and issue personalised documents for citizens easily
               </Text>
-
               <LoginImage
                 aria-hidden
                 maxH={{ base: '22rem', lg: '28rem' }}
@@ -161,7 +161,7 @@ export const LoginPage = (): JSX.Element => {
                 pt="0.5rem"
                 pb="4rem"
               >
-                <Text textStyle="legal" color="black">
+                <Text textStyle="legal" color="black" fontSize="xs">
                   © {currentYear} Open Government Products, GovTech Singapore
                 </Text>
               </GridItem>
@@ -172,7 +172,12 @@ export const LoginPage = (): JSX.Element => {
                 display={{ base: 'none', lg: 'flex' }}
                 gridArea="links"
               >
-                <Wrap shouldWrapChildren textStyle="legal" spacing="1.5rem">
+                <Wrap
+                  shouldWrapChildren
+                  textStyle="legal"
+                  spacing="1.5rem"
+                  fontSize="xs"
+                >
                   {footerLinks.map(({ label, href }, index) => (
                     <Link key={index} href={href}>
                       {label}
