@@ -25,6 +25,10 @@ import Spinner from '~components/Spinner'
 import { ReadonlyEditor } from '~pages/viewer/components/ReadonlyEditor'
 import { CreateMemo, createMemo } from '~features/memos/MemosService'
 
+// TODO share with backend
+const UIN_TOKEN = 'UIN'
+const UIN_TYPE_TOKEN = 'UIN Type'
+
 export const IssueSingleMemoPage = (): ReactElement => {
   const { templateId } = useParams()
   const { isLoading, isError, data: template } = useTemplate(Number(templateId))
@@ -79,8 +83,8 @@ export const IssueSingleMemoPage = (): ReactElement => {
   useEffect(() => {
     const paramsWithDefault: Record<string, string> = {
       ...params,
-      uin,
-      uin_type: uinType,
+      [UIN_TOKEN]: uin,
+      [UIN_TYPE_TOKEN]: uinType,
     }
     for (const key in paramsWithDefault) {
       if (!paramsWithDefault[key]) {
@@ -150,7 +154,7 @@ export const IssueSingleMemoPage = (): ReactElement => {
                   p="4"
                 >
                   <Heading {...textStyles['subhead-2']} mb="2">
-                    UIN
+                    {UIN_TOKEN}
                   </Heading>
                   <Input
                     value={uin}
@@ -168,7 +172,7 @@ export const IssueSingleMemoPage = (): ReactElement => {
                   p="4"
                 >
                   <Heading {...textStyles['subhead-2']} mb="2">
-                    UIN Type
+                    {UIN_TYPE_TOKEN}
                   </Heading>
                   <Select
                     placeholder="Choose a UIN type"

@@ -7,7 +7,12 @@ import {
 import { Template, TemplateVersion, User, Memo } from 'database/entities'
 import { randomBytes } from 'crypto'
 import { pick } from 'lodash'
-import { isTemplateIssuer, renderTemplate } from 'templates/templates.util'
+import {
+  isTemplateIssuer,
+  renderTemplate,
+  UIN_TOKEN,
+  UIN_TYPE_TOKEN,
+} from 'templates/templates.util'
 import { Connection } from 'typeorm'
 import { TemplateStatus } from 'types'
 
@@ -189,8 +194,8 @@ export class MemosService {
         ...block,
         data: renderTemplate(block.data, {
           ...params,
-          uin: memo.uin,
-          uin_type: memo.uinType,
+          [UIN_TOKEN]: memo.uin,
+          [UIN_TYPE_TOKEN]: memo.uinType,
         }),
       }
     })
