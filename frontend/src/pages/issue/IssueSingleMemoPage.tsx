@@ -38,6 +38,8 @@ export const IssueSingleMemoPage = (): ReactElement => {
   const mutation = useMutation((data: CreateMemo) => createMemo(data))
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
+  const [previewParams, setPreviewParams] = useState<typeof params>({})
+
   const handleParamsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setParams({
@@ -73,6 +75,20 @@ export const IssueSingleMemoPage = (): ReactElement => {
     const paramsFromTemplate = template?.paramsRequired || []
     setParams(Object.fromEntries(paramsFromTemplate.map((p) => [p, ''])))
   }, [template])
+
+  useEffect(() => {
+    const paramsWithDefault: Record<string, string> = {
+      ...params,
+      uin,
+      uin_type: uinType,
+    }
+    for (const key in paramsWithDefault) {
+      if (!paramsWithDefault[key]) {
+        paramsWithDefault[key] = `{{ ${key} }}`
+      }
+    }
+    setPreviewParams(paramsWithDefault)
+  }, [params, uin, uinType])
 
   return (
     <Flex
@@ -197,11 +213,7 @@ export const IssueSingleMemoPage = (): ReactElement => {
             <GridItem colSpan={{ base: 4, lg: 3 }} overflowY="scroll">
               <Box w="100%" maxW="48em" margin="0 auto" p="8" shadow="md">
                 <ReadonlyEditor
-                  value={render(template.body[0].data, {
-                    ...params,
-                    uin,
-                    uin_type: uinType,
-                  })}
+                  value={render(template.body[0].data, previewParams)}
                 />
               </Box>
             </GridItem>
