@@ -12,6 +12,7 @@ import {
   Input,
   Select,
   Spacer,
+  Textarea,
 } from '@chakra-ui/react'
 import { ArrowBack } from '@styled-icons/boxicons-regular'
 import { render } from 'mustache'
@@ -37,7 +38,7 @@ export const IssueSingleMemoPage = (): ReactElement => {
   const mutation = useMutation((data: CreateMemo) => createMemo(data))
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
-  const handleParamsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleParamsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setParams({
       ...params,
@@ -175,12 +176,14 @@ export const IssueSingleMemoPage = (): ReactElement => {
                     <Heading {...textStyles['subhead-2']} mb="2">
                       {key}
                     </Heading>
-                    <Input
+                    <Textarea
                       name={key}
                       value={params[key]}
                       onChange={handleParamsChange}
                       required
                       disabled={isSubmitting}
+                      resize="vertical"
+                      rows={1}
                     />
                   </Box>
                 ))}
