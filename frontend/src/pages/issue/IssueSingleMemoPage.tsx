@@ -154,7 +154,7 @@ export const IssueSingleMemoPage = (): ReactElement => {
                   p="4"
                 >
                   <Heading {...textStyles['subhead-2']} mb="2">
-                    UIN
+                    {UIN_TOKEN}
                   </Heading>
                   <Input
                     value={uin}
@@ -172,7 +172,7 @@ export const IssueSingleMemoPage = (): ReactElement => {
                   p="4"
                 >
                   <Heading {...textStyles['subhead-2']} mb="2">
-                    UIN Type
+                    {UIN_TYPE_TOKEN}
                   </Heading>
                   <Select
                     placeholder="Choose a UIN type"
