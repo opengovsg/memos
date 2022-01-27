@@ -38,6 +38,8 @@ export const IssueSingleMemoPage = (): ReactElement => {
   const mutation = useMutation((data: CreateMemo) => createMemo(data))
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
+  const [previewParams, setPreviewParams] = useState<typeof params>({})
+
   const handleParamsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setParams({
@@ -74,6 +76,20 @@ export const IssueSingleMemoPage = (): ReactElement => {
     setParams(Object.fromEntries(paramsFromTemplate.map((p) => [p, ''])))
   }, [template])
 
+  useEffect(() => {
+    const paramsWithDefault: Record<string, string> = {
+      ...params,
+      uin,
+      uin_type: uinType,
+    }
+    for (const key in paramsWithDefault) {
+      if (!paramsWithDefault[key]) {
+        paramsWithDefault[key] = `{{ ${key} }}`
+      }
+    }
+    setPreviewParams(paramsWithDefault)
+  }, [params, uin, uinType])
+
   return (
     <Flex
       flexDir="column"
@@ -103,12 +119,15 @@ export const IssueSingleMemoPage = (): ReactElement => {
           </Box>
 
           {/* Body */}
-          <Grid templateColumns="repeat(4, 1fr)">
+          <Grid
+            templateColumns="repeat(4, 1fr)"
+            width="100%"
+            height="calc(100% - 77px)" // TODO fix this
+          >
             {/* Sidebar */}
             <GridItem
               borderRight="1px solid"
               borderColor="gray.200"
-              height="calc(100vh - 100px)"
               overflowY="scroll"
               colSpan={{ base: 4, lg: 1 }}
             >
@@ -191,14 +210,10 @@ export const IssueSingleMemoPage = (): ReactElement => {
             </GridItem>
 
             {/* Content */}
-            <GridItem colSpan={{ base: 4, lg: 3 }}>
+            <GridItem colSpan={{ base: 4, lg: 3 }} overflowY="scroll">
               <Box w="100%" maxW="48em" margin="0 auto" p="8" shadow="md">
                 <ReadonlyEditor
-                  value={render(template.body[0].data, {
-                    ...params,
-                    uin,
-                    uin_type: uinType,
-                  })}
+                  value={render(template.body[0].data, previewParams)}
                 />
               </Box>
             </GridItem>
