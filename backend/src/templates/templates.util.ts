@@ -2,6 +2,9 @@ import { Editor, Issuer, User } from 'database/entities'
 import { EntityManager } from 'typeorm'
 import mustache from 'mustache'
 
+export const UIN_TOKEN = 'UIN'
+export const UIN_TYPE_TOKEN = 'UIN Type'
+
 /**
  * Checks whether a user is an editor of a template.
  */
@@ -69,13 +72,12 @@ export const parseTemplate = (body: string): Array<string> => {
     const token = meta[1]
 
     // uin and uin_type are required properties of the memo and should not be included in the params
-    if (type === 'name' && token !== 'uin' && token !== 'uin_type') {
-      const key = token.toLowerCase()
-      if (!key) {
+    if (type === 'name' && token !== UIN_TOKEN && token !== UIN_TYPE_TOKEN) {
+      if (!token) {
         // TODO: throw an error? This currently ignores empty keys
         continue
       }
-      vars.add(key)
+      vars.add(token)
     }
   }
 
