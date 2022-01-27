@@ -106,7 +106,6 @@ export const LoginPage = (): JSX.Element => {
                 textStyle="h3"
                 color="#0E2245"
                 fontSize="4xl"
-                // letterSpacing={0.5}
                 lineHeight="2.5rem"
               >
                 Generate and issue personalised documents for citizens easily
