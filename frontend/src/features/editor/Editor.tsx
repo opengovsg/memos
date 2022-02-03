@@ -2,7 +2,8 @@ import './editor.css'
 
 import { ReactElement } from 'react'
 import { Box, Button, Flex } from '@chakra-ui/react'
-import Underline from '@tiptap/extension-underline'
+import { TextAlign } from '@tiptap/extension-text-align'
+import { Underline } from '@tiptap/extension-underline'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 
@@ -20,6 +21,9 @@ export const Editor = (): ReactElement => {
         },
       }),
       Underline,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
     ],
     content: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>',
   })
@@ -28,7 +32,7 @@ export const Editor = (): ReactElement => {
     text: string
     onClick: () => void
     isActiveName: string
-    isActiveAttributes?: Record<string, number>
+    isActiveAttributes?: Record<string, number | string>
   }[] = [
     {
       text: 'bold',
@@ -66,6 +70,30 @@ export const Editor = (): ReactElement => {
       text: 'list',
       onClick: () => editor?.chain().focus().toggleOrderedList().run(),
       isActiveName: 'orderedList',
+    },
+    {
+      text: 'left',
+      onClick: () => editor?.chain().focus().setTextAlign('left').run(),
+      isActiveName: '',
+      isActiveAttributes: { textAlign: 'left' },
+    },
+    {
+      text: 'center',
+      onClick: () => editor?.chain().focus().setTextAlign('center').run(),
+      isActiveName: '',
+      isActiveAttributes: { textAlign: 'center' },
+    },
+    {
+      text: 'right',
+      onClick: () => editor?.chain().focus().setTextAlign('right').run(),
+      isActiveName: '',
+      isActiveAttributes: { textAlign: 'right' },
+    },
+    {
+      text: 'justify',
+      onClick: () => editor?.chain().focus().setTextAlign('justify').run(),
+      isActiveName: '',
+      isActiveAttributes: { textAlign: 'justify' },
     },
   ]
 

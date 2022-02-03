@@ -9,6 +9,7 @@
     "@emotion/styled": "^11.3.0",
     "@styled-icons/boxicons-regular": "^10.38.0",
     "@styled-icons/material": "^10.34.0",
+    "@tiptap/extension-text-align": "^2.0.0-beta.29",
     "@tiptap/extension-underline": "^2.0.0-beta.23",
     "@tiptap/react": "^2.0.0-beta.107",
     "@tiptap/starter-kit": "^2.0.0-beta.180",
