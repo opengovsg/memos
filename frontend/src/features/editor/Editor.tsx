@@ -62,6 +62,11 @@ export const Editor = (): ReactElement => {
       onClick: () => editor?.chain().focus().toggleBulletList().run(),
       isActiveName: 'bulletList',
     },
+    {
+      text: 'list',
+      onClick: () => editor?.chain().focus().toggleOrderedList().run(),
+      isActiveName: 'orderedList',
+    },
   ]
 
   return (
