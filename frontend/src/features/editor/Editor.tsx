@@ -44,7 +44,7 @@ export const Editor = (): ReactElement => {
           {buttons.map(({ text, onClick }) => (
             <Button
               size="xs"
-              variant="outline"
+              variant={editor?.isActive(text) ? 'solid' : 'outline'}
               mr="1"
               onClick={onClick}
               key={text}
