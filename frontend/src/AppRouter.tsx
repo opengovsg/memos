@@ -19,6 +19,7 @@ import { IssueSingleMemoPage } from '~pages/issue/IssueSingleMemoPage'
 import { IssueSingleMemoSuccessPage } from '~pages/issue/IssueSingleMemoSuccessPage'
 import { LoginPage } from '~pages/login/LoginPage'
 import { Viewer } from '~pages/viewer/Viewer'
+import { Editor } from '~features/editor/Editor'
 
 import { PrivateElement } from './PrivateElement'
 import { PublicElement } from './PublicElement'
@@ -53,6 +54,9 @@ export const AppRouter = (): JSX.Element => {
           path={VIEWER_ROUTE}
           element={<PublicElement element={<Viewer />} />}
         />
+
+        {/* temp route */}
+        <Route path="editor" element={<Editor />} />
 
         {/* TODO abstract routes related to issuing memos into separate router */}
         <Route

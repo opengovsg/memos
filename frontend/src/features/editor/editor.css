@@ -1,0 +1,4 @@
+.ProseMirror {
+  /* TODO: poor accessibility, provide alternative visual cues */
+  outline: none;
+}
