@@ -57,6 +57,11 @@ export const Editor = (): ReactElement => {
       isActiveName: 'heading',
       isActiveAttributes: { level: 3 },
     },
+    {
+      text: 'bullet',
+      onClick: () => editor?.chain().focus().toggleBulletList().run(),
+      isActiveName: 'bulletList',
+    },
   ]
 
   return (

@@ -10,3 +10,8 @@
 .ProseMirror h3 {
   font-size: 2em;
 }
+
+.ProseMirror ul,
+.ProseMirror ol {
+  padding: 0 1em;
+}
