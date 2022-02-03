@@ -45,7 +45,7 @@ export const useEditor = (): EditorContextProps => {
 
 export const useProvideEditor = (): EditorContextProps => {
   const { status, data: template } = useTemplate()
-  const [activeEditorId, setActiveEditorId] = useState<string>('defaultEditor')
+  const [activeEditorId, setActiveEditorId] = useState<string>('')
   const [initialEditorValue, setInitialEditorValue] = useState<string | null>(
     null,
   )
