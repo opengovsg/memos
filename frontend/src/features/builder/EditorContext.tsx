@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useState,
 } from 'react'
-import { usePlateSelectors } from '@udecode/plate'
+import { platesStore, usePlateSelectors } from '@udecode/plate'
 import _ from 'lodash'
 
 import { useTemplate } from '~features/common/queries'
@@ -20,6 +20,7 @@ type EditorContextProps = {
   activeTemplateName: string
   initialEditorValue: string | null
   setActiveTemplateName: React.Dispatch<React.SetStateAction<string>>
+  resetEditor: () => Promise<void>
   saveTemplate: () => Promise<void>
 }
 
@@ -45,7 +46,7 @@ export const useEditor = (): EditorContextProps => {
 
 export const useProvideEditor = (): EditorContextProps => {
   const { status, data: template } = useTemplate()
-  const [activeEditorId, setActiveEditorId] = useState<string>('')
+  const [activeEditorId, setActiveEditorId] = useState<string>('default')
   const [initialEditorValue, setInitialEditorValue] = useState<string | null>(
     null,
   )
@@ -70,6 +71,17 @@ export const useProvideEditor = (): EditorContextProps => {
     }
   }, [value])
 
+  // https://github.com/udecode/plate/issues/1349
+  const resetEditor = useCallback(async () => {
+    const currState = platesStore.store.getState()
+    platesStore.set.state(() => {
+      if (currState[activeEditorId]) {
+        delete currState[activeEditorId]
+      }
+      return currState
+    })
+  }, [activeEditorId])
+
   const saveTemplate = useCallback(async () => {
     setActiveEditorValue(JSON.stringify(value))
     const saveTemplateDto = {
@@ -81,7 +93,8 @@ export const useProvideEditor = (): EditorContextProps => {
         },
       ],
     }
-    if (activeEditorId) {
+    if (activeEditorId !== 'default') {
+      console.log(activeEditorId)
       return BuilderService.updateTemplate(activeEditorId, saveTemplateDto)
     }
     return BuilderService.saveTemplate(saveTemplateDto)
@@ -94,6 +107,7 @@ export const useProvideEditor = (): EditorContextProps => {
     setActiveEditorId,
     activeTemplateName,
     setActiveTemplateName,
+    resetEditor,
     saveTemplate,
   }
 }

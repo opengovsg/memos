@@ -147,7 +147,7 @@ export const Editor = ({
   const [readOnly] = useState<boolean>(editableProps?.readOnly || false)
   const plugins = getCommonPlugins()
   useEffect(() => {
-    setActiveEditorId(templateId || '')
+    setActiveEditorId(templateId || 'default')
     setWaitForTemplate(!!templateId && initialEditorValue === null)
   }, [initialEditorValue, setActiveEditorId, templateId])
 

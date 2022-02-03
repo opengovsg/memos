@@ -10,7 +10,7 @@ import { BuilderNavBar } from './BuilderNavBar'
 
 const useBuilderNavBar = () => {
   const navigate = useNavigate()
-  const { activeTemplateName, saveTemplate } = useEditor()
+  const { activeTemplateName, resetEditor, saveTemplate } = useEditor()
   const toast = useToast()
 
   const handleBackToDashboard = useCallback(
@@ -37,6 +37,7 @@ const useBuilderNavBar = () => {
         status: 'error',
       })
     }
+    resetEditor()
     navigate(DASHBOARD_ROUTE)
   }
 
