@@ -2,3 +2,11 @@
   /* TODO: poor accessibility, provide alternative visual cues */
   outline: none;
 }
+
+.ProseMirror h1 {
+  font-size: 3em;
+}
+
+.ProseMirror h3 {
+  font-size: 2em;
+}
