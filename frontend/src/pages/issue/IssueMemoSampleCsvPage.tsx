@@ -8,23 +8,48 @@ import {
   Icon,
   Spinner,
   Text,
+  useToast,
   VStack,
 } from '@chakra-ui/react'
 import { Download } from '@styled-icons/boxicons-regular'
 import { Close } from '@styled-icons/material'
+import download from 'downloadjs'
 
 import { textStyles } from '~theme/textStyles'
 import { DASHBOARD_ROUTE } from '~constants/routes'
 import { useTemplate } from '~hooks/useTemplate'
 
+import { UIN_TOKEN, UIN_TYPE_TOKEN } from './constants'
+
 export const IssueMemoSampleCsvPage = (): ReactElement => {
   const navigate = useNavigate()
   const { templateId } = useParams()
+  const toast = useToast()
 
   // Verify that the template exists
   const { isLoading, isError, data: template } = useTemplate(Number(templateId))
 
+  const handleDownloadClick = async () => {
+    try {
+      let headers = template?.paramsRequired || []
+      // Params from backend should not have UIN_TOKEN and UIN_TYPE_TOKEN
+      headers = [UIN_TOKEN, UIN_TYPE_TOKEN, ...headers]
+      const content = headers.join(',')
+
+      // TODO: Custom filename? Template name can have illegal characters.
+      download(content, `memos_sample.csv`, 'text/csv')
+    } catch (e) {
+      toast({
+        title: `Failed to download CSV, please try refreshing`,
+        position: 'top',
+        status: 'error',
+      })
+      console.error(e)
+    }
+  }
+
   const handleContinueClick = () => {
+    // Navigate away for now
     navigate(DASHBOARD_ROUTE)
     // navigate(`/issue/${templateId}/bulk`)
   }
@@ -47,7 +72,13 @@ export const IssueMemoSampleCsvPage = (): ReactElement => {
             <VStack spacing="4">
               <Icon as={Download} w="12" h="12" />
               <Text>Download the CSV and fill in the required fields</Text>
-              <Button variant="outline">Download CSV</Button>
+              <Button
+                variant="outline"
+                disabled={!template}
+                onClick={handleDownloadClick}
+              >
+                Download CSV
+              </Button>
             </VStack>
           </Center>
 
