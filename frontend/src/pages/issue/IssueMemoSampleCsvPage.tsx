@@ -34,7 +34,10 @@ export const IssueMemoSampleCsvPage = (): ReactElement => {
       let headers = template?.paramsRequired || []
       // Params from backend should not have UIN_TOKEN and UIN_TYPE_TOKEN
       headers = [UIN_TOKEN, UIN_TYPE_TOKEN, ...headers]
-      const content = headers.join(',')
+      // Escape " and /
+      const content = headers
+        .map((h) => `"${h.replace(/\\"/g, '""')}"`)
+        .join(',')
 
       // TODO: Custom filename? Template name can have illegal characters.
       download(content, `memos_sample.csv`, 'text/csv')
