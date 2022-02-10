@@ -39,7 +39,7 @@ export const IssueMemoChooseModePage = (): ReactElement => {
   const handleContinueClick = () => {
     selectedMode === 'single'
       ? navigate(`/issue/${templateId}/single`)
-      : navigate(`/issue/${templateId}/csv`)
+      : navigate(`/issue/${templateId}/bulk/download`)
   }
 
   const buttonData: {

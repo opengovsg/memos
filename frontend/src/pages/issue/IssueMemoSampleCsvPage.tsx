@@ -34,12 +34,19 @@ export const IssueMemoSampleCsvPage = (): ReactElement => {
       let headers = template?.paramsRequired || []
       // Params from backend should not have UIN_TOKEN and UIN_TYPE_TOKEN
       headers = [UIN_TOKEN, UIN_TYPE_TOKEN, ...headers]
-      // Escape " and /
+      /**
+       * Escape `"` and `,`
+       * Quotation marks are escaped with `\` in mustache,
+       * but csv files escape quotation marks with another quotation mark:
+       *  1. `\"` -> `""`
+       * We can escape all `,` in the column header by wrapping the whole
+       * thing with "":
+       *  2. `header` -> `"${header}"`
+       */
       const content = headers
         .map((h) => `"${h.replace(/\\"/g, '""')}"`)
         .join(',')
 
-      // TODO: Custom filename? Template name can have illegal characters.
       download(content, `memos_sample.csv`, 'text/csv')
     } catch (e) {
       toast({
@@ -54,7 +61,7 @@ export const IssueMemoSampleCsvPage = (): ReactElement => {
   const handleContinueClick = () => {
     // Navigate away for now
     navigate(DASHBOARD_ROUTE)
-    // navigate(`/issue/${templateId}/bulk`)
+    // navigate(`/issue/${templateId}/bulk/upload`)
   }
 
   return (
@@ -75,11 +82,7 @@ export const IssueMemoSampleCsvPage = (): ReactElement => {
             <VStack spacing="4">
               <Icon as={Download} w="12" h="12" />
               <Text>Download the CSV and fill in the required fields</Text>
-              <Button
-                variant="outline"
-                disabled={!template}
-                onClick={handleDownloadClick}
-              >
+              <Button variant="outline" onClick={handleDownloadClick}>
                 Download CSV
               </Button>
             </VStack>
