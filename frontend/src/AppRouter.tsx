@@ -5,6 +5,7 @@ import {
   BUILDER_ROUTE,
   DASHBOARD_ROUTE,
   ISSUE_MEMO_LANDING_ROUTE,
+  ISSUE_MEMO_SAMPLE_CSV_ROUTE,
   ISSUE_MEMO_SINGLE_ROUTE,
   ISSUE_MEMO_SINGLE_SUCCESS_ROUTE,
   LOGIN_ROUTE,
@@ -15,6 +16,7 @@ import {
 import { Builder } from '~pages/builder/Builder'
 import { Dashboard } from '~pages/dashboard/Dashboard'
 import { IssueMemoChooseModePage } from '~pages/issue/IssueMemoChooseModePage'
+import { IssueMemoSampleCsvPage } from '~pages/issue/IssueMemoSampleCsvPage'
 import { IssueSingleMemoPage } from '~pages/issue/IssueSingleMemoPage'
 import { IssueSingleMemoSuccessPage } from '~pages/issue/IssueSingleMemoSuccessPage'
 import { LoginPage } from '~pages/login/LoginPage'
@@ -66,9 +68,16 @@ export const AppRouter = (): JSX.Element => {
         />
 
         <Route
+          path={ISSUE_MEMO_SAMPLE_CSV_ROUTE}
+          element={<PrivateElement element={<IssueMemoSampleCsvPage />} />}
+        />
+
+        <Route
           path={ISSUE_MEMO_SINGLE_ROUTE}
           element={<PrivateElement element={<IssueSingleMemoPage />} />}
         />
+
+        {/* HERE: Issue bulk memo page */}
 
         <Route path="*" element={<Navigate to={LOGIN_ROUTE} />} />
       </Routes>

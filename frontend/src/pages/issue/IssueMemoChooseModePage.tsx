@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { InfoCircle } from '@styled-icons/boxicons-regular'
 import { Close, Description, FileCopy } from '@styled-icons/material'
+import { StyledIcon } from '@styled-icons/styled-icon'
 
 import { textStyles } from '~theme/textStyles'
 import { DASHBOARD_ROUTE } from '~constants/routes'
@@ -38,12 +39,12 @@ export const IssueMemoChooseModePage = (): ReactElement => {
   const handleContinueClick = () => {
     selectedMode === 'single'
       ? navigate(`/issue/${templateId}/single`)
-      : navigate(`/issue/${templateId}/bulk`)
+      : navigate(`/issue/${templateId}/bulk/download`)
   }
 
   const buttonData: {
     mode: typeof selectedMode
-    icon: any // TODO narrow
+    icon: StyledIcon
     title: string
     subtitle: string
     description: string
@@ -71,7 +72,7 @@ export const IssueMemoChooseModePage = (): ReactElement => {
       {template && (
         <Box color="gray.600">
           <Heading as="h1" {...textStyles.h2} mb="1">
-            Use this template to generate memo
+            Generate Memo
           </Heading>
           <Text mb="16">
             Select if you would like to generate one or multiple memos to
