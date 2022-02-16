@@ -59,9 +59,7 @@ export const IssueMemoSampleCsvPage = (): ReactElement => {
   }
 
   const handleContinueClick = () => {
-    // Navigate away for now
-    navigate(DASHBOARD_ROUTE)
-    // navigate(`/issue/${templateId}/bulk/upload`)
+    navigate(`/issue/${templateId}/bulk`)
   }
 
   return (
