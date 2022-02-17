@@ -14,14 +14,17 @@ import {
   Spacer,
 } from '@chakra-ui/react'
 import { ArrowBack } from '@styled-icons/boxicons-regular'
+import { render } from 'mustache'
 
 import { textStyles } from '~theme/textStyles'
 import { DASHBOARD_ROUTE } from '~constants/routes'
 import { useTemplate } from '~hooks/useTemplate'
+import { validateCsv } from '~services/CsvService'
 import Attachment from '~components/Field/Attachment'
 import Spinner from '~components/Spinner'
 
 import { ReadonlyEditor } from '~pages/viewer/components/ReadonlyEditor'
+import { Template } from '~features/templates/TemplatesService'
 
 export const IssueBulkMemoPage = (): ReactElement => {
   const { templateId } = useParams()
@@ -31,23 +34,56 @@ export const IssueBulkMemoPage = (): ReactElement => {
   // TODO: Directly use state provided by useMutation
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [selectedFile, setSelectedFile] = useState<File>()
+  const [previewParams, setPreviewParams] = useState<Record<string, string>>()
+  const [preview, setPreview] = useState<string>('[]')
   // TODO: Error handling, we should standardize.
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState<string>()
+  const [showAlert, setShowAlert] = useState<boolean>(false)
 
   const onFileAccepted = async (file?: File) => {
     setErrorMessage('')
-    setSelectedFile(file)
-    // Validate CSV here
+    // When file is unset
+    if (!file) {
+      setSelectedFile(file)
+      setPreviewParams(undefined)
+      return
+    }
+
+    try {
+      const { firstRowParams } = await validateCsv({
+        file: file as File,
+        template: template as Template,
+      })
+      setPreviewParams(firstRowParams)
+      setSelectedFile(file)
+    } catch (e) {
+      // TODO: Fix rejected promises from validateCsv not being caught.
+      setErrorMessage((e as Error).message)
+      // This disables submission unless the user reuploads
+      setSelectedFile(undefined)
+    }
   }
 
   const handleSubmit = async () => {
-    // TODO: handle errors
-    if (!template) return
-
     setIsSubmitting(true)
     // Navigate away for now
     navigate(DASHBOARD_ROUTE)
   }
+
+  useEffect(() => {
+    setShowAlert(!!errorMessage)
+  }, [errorMessage])
+
+  useEffect(() => {
+    if (template) {
+      if (previewParams) {
+        const renderedPreview = render(template.body[0].data, previewParams)
+        setPreview(renderedPreview)
+      } else {
+        setPreview(template.body[0].data)
+      }
+    }
+  }, [previewParams, template])
 
   return (
     <Flex
@@ -113,8 +149,8 @@ export const IssueBulkMemoPage = (): ReactElement => {
                   onChange={onFileAccepted}
                   onError={setErrorMessage}
                 />
-                {errorMessage && (
-                  <Alert status="error">
+                {showAlert && (
+                  <Alert status="error" mt="4">
                     <AlertIcon />
                     {errorMessage}
                   </Alert>
@@ -125,8 +161,7 @@ export const IssueBulkMemoPage = (): ReactElement => {
             {/* Content */}
             <GridItem colSpan={{ base: 4, lg: 3 }} overflowY="scroll">
               <Box w="100%" maxW="48em" margin="0 auto" p="8" shadow="md">
-                {/** TODO: Preview the first row? */}
-                <ReadonlyEditor value={template.body[0].data} />
+                <ReadonlyEditor value={preview} />
               </Box>
             </GridItem>
           </Grid>
