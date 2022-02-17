@@ -19,7 +19,7 @@ import { textStyles } from '~theme/textStyles'
 import { DASHBOARD_ROUTE } from '~constants/routes'
 import { useTemplate } from '~hooks/useTemplate'
 
-import { UIN_TOKEN, UIN_TYPE_TOKEN } from './constants'
+import { getTemplateParameters } from '~features/templates/TemplatesService'
 
 export const IssueMemoSampleCsvPage = (): ReactElement => {
   const navigate = useNavigate()
@@ -31,9 +31,7 @@ export const IssueMemoSampleCsvPage = (): ReactElement => {
 
   const handleDownloadClick = async () => {
     try {
-      let headers = template?.paramsRequired || []
-      // Params from backend should not have UIN_TOKEN and UIN_TYPE_TOKEN
-      headers = [UIN_TOKEN, UIN_TYPE_TOKEN, ...headers]
+      const headers = getTemplateParameters(template)
       /**
        * Escape `"` and `,`
        * Quotation marks are escaped with `\` in mustache,

@@ -1,5 +1,7 @@
 import ApiService from '~services/ApiService'
 
+import { ADDRESSING_PARAMETERS } from './constants'
+
 // TODO: migrate to shared types
 enum TemplateStatus {
   Private = 'PRIVATE',
@@ -44,4 +46,15 @@ const templatesApi = ApiService.url(TEMPLATES_ENDPOINT)
  */
 export const getTemplate = (templateId: number): Promise<Template> => {
   return templatesApi.url(`/${templateId}`).get().json()
+}
+
+/**
+ * Gets the required parameters from the template
+ * Including compulsory addressing parameters.
+ */
+export const getTemplateParameters = (template?: Template): string[] => {
+  let headers = template?.paramsRequired || []
+  // Params from backend should not have UIN_TOKEN and UIN_TYPE_TOKEN
+  headers = [...ADDRESSING_PARAMETERS, ...headers]
+  return headers
 }
