@@ -22,7 +22,7 @@ export const AttachmentDropzone = ({
         <Text>Drop the file here ...</Text>
       ) : (
         <Text>
-          <Link isDisabled={inputProps.disabled}>Choose file</Link> or drag and
+          <Link disabled={inputProps.disabled}>Choose file</Link> or drag and
           drop here
         </Text>
       )}
