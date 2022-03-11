@@ -6,7 +6,6 @@ import React, {
   useEffect,
   useState,
 } from 'react'
-import { usePlateSelectors } from '@udecode/plate'
 import _ from 'lodash'
 
 import { useTemplate } from '~features/common/queries'
@@ -52,8 +51,8 @@ export const useProvideEditor = (): EditorContextProps => {
   const [activeEditorValue, setActiveEditorValue] = useState<string>('')
   const [activeTemplateName, setActiveTemplateName] =
     useState<string>('My Template')
-  const { value: getValue } = usePlateSelectors(activeEditorId)
-  const value = getValue()
+
+  const value = 'Dummy value while removing plate'
 
   useEffect(() => {
     if (status === 'success') {

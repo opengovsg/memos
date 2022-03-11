@@ -1,24 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Box, Text, VStack } from '@chakra-ui/react'
-import { usePlateSelectors } from '@udecode/plate'
-import { Node } from 'slate'
-
-import { getKeywords, serializeNodesToString } from '~pages/builder/util'
-import { useEditor } from '~features/builder/EditorContext'
 
 export const Keywords = (): JSX.Element => {
   const [keywords, setKeywords] = useState<string[]>([])
   // Debug
   const [debugTextValue, setDebugTextValue] = useState<string>('')
 
-  const { activeEditorId } = useEditor()
-  const { value: getValue } = usePlateSelectors(activeEditorId)
-  const value: Node[] | null = getValue()
+  const value: Node[] | null = null
   useEffect(() => {
     if (value) {
-      const textValue = serializeNodesToString(value || [])
-      setKeywords(getKeywords(textValue))
-      setDebugTextValue(textValue)
+      setKeywords(value)
+      setDebugTextValue(value)
     } else {
       setKeywords([])
       setDebugTextValue('')
