@@ -57,7 +57,6 @@ export const IssueBulkMemoPage = (): ReactElement => {
       setPreviewParams(firstRowParams)
       setSelectedFile(file)
     } catch (e) {
-      // TODO: Fix rejected promises from validateCsv not being caught.
       setErrorMessage((e as Error).message)
       // This disables submission unless the user reuploads
       setSelectedFile(undefined)

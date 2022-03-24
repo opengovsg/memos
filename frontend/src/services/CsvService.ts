@@ -28,8 +28,9 @@ export const validateCsv = async ({
   return new Promise((resolve, reject) => {
     let firstRowParams: Record<string, string> = {}
     let count = 0
-    Papa.parse(file, {
+    return Papa.parse(file, {
       header: true,
+      preview: 1, // Only check the first row, for preview
       skipEmptyLines: 'greedy', // greedy - skip lines with only whitespace
       step: (
         step: Papa.ParseStepResult<Record<string, string>>,
@@ -47,20 +48,18 @@ export const validateCsv = async ({
             firstRowParams = row
           }
         } catch (e) {
-          parser.abort()
-          return reject(
+          reject(
             new Error(
-              `The following error occured while validating the CSV.\n
-                Please check that the CSV file matches the provided sample.\n\n${e}`,
+              `The following error occured while validating your CSV.\n
+              Please check your CSV.\n\n${e}`,
             ),
           )
+          parser.abort()
         }
       },
       complete: () => {
         if (!count) {
-          return reject(
-            new Error('CSV file cannot be empty, fill up rows and try again.'),
-          )
+          reject(new Error('The fields in your CSV file cannot be empty.'))
         }
         resolve({
           csvFilename,
@@ -68,19 +67,25 @@ export const validateCsv = async ({
           firstRowParams,
         })
       },
+      error: reject,
     })
   })
 }
 
-// Validate row has required headers
+// Validate row has required headers and values
 const validateRow = (
   row: Record<string, string>,
   requiredParams: Array<string>,
-): boolean => {
+): void => {
   const params = keys(row)
   const missingParams = difference(requiredParams, params)
   if (missingParams.length) {
-    throw new Error(`Missing params: ${missingParams.join(',')}`)
+    throw new Error(`Missing header(s) - ${missingParams.join(',')}`)
   }
-  return true
+  const missingFields = params.filter((p) => !row[p])
+  if (missingFields.length) {
+    throw new Error(
+      `Missing field(s) in row 1 for preview - ${missingFields.join(',')}`,
+    )
+  }
 }
