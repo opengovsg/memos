@@ -24,8 +24,7 @@ import Spinner from '~components/Spinner'
 
 import { ReadonlyEditor } from '~pages/viewer/components/ReadonlyEditor'
 import { CreateMemo, createMemo } from '~features/memos/MemosService'
-
-import { UIN_TOKEN, UIN_TYPE_TOKEN } from './constants'
+import { UIN_TOKEN, UIN_TYPE_TOKEN } from '~features/templates/constants'
 
 export const IssueSingleMemoPage = (): ReactElement => {
   const { templateId } = useParams()

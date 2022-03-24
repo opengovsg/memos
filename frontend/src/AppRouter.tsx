@@ -4,6 +4,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import {
   BUILDER_ROUTE,
   DASHBOARD_ROUTE,
+  ISSUE_MEMO_BULK_ROUTE,
   ISSUE_MEMO_LANDING_ROUTE,
   ISSUE_MEMO_SAMPLE_CSV_ROUTE,
   ISSUE_MEMO_SINGLE_ROUTE,
@@ -15,6 +16,7 @@ import {
 
 import { Builder } from '~pages/builder/Builder'
 import { Dashboard } from '~pages/dashboard/Dashboard'
+import { IssueBulkMemoPage } from '~pages/issue/IssueBulkMemoPage'
 import { IssueMemoChooseModePage } from '~pages/issue/IssueMemoChooseModePage'
 import { IssueMemoSampleCsvPage } from '~pages/issue/IssueMemoSampleCsvPage'
 import { IssueSingleMemoPage } from '~pages/issue/IssueSingleMemoPage'
@@ -73,11 +75,14 @@ export const AppRouter = (): JSX.Element => {
         />
 
         <Route
+          path={ISSUE_MEMO_BULK_ROUTE}
+          element={<PrivateElement element={<IssueBulkMemoPage />} />}
+        />
+
+        <Route
           path={ISSUE_MEMO_SINGLE_ROUTE}
           element={<PrivateElement element={<IssueSingleMemoPage />} />}
         />
-
-        {/* HERE: Issue bulk memo page */}
 
         <Route path="*" element={<Navigate to={LOGIN_ROUTE} />} />
       </Routes>
