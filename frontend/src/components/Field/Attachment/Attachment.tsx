@@ -109,8 +109,7 @@ export const Attachment = forwardRef<AttachmentProps, 'div'>(
           let errorMessage
           switch (firstError.code) {
             case 'file-invalid-type': {
-              const fileExt = getFileExtension(rejectedFiles[0].file.name)
-              errorMessage = `Your file's extension ending in *${fileExt} is not allowed`
+              errorMessage = `Your attachment needs to be in the ${accept} file format(s)`
               break
             }
             case 'too-many-files': {
