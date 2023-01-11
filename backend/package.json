@@ -35,7 +35,7 @@
     "@nestjs/typeorm": "^8.0.3",
     "aws-sdk": "^2.1063.0",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.13.2",
+    "class-validator": "^0.14.0",
     "convict": "^6.2.1",
     "dotenv": "^16.0.0",
     "express-session": "^1.17.2",
