@@ -9,7 +9,7 @@
     "@emotion/styled": "^11.3.0",
     "@styled-icons/boxicons-regular": "^10.38.0",
     "@styled-icons/material": "^10.34.0",
-    "@udecode/plate": "^9.2.1",
+    "@udecode/plate": "^20.0.0",
     "dayjs": "^1.10.7",
     "downloadjs": "^1.4.7",
     "framer-motion": "^4.1.17",
